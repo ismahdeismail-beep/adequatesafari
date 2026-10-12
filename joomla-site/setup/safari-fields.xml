@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Safari content-type custom fields for com_fields (Joomla 5).
+  Import via:  System → Fields → Import, or the setup script (joomla-site/setup/install.php).
+  Every field is scoped to com_content.article and can be filtered with com_fields.
+-->
+<fields>
+    <!-- ── Core safari metadata ─────────────────────────────── -->
+    <field
+        name="safari_type"
+        type="list"
+        title="Safari type"
+        description="Lodge, camping, flying or trekking safari."
+        context="com_content.article"
+        group="Safari"
+        required="1"
+        default="lodge">
+        <option value="lodge">Lodge safari</option>
+        <option value="camping">Camping safari</option>
+        <option value="flying">Flying safari</option>
+        <option value="trek">Trekking / climb</option>
+    </field>
+
+    <field name="duration_days" type="number" title="Duration (days)" group="Safari" context="com_content.article" required="1" default="3" filter="integer" />
+    <field name="duration_nights" type="number" title="Duration (nights)" group="Safari" context="com_content.article" default="2" filter="integer" />
+
+    <!-- ── Pricing ──────────────────────────────────────────── -->
+    <field name="base_price_usd" type="number" title="Base price (USD, per person)" group="Pricing" context="com_content.article" default="0" filter="float" />
+    <field name="base_price_kes" type="number" title="Base price (KES, per person)" group="Pricing" context="com_content.article" default="0" filter="integer" />
+    <field name="accommodation_tier" type="list" title="Accommodation tier" group="Pricing" context="com_content.article" default="mid-range">
+        <option value="budget">Budget</option>
+        <option value="mid-range">Mid-range</option>
+        <option value="luxury">Luxury</option>
+        <option value="premium">Premium</option>
+    </field>
+    <field name="meal_plan" type="list" title="Meal plan" group="Pricing" context="com_content.article" default="fb">
+        <option value="bb">Bed &amp; Breakfast</option>
+        <option value="hb">Half Board</option>
+        <option value="fb">Full Board</option>
+        <option value="ai">All Inclusive</option>
+    </field>
+
+    <!-- ── Logistics ────────────────────────────────────────── -->
+    <field name="parks" type="list" title="Parks visited" group="Logistics" context="com_content.article" multiple="true" layout="joomla.form.field.list-fancy-select">
+        <option value="masai-mara">Masai Mara</option>
+        <option value="amboseli">Amboseli</option>
+        <option value="tsavo-east">Tsavo East</option>
+        <option value="tsavo-west">Tsavo West</option>
+        <option value="lake-nakuru">Lake Nakuru</option>
+        <option value="lake-naivasha">Lake Naivasha</option>
+        <option value="samburu">Samburu</option>
+        <option value="aberdare">Aberdares</option>
+        <option value="meru">Meru</option>
+        <option value="mount-kenya">Mount Kenya</option>
+        <option value="serengeti">Serengeti</option>
+        <option value="ngorongoro">Ngorongoro</option>
+        <option value="tarangire">Tarangire</option>
+        <option value="bwindi">Bwindi</option>
+        <option value="zanzibar">Zanzibar</option>
+    </field>
+    <field name="transport" type="list" title="Transport" group="Logistics" context="com_content.article" default="4x4-landcruiser">
+        <option value="4x4-landcruiser">4x4 Land Cruiser</option>
+        <option value="4x4-van">4x4 Safari Van</option>
+        <option value="flight">Domestic flight</option>
+        <option value="road-transfer">Road transfer</option>
+    </field>
+    <field name="departure_from" type="text" title="Departure city" group="Logistics" context="com_content.article" default="Nairobi" />
+    <field name="group_size_min" type="number" title="Minimum group size" group="Logistics" context="com_content.article" default="2" filter="integer" />
+    <field name="group_size_max" type="number" title="Maximum group size" group="Logistics" context="com_content.article" default="7" filter="integer" />
+
+    <!-- ── Rich content ─────────────────────────────────────── -->
+    <field name="highlights" type="textarea" title="Highlights (one per line)" group="Content" context="com_content.article" rows="4" />
+    <field name="includes" type="textarea" title="Included (one per line)" group="Content" context="com_content.article" rows="5" />
+    <field name="excludes" type="textarea" title="Not included (one per line)" group="Content" context="com_content.article" rows="4" />
+    <field name="itinerary_summary" type="editor" title="Day-by-day summary" group="Content" context="com_content.article" filter="JComponentHelper::filterText" buttons="true" />
+
+    <!-- ── SEO ──────────────────────────────────────────────── -->
+    <field name="seo_title" type="text" title="SEO title" group="SEO" context="com_content.article" maxlength="70" />
+    <field name="seo_description" type="textarea" title="SEO description" group="SEO" context="com_content.article" rows="2" maxlength="160" />
+</fields>

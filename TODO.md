@@ -1,166 +1,216 @@
 # Absolute Adventure Safaris - Modernization TODO
 
-## ✅ COMPLETED (Foundation - ~30 min)
+> **Repo:** `~/Desktop/Absoluteadventuresafari` (github.com/Absoluteadventuresafari)
+> **Shared work dir:** `~/Desktop/absolute adventure safari` (other session's API dev)
+> **Rule:** before any commit/push → open localhost for review + stay in sync with other session.
 
-### Infrastructure & Architecture
-- [x] Project structure created (`~/Desktop/absolute adventure safari/`)
-- [x] Git repository initialized
-- [x] **README.md** - Architecture overview, migration strategy, commands
-- [x] **docker/docker-compose.yml** - Full stack (Joomla 5, MariaDB, Redis, Nginx, API, 3x Next.js apps)
-- [x] **docker/Dockerfile.joomla** - PHP 8.3 + Apache + extensions + opcache
-- [x] **docker/Dockerfile.api** - NestJS multi-stage build
-- [x] **docker/Dockerfile.nextjs** - Next.js standalone output
-- [x] **docker/nginx/nginx.conf** - Main config with upstreams, rate limiting, gzip
-- [x] **docker/nginx/conf.d/default.conf** - SSL, subdomains, security headers, HSTS
-- [x] **.env.example** - All environment variables documented
-- [x] **docs/data-model.md** - Complete data model (8 entities, SQL, JSONB structures)
-- [x] **docs/api-spec.md** - Full REST API spec (endpoints, auth, webhooks, SDK)
-- [x] **docs/export_joomla.py** - Python script to export current Joomla content
-- [x] **api/package.json** - NestJS dependencies with Prisma, Stripe, M-Pesa, JWT, Swagger
+---
 
-## 🔄 IN PROGRESS / NEXT (Core API - ~60 min)
+## 🐛 ERROR / FIX QUEUE  ← *user-reported (Oct 2026), do these first*
 
-### API Implementation (NestJS + Prisma)
-- [ ] `api/prisma/schema.prisma` - Database schema matching data-model.md
-- [ ] `api/src/main.ts` - Bootstrap with Swagger, Helmet, Throttler, CORS
-- [ ] `api/src/config/` - Configuration modules (database, jwt, stripe, mpesa, email)
-- [ ] `api/src/common/` - Guards, interceptors, pipes, filters, decorators
-- [ ] `api/src/modules/auth/` - JWT auth, register, login, refresh, password reset
-- [ ] `api/src/modules/users/` - User profiles, preferences, loyalty
-- [ ] `api/src/modules/safaris/` - Catalog, availability, search, filters
-- [ ] `api/src/modules/bookings/` - CRUD, hold inventory, pricing, vouchers
-- [ ] `api/src/modules/payments/` - Stripe + M-Pesa integration, webhooks
-- [ ] `api/src/modules/itinerary/` - Sessions, pricing, PDF export, convert to booking
-- [ ] `api/src/modules/agents/` - Agent auth, bookings, commissions, clients
-- [ ] `api/src/modules/sync/` - Joomla webhook receivers, data synchronization
-- [ ] `api/prisma/seed.ts` - Seed parks, tiers, sample safaris, test agent
+| # | Issue | Status | Fix plan |
+|---|-------|--------|----------|
+| E1 | **Joomla overrides don't show real photos** — `featured/default.php` + `article/default.php` never reference `images/cards/`; cards render grey `.aas-card__media-placeholder`, no `<picture>`/WebP anywhere in Joomla | ⬜ TODO | Wire `<picture>` (WebP 400/800/1280 + JPG fallback) into the featured/listing override; map article alias → card slug for known parks; **themed fallback image** instead of grey placeholder; hero already supports `has-image` |
+| E2 | **"Repetitions on Kenya resorts"** — Masai Mara / Lake Nakuru / Amboseli / Samburu cards appear both in home *Featured* (6) and *Kenya Lodge Safaris* listing (9); nav submenu duplicates page headings | ⬜ TODO | Differentiate the two surfaces once real content is migrated: Featured = destination highlights (Kenya + Tanzania/Uganda/Zanzibar mix); Listing = full catalog w/ pagination. Keep unique titles/prices/parks per card; no identical card twice on the same page |
+| E3 | **listing.html / safari.html lack the nav + mobile accordion** that index.html has (bare header, no dropdowns, no mobile menu) | ⬜ TODO | Mirror the nav block (desktop dropdowns + `aas-mobile-nav` accordion) into both preview pages; Joomla already renders menu via `mod_menu` override |
+| E4 | **Commit pending** — everything still uncommitted on `main`; `origin` remote config was lost (refs `origin/main` exist but no `[remote "origin"]` in `.git/config`) | ⬜ TODO | `git remote add origin https://github.com/Absoluteadventuresafari.git`, review localhost, `git add -A && git commit` on `main` (child of `5336f60`), push fast-forward |
+| E5 | Contact details (phones/emails) stripped from all files — re-add via template params later | ⬜ TODO | Re-add contacts behind params `phone`, `phoneWhatsapp`, `email` in `templateDetails.xml` + index.php footer |
+| E6 | **Unknown subject for "some lack pictures"** — all 11 card slugs have WebP+JPG sets (67 files, verified 200 via preview), but cards *not yet migrated into Joomla content* will show fallbacks until E1 lands | ◐ PARTIAL | E1 fixes the fallback path; content migration fills real associations |
 
-### Joomla 5 Modernization
-- [ ] Custom template `absolute/` (minimal, API-first, Tailwind via CDN)
-- [ ] Custom fields for Safari content type (duration, price, parks, tier, etc.)
-- [ ] Plugin `plg_system_jwt` - JWT bridge for micro-app SSO
-- [ ] Plugin `plg_content_api_sync` - Push content changes to API via queue
-- [ ] Module `mod_safari_search` - Search form for micro-apps
-- [ ] FaLang/Joomfish setup for 5 languages (en, de, fr, zh, es)
-- [ ] Akeeba Backup + Admin Tools security hardening
+---
 
-## ⏳ PENDING (Micro-apps - ~90 min each)
+## ✅ COMPLETED (verified)
+
+### Foundation / Infrastructure
+- [x] Project structure + git repo
+- [x] `README.md` — architecture, migration strategy, commands
+- [x] `docker/docker-compose.yml` — Joomla 5, MariaDB, Redis, Nginx, API, 3× Next.js
+- [x] `docker/Dockerfile.joomla` — PHP 8.3 + Apache + extensions + opcache
+- [x] `docker/Dockerfile.api` — NestJS multi-stage
+- [x] `docker/Dockerfile.nextjs` — Next.js standalone
+- [x] `docker/nginx/nginx.conf` + `conf.d/default.conf` — upstreams, SSL, HSTS, rate limits
+- [x] `.env.example` — all env vars (DB, JWT, Stripe, M-Pesa, SMTP, S3, analytics)
+- [x] `docs/data-model.md` — 8 entities, SQL, JSONB structures
+- [x] `docs/api-spec.md` — full REST spec, auth, webhooks, SDK
+- [x] `docs/export_joomla.py` — live Joomla content exporter
+- [x] `docs/current-site-analysis.md`, `docs/visual-sitemap.md`
+
+### Joomla 5 template (built, `php -l` clean)
+- [x] `templateDetails.xml` — manifest, positions, params (colors, API URLs, features, social, contact)
+- [x] `index.php` — API-first shell (header, hero module, footer, cookie consent)
+- [x] `component.php`, `error.php`, `offline.php`
+- [x] `css/template.css` — responsive + design tokens (color/space/radius/elevation/**motion**)
+- [x] `js/template.js` — nav toggle, search drawer, cookie consent, micro-app hand-off, **mobile accordion (js-ready progressive enhancement)**
+- [x] `html/mod_menu/default.php` — **recursive multi-level menu**, `has-children` fixed, ARIA toggles
+- [x] `html/com_content/article/default.php` — safari detail (hero `has-image`, fields: duration/group/pricing, booking CTA)
+- [x] `html/com_content/featured/default.php` — listing grid (cards, pagination, book/view CTA)
+- [x] Language `en-GB` + `scss/` tokens (motion tokens mirrored)
+- [x] Plugin `plg_system_jwt` — JWT bridge for micro-app SSO
+- [x] Plugin `plg_content_api_sync` — push content changes to API
+- [x] Module `mod_safari_search` — search form for micro-apps (php/tmpl/xml/language)
+- [x] Module `mod_aas_hero` — hero carousel with controlled motion (php/tmpl/css/js/language)
+- [x] `setup/safari-fields.xml` + `install.sh`
+
+### Hero + cards imagery (built, preview verified 200)
+- [x] Client hero slides → `images/hero/` (WebP 1300/960/640 + JPG fallback)
+- [x] Ken Burns zoom/pan on active frame (8s), crossfade, staggered captions
+- [x] Pause on hover/focus/hidden-tab; swipe; keyboard arrows; `prefers-reduced-motion`
+- [x] **11 CC-licensed destination photos** → `images/cards/` (WebP 400/800/1280 + JPG, 4:3 cards & 2:1 banners; 67 files)
+- [x] `images/cards/CREDITS.md` + preview `/credits.html` (attribution)
+- [x] Preview pages wired with real photos: **index (6 cards)**, **listing (9 cards)**, **safari hero banner**
+- [x] Animated nav dropdowns — fade+lift+micro-scale, staggered items, 2nd-level flyout, `Esc` close, `:focus-within` parity
+- [x] Card hover lift + photo zoom (token-driven)
+- [x] `docs/micro-interactions.md` — interaction spec (durations/easings/choreography)
+
+### API — scaffold (synced from other session)
+- [x] `api/package.json` — NestJS deps (Prisma, Stripe, JWT, Swagger, Throttler)
+- [x] `api/prisma/schema.prisma` — full schema (Users, Agents, Safaris, Parks,
+      Accommodations, RoomTypes, Bookings, Payments, ItinerarySessions,
+      Webhooks, SyncLogs, enums)
+- [x] `api/src/main.ts` — bootstrap (Swagger, Helmet, Throttler, CORS)
+- [x] `api/src/app.module.ts`
+- [x] `api/src/config/configuration.ts`, `config/validation.ts`
+- [x] `api/src/common/filters/http-exception.filter.ts`
+- [x] `api/src/common/interceptors/logging.interceptor.ts`, `transform.interceptor.ts`
+- [x] `api/src/prisma/prisma.module.ts`, `prisma.service.ts`
+
+---
+
+## 🔄 IN PROGRESS
+
+### Fix queue (E1→E6 above)  ← *next*
+- [ ] E1: `<picture>` WebP wiring in `featured/default.php` (+ themed fallback), verify hero uses card 1280 banner
+- [ ] E3: nav + mobile menu on `listing.html` / `safari.html`
+- [ ] E4: restore `origin` remote, `git add -A`, commit on `main` (rule: localhost open first)
+- [ ] E5: contact params re-add
+- [ ] E2: de-duplicate Kenya cards on final content migration
+
+### Joomla 5 remaining
+- [ ] FaLang/Joomfish — 5 languages (en, de, fr, zh, es)
+- [ ] Akeeba Backup + Admin Tools hardening
+- [ ] Joomla content migration → real articles w/ images (see Content Migration)
+
+### API — modules (in progress, other session)
+- [ ] `api/src/modules/auth/` — JWT, register, login, refresh, password reset
+- [ ] `api/src/modules/users/` — profiles, preferences, loyalty
+- [ ] `api/src/modules/safaris/` — catalog, availability, search, filters
+- [ ] `api/src/modules/bookings/` — CRUD, hold inventory, pricing, vouchers
+- [ ] `api/src/modules/payments/` — Stripe + M-Pesa, webhooks
+- [ ] `api/src/modules/itinerary/` — sessions, pricing, PDF, convert
+- [ ] `api/src/modules/agents/` — auth, bookings, commissions
+- [ ] `api/src/modules/sync/` — Joomla webhook receivers
+- [ ] `api/prisma/seed.ts` — parks, tiers, sample safaris, test agent
+
+---
+
+## ⏳ PENDING
 
 ### 1. Booking Micro-app (`micro-apps/booking/`)
-- [ ] `npx create-next-app@latest . --typescript --tailwind --eslint --app --src-dir`
-- [ ] Shared UI components (shadcn/ui via Turborepo)
-- [ ] Safari search & filter page (SSR)
-- [ ] Safari detail page with availability calendar
-- [ ] Booking flow: details → payment → confirmation
-- [ ] Stripe Checkout + M-Pesa STK Push integration
+- [ ] Scaffold Next.js (TS, Tailwind, App Router, src-dir)
+- [ ] Shared UI (shadcn/ui)
+- [ ] Safari search & filter (SSR)
+- [ ] Safari detail + availability calendar
+- [ ] Booking flow → payment → confirmation
+- [ ] Stripe Checkout + M-Pesa STK Push
 - [ ] Guest + authenticated booking
-- [ ] Voucher PDF download
+- [ ] Voucher PDF
 - [ ] Email/SMS/WhatsApp confirmations
-- [ ] i18n (next-intl) for 5 languages
-- [ ] SEO: structured data, sitemap, meta tags
+- [ ] i18n (next-intl, 5 langs)
+- [ ] SEO: structured data, sitemap, meta
 
 ### 2. Itinerary Builder (`micro-apps/itinerary-builder/`)
-- [ ] Drag-drop day planner (React DnD / @dnd-kit)
-- [ ] Park/accommodation selector with live pricing
-- [ ] Preferences panel (pace, budget, interests)
-- [ ] Real-time price calculation (API)
-- [ ] PDF itinerary export (pdfmake)
-- [ ] "Book This Itinerary" → booking micro-app handoff
-- [ ] Save/resume sessions (localStorage + API)
-- [ ] Shareable links
+- [ ] Drag-drop day planner (@dnd-kit)
+- [ ] Park/accommodation selector + live pricing
+- [ ] Preferences panel
+- [ ] Real-time pricing (API)
+- [ ] PDF export (pdfmake)
+- [ ] "Book this itinerary" handoff
+- [ ] Save/resume + shareable links
 - [ ] Mobile-responsive
 
 ### 3. Agent Portal (`micro-apps/agent-portal/`)
-- [ ] Agent login (JWT + refresh tokens)
+- [ ] Agent login (JWT + refresh)
 - [ ] Dashboard: bookings, commissions, clients
-- [ ] Booking management (view, modify, cancel for clients)
-- [ ] Commission reports (filters, export CSV/PDF)
-- [ ] Client CRM (contact history, preferences, loyalty)
-- [ ] White-label settings (logo, colors, domain)
+- [ ] Booking management for clients
+- [ ] Commission reports (CSV/PDF export)
+- [ ] Client CRM
+- [ ] White-label settings
 - [ ] API key management
-- [ ] Notifications (new booking, payment, commission paid)
+- [ ] Notifications
 
-## 🚀 DEPLOYMENT & OPS (30 min)
+### Deployment & Ops
+- [ ] `.github/workflows/ci.yml` — lint, test, type-check
+- [ ] `deploy-api.yml`, `deploy-apps.yml`, `deploy-joomla.yml`, `sync-content.yml`
+- [ ] VPS (Ubuntu 22.04, Docker, Nginx, Certbot)
+- [ ] DNS: `www`, `api`, `book`, `plan`, `agents`, `cdn`
+- [ ] SSL (Let's Encrypt + auto-renew)
+- [ ] DB backups (daily + PITR)
+- [ ] Monitoring (UptimeRobot, Sentry, Logtail)
+- [ ] CDN (CloudFront/Cloudflare)
+- [ ] Email (SendGrid/Postmark)
+- [ ] Analytics (GA4 + GTM + Pixel)
 
-### CI/CD (GitHub Actions)
-- [ ] `.github/workflows/ci.yml` - Lint, test, type-check
-- [ ] `.github/workflows/deploy-api.yml` - Build & push API to Railway/Render
-- [ ] `.github/workflows/deploy-apps.yml` - Deploy Next.js apps to Vercel
-- [ ] `.github/workflows/deploy-joomla.yml` - Deploy Joomla to VPS (rsync + DB migrate)
-- [ ] `.github/workflows/sync-content.yml` - Nightly content sync Joomla → API
-
-### Production Setup
-- [ ] Provision VPS (Ubuntu 22.04, Docker, Nginx, Certbot)
-- [ ] Configure DNS: `www`, `api`, `book`, `plan`, `agents`, `cdn`
-- [ ] SSL certificates (Let's Encrypt + auto-renewal)
-- [ ] Database backups (daily + point-in-time)
-- [ ] Monitoring: UptimeRobot, Sentry, Logtail
-- [ ] CDN: CloudFront/Cloudflare for images
-- [ ] Email: SendGrid/Postmark transactional
-- [ ] Analytics: GA4 + GTM + Facebook Pixel
-
-## 📋 CONTENT MIGRATION (Parallel - 30 min)
-
+### Content Migration
 - [ ] Run `export_joomla.py` on live site
-- [ ] Transform exported JSON → new data model
-- [ ] Import to Joomla 5 via CLI (custom fields, categories, articles)
-- [ ] Sync to API database (prisma migrate + seed)
-- [ ] Verify all safaris, parks, accommodations, images
-- [ ] Set up 301 redirects for old URLs
+- [ ] Transform JSON → new data model
+- [ ] Import to Joomla 5 via CLI
+- [ ] Sync to API DB (prisma migrate + seed)
+- [ ] Verify safaris/parks/accommodations/images (resolve E2 duplication here)
+- [ ] 301 redirects for old URLs
 - [ ] Test multi-language content
 
-## 🎯 LAUNCH CHECKLIST
-
-- [ ] End-to-end booking flow (guest + agent)
-- [ ] M-Pesa sandbox → production switch
-- [ ] Stripe test → live mode
+### Launch Checklist
+- [ ] E2E booking flow (guest + agent)
+- [ ] M-Pesa sandbox → production
+- [ ] Stripe test → live
 - [ ] Load test (k6): 100 concurrent bookings
 - [ ] Security audit (OWASP, headers, rate limits)
 - [ ] Accessibility audit (WCAG 2.1 AA)
-- [ ] Core Web Vitals < 2.5s LCP, < 100ms CLS
+- [ ] Core Web Vitals (LCP < 2.5s, CLS < 100ms)
 - [ ] GDPR/Privacy policy + cookie consent
-- [ ] Terms of service + booking conditions
-- [ ] Staff training (Joomla admin, agent portal)
-- [ ] Go-live checklist & rollback plan
+- [ ] TOS + booking conditions
+- [ ] Staff training
+- [ ] Go-live + rollback plan
 
 ---
 
 ## Time Estimates (AI-Accelerated)
 
-| Phase | Tasks | Est. Time |
-|-------|-------|-----------|
-| Foundation | ✅ Done | 30 min |
-| API Core | 12 modules + Prisma + tests | 60 min |
-| Joomla 5 | Template, fields, plugins, i18n | 45 min |
-| Booking App | Next.js + payments + i18n | 90 min |
-| Itinerary Builder | Drag-drop + pricing + PDF | 90 min |
-| Agent Portal | Dashboard + CRM + reports | 90 min |
-| Deployment | CI/CD + VPS + DNS + SSL | 30 min |
-| Content Migration | Export → transform → import | 30 min |
-| **Total** | | **~7.5 hours** |
+| Phase | Est. |
+|-------|------|
+| Foundation | ✅ Done |
+| Fix queue E1–E6 | ~20 min |
+| API Core (modules + Prisma + tests) | ~60 min |
+| Joomla 5 (template, fields, plugins, i18n) | ~45 min |
+| Booking App | ~90 min |
+| Itinerary Builder | ~90 min |
+| Agent Portal | ~90 min |
+| Deployment (CI/CD, VPS, DNS, SSL) | ~30 min |
+| Content Migration | ~30 min |
+| **Total** | **~8 hours** |
+
+---
 
 ## Quick Commands
 
 ```bash
-# Start everything locally
-cd ~/Desktop/absolute\ adventure\ safari
+# Local stack
 docker compose -f docker/docker-compose.yml up -d
-
-# View logs
-docker compose -f docker/docker-compose.yml logs -f api
-docker compose -f docker/docker-compose.yml logs -f joomla
 
 # API dev
 cd api && npm run start:dev
 
-# Micro-apps dev (separate terminals)
-cd micro-apps/booking && npm run dev
-cd micro-apps/itinerary-builder && npm run dev
-cd micro-apps/agent-portal && npm run dev
+# Micro-apps dev
+cd micro-apps/booking && npm run dev           # :3001
+cd micro-apps/itinerary-builder && npm run dev  # :3002
+cd micro-apps/agent-portal && npm run dev       # :3003
 
-# Run export on live server
+# Prisma
+cd api && npx prisma generate && npx prisma migrate dev && npx prisma db seed
+
+# Export live Joomla content
 ssh user@server "cd /path/to/export && python3 export_joomla.py"
 
-# Prisma commands
-cd api && npx prisma generate && npx prisma migrate dev && npx prisma db seed
+# Preview after fixes
+cd ~/Desktop/Absoluteadventuresafari && python3 preview/serve.py 8080   # http://localhost:8080/
 ```

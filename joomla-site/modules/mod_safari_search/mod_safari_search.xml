@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="5.0" type="module" client="site" method="upgrade">
+    <name>MOD_SAFARI_SEARCH</name>
+    <author>Absolute Adventure Safaris</author>
+    <creationDate>2026-01-12</creationDate>
+    <copyright>Copyright (C) 2026 Absolute Adventure Safaris</copyright>
+    <license>Proprietary</license>
+    <authorUrl>https://absoluteadventuresafaris.com</authorUrl>
+    <version>1.0.0</version>
+    <description>MOD_SAFARI_SEARCH_XML_DESCRIPTION</description>
+
+    <files>
+        <filename module="mod_safari_search">mod_safari_search.php</filename>
+        <folder>tmpl</folder>
+        <folder>language</folder>
+    </files>
+
+    <languages>
+        <language tag="en-GB">language/en-GB/en-GB.mod_safari_search.ini</language>
+        <language tag="en-GB">language/en-GB/en-GB.mod_safari_search.sys.ini</language>
+    </languages>
+
+    <config>
+        <fields name="params">
+            <fieldset name="basic" label="MOD_SAFARI_SEARCH_BASIC">
+                <field name="layout" type="modulelayout" label="JFIELD_ALT_LAYOUT_LABEL" default="default" />
+                <field name="heading" type="text" label="MOD_SAFARI_SEARCH_HEADING"
+                       default="Find your perfect safari" />
+                <field name="subheading" type="text" label="MOD_SAFARI_SEARCH_SUBHEADING"
+                       default="Search by destination, duration or budget" />
+                <field name="enabled_fields" type="checkboxes" label="MOD_SAFARI_SEARCH_FIELDS">
+                    <option value="destination">MOD_SAFARI_SEARCH_FIELD_DESTINATION</option>
+                    <option value="type">MOD_SAFARI_SEARCH_FIELD_TYPE</option>
+                    <option value="duration">MOD_SAFARI_SEARCH_FIELD_DURATION</option>
+                    <option value="dates">MOD_SAFARI_SEARCH_FIELD_DATES</option>
+                    <option value="travelers">MOD_SAFARI_SEARCH_FIELD_TRAVELERS</option>
+                    <option value="budget">MOD_SAFARI_SEARCH_FIELD_BUDGET</option>
+                </field>
+                <field name="redirect_mode" type="list" label="MOD_SAFARI_SEARCH_REDIRECT" default="booking">
+                    <option value="booking">MOD_SAFARI_SEARCH_REDIRECT_BOOKING</option>
+                    <option value="joomla">MOD_SAFARI_SEARCH_REDIRECT_JOOMLA</option>
+                </field>
+                <field name="booking_url" type="url" label="MOD_SAFARI_SEARCH_BOOKING_URL"
+                       default="https://book.absoluteadventuresafaris.com" />
+                <field name="joomla_menuid" type="menuitem" label="MOD_SAFARI_SEARCH_JOOMLA_MENU" />
+            </fieldset>
+        </fields>
+    </config>
+</extension>

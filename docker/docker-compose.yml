@@ -18,7 +18,7 @@ services:
       JOOMLA_SITE_NAME: "Absolute Adventure Safaris"
       JOOMLA_ADMIN_USER: admin
       JOOMLA_ADMIN_PASSWORD: ${JOOMLA_ADMIN_PASSWORD:-changeme123}
-      JOOMLA_ADMIN_EMAIL: admin@absoluteadventuresafaris.com
+      JOOMLA_ADMIN_EMAIL: ${JOOMLA_ADMIN_EMAIL:-admin@localhost}
       PHP_MEMORY_LIMIT: 512M
       PHP_UPLOAD_MAX_FILESIZE: 64M
       PHP_POST_MAX_SIZE: 64M

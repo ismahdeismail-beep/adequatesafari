@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="5.0" type="plugin" group="system" method="upgrade">
+    <name>PLG_SYSTEM_JWT</name>
+    <author>Absolute Adventure Safaris</author>
+    <creationDate>2026-01-12</creationDate>
+    <copyright>Copyright (C) 2026 Absolute Adventure Safaris</copyright>
+    <license>Proprietary</license>
+    <authorUrl>https://absoluteadventuresafaris.com</authorUrl>
+    <version>1.0.0</version>
+    <description>PLG_SYSTEM_JWT_XML_DESCRIPTION</description>
+
+    <files>
+        <filename plugin="jwt">jwt.php</filename>
+    </files>
+
+    <languages>
+        <language tag="en-GB">language/en-GB/en-GB.plg_system_jwt.ini</language>
+        <language tag="en-GB">language/en-GB/en-GB.plg_system_jwt.sys.ini</language>
+    </languages>
+
+    <config>
+        <fields name="params">
+            <fieldset name="basic" label="PLG_SYSTEM_JWT_BASIC">
+                <field name="secret" type="password" label="PLG_SYSTEM_JWT_SECRET"
+                       description="PLG_SYSTEM_JWT_SECRET_DESC"
+                       size="60" />
+                <field name="algorithm" type="list" label="PLG_SYSTEM_JWT_ALGORITHM" default="HS256">
+                    <option value="HS256">HS256</option>
+                    <option value="HS384">HS384</option>
+                    <option value="HS512">HS512</option>
+                </field>
+                <field name="issuer" type="text" label="PLG_SYSTEM_JWT_ISSUER" default="absoluteadventuresafaris.com" />
+                <field name="audience" type="text" label="PLG_SYSTEM_JWT_AUDIENCE" default="aas-micro-apps" />
+                <field name="ttl" type="number" label="PLG_SYSTEM_JWT_TTL" default="900"
+                       description="PLG_SYSTEM_JWT_TTL_DESC" />
+                <field name="cookie_name" type="text" label="PLG_SYSTEM_JWT_COOKIE" default="aas_token" />
+                <field name="allow_get" type="radio" label="PLG_SYSTEM_JWT_ALLOW_GET" default="0" class="btn-group btn-group-yesno">
+                    <option value="1">JYES</option>
+                    <option value="0">JNO</option>
+                </field>
+                <field name="cors_origins" type="text" label="PLG_SYSTEM_JWT_CORS_ORIGINS" default="https://book.absoluteadventuresafaris.com,https://plan.absoluteadventuresafaris.com,https://agents.absoluteadventuresafaris.com"
+                       description="PLG_SYSTEM_JWT_CORS_ORIGINS_DESC" size="60" />
+            </fieldset>
+        </fields>
+    </config>
+</extension>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="5.0" type="plugin" group="content" method="upgrade">
+    <name>PLG_CONTENT_API_SYNC</name>
+    <author>Absolute Adventure Safaris</author>
+    <creationDate>2026-01-12</creationDate>
+    <copyright>Copyright (C) 2026 Absolute Adventure Safaris</copyright>
+    <license>Proprietary</license>
+    <authorUrl>https://absoluteadventuresafaris.com</authorUrl>
+    <version>1.0.0</version>
+    <description>PLG_CONTENT_API_SYNC_XML_DESCRIPTION</description>
+
+    <files>
+        <filename plugin="api_sync">api_sync.php</filename>
+    </files>
+
+    <languages>
+        <language tag="en-GB">language/en-GB/en-GB.plg_content_api_sync.ini</language>
+        <language tag="en-GB">language/en-GB/en-GB.plg_content_api_sync.sys.ini</language>
+    </languages>
+
+    <config>
+        <fields name="params">
+            <fieldset name="basic" label="PLG_CONTENT_API_SYNC_BASIC">
+                <field name="api_url" type="url" label="PLG_CONTENT_API_SYNC_URL"
+                       default="https://api.absoluteadventuresafaris.com/v1/sync"
+                       description="PLG_CONTENT_API_SYNC_URL_DESC" size="60" />
+                <field name="api_token" type="password" label="PLG_CONTENT_API_SYNC_TOKEN" size="60"
+                       description="PLG_CONTENT_API_SYNC_TOKEN_DESC" />
+                <field name="sync_categories" type="text" label="PLG_CONTENT_API_SYNC_CATEGORIES"
+                       default="17,14,236,237,238,240,242,243,244"
+                       description="PLG_CONTENT_API_SYNC_CATEGORIES_DESC" size="60" />
+                <field name="sync_on_save" type="radio" label="PLG_CONTENT_API_SYNC_ON_SAVE" default="1" class="btn-group btn-group-yesno">
+                    <option value="1">JYES</option>
+                    <option value="0">JNO</option>
+                </field>
+                <field name="sync_on_delete" type="radio" label="PLG_CONTENT_API_SYNC_ON_DELETE" default="1" class="btn-group btn-group-yesno">
+                    <option value="1">JYES</option>
+                    <option value="0">JNO</option>
+                </field>
+                <field name="queue_on_failure" type="radio" label="PLG_CONTENT_API_SYNC_QUEUE" default="1" class="btn-group btn-group-yesno">
+                    <option value="1">JYES</option>
+                    <option value="0">JNO</option>
+                </field>
+                <field name="timeout" type="number" label="PLG_CONTENT_API_SYNC_TIMEOUT" default="5" />
+            </fieldset>
+        </fields>
+    </config>
+</extension>

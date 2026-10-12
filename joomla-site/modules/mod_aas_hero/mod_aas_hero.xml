@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="5.0" type="module" client="site" method="upgrade">
+    <name>MOD_AAS_HERO</name>
+    <author>Absolute Adventure Safaris</author>
+    <creationDate>2026-01-12</creationDate>
+    <copyright>Copyright (C) 2026 Absolute Adventure Safaris</copyright>
+    <license>Proprietary</license>
+    <authorUrl>https://absoluteadventuresafaris.com</authorUrl>
+    <version>1.0.0</version>
+    <description>MOD_AAS_HERO_XML_DESCRIPTION</description>
+
+    <files>
+        <filename module="mod_aas_hero">mod_aas_hero.php</filename>
+        <folder>tmpl</folder>
+        <folder>language</folder>
+    </files>
+
+    <languages>
+        <language tag="en-GB">language/en-GB/en-GB.mod_aas_hero.ini</language>
+        <language tag="en-GB">language/en-GB/en-GB.mod_aas_hero.sys.ini</language>
+    </languages>
+
+    <config>
+        <fields name="params">
+            <fieldset name="basic" label="MOD_AAS_HERO_BASIC">
+                <field name="layout" type="modulelayout" label="JFIELD_ALT_LAYOUT_LABEL" default="default" />
+                <field name="height" type="list" label="MOD_AAS_HERO_HEIGHT" default="large">
+                    <option value="medium">MOD_AAS_HERO_HEIGHT_MEDIUM</option>
+                    <option value="large">MOD_AAS_HERO_HEIGHT_LARGE</option>
+                    <option value="full">MOD_AAS_HERO_HEIGHT_FULL</option>
+                </field>
+                <field name="autoplay" type="radio" label="MOD_AAS_HERO_AUTOPLAY" default="1" class="btn-group btn-group-yesno">
+                    <option value="1">JYES</option>
+                    <option value="0">JNO</option>
+                </field>
+                <field name="interval" type="number" label="MOD_AAS_HERO_INTERVAL" default="6000"
+                       description="MOD_AAS_HERO_INTERVAL_DESC" />
+                <field name="motion" type="list" label="MOD_AAS_HERO_MOTION" default="kenburns">
+                    <option value="kenburns">MOD_AAS_HERO_MOTION_KENBURNS</option>
+                    <option value="fade">MOD_AAS_HERO_MOTION_FADE</option>
+                    <option value="none">MOD_AAS_HERO_MOTION_NONE</option>
+                </field>
+                <field name="show_captions" type="radio" label="MOD_AAS_HERO_SHOW_CAPTIONS" default="1" class="btn-group btn-group-yesno">
+                    <option value="1">JYES</option>
+                    <option value="0">JNO</option>
+                </field>
+                <field name="show_controls" type="radio" label="MOD_AAS_HERO_SHOW_CONTROLS" default="1" class="btn-group btn-group-yesno">
+                    <option value="1">JYES</option>
+                    <option value="0">JNO</option>
+                </field>
+                <field name="show_progress" type="radio" label="MOD_AAS_HERO_SHOW_PROGRESS" default="1" class="btn-group btn-group-yesno">
+                    <option value="1">JYES</option>
+                    <option value="0">JNO</option>
+                </field>
+                <field name="overlay" type="list" label="MOD_AAS_HERO_OVERLAY" default="tinted">
+                    <option value="none">MOD_AAS_HERO_OVERLAY_NONE</option>
+                    <option value="light">MOD_AAS_HERO_OVERLAY_LIGHT</option>
+                    <option value="tinted">MOD_AAS_HERO_OVERLAY_TINTED</option>
+                    <option value="strong">MOD_AAS_HERO_OVERLAY_STRONG</option>
+                </field>
+            </fieldset>
+
+            <fieldset name="slides" label="MOD_AAS_HERO_SLIDES">
+                <field name="slides_data" type="subform"
+                       label="MOD_AAS_HERO_SLIDES"
+                       layout="joomla.form.field.subform.repeatable-table"
+                       multiple="true"
+                       min="1">
+                    <form>
+                        <field name="image" type="media" label="MOD_AAS_HERO_SLIDE_IMAGE" directory="templates/absolute/images/hero" />
+                        <field name="eyebrow" type="text" label="MOD_AAS_HERO_SLIDE_EYEBROW" />
+                        <field name="heading" type="text" label="MOD_AAS_HERO_SLIDE_HEADING" />
+                        <field name="subtext" type="textarea" label="MOD_AAS_HERO_SLIDE_SUBTEXT" rows="2" />
+                        <field name="button_text" type="text" label="MOD_AAS_HERO_SLIDE_BTN_TEXT" default="Book Now" />
+                        <field name="button_url" type="url" label="MOD_AAS_HERO_SLIDE_BTN_URL" default="https://book.absoluteadventuresafaris.com" />
+                        <field name="button2_text" type="text" label="MOD_AAS_HERO_SLIDE_BTN2_TEXT" />
+                        <field name="button2_url" type="url" label="MOD_AAS_HERO_SLIDE_BTN2_URL" />
+                        <field name="align" type="list" label="MOD_AAS_HERO_SLIDE_ALIGN" default="left">
+                            <option value="left">MOD_AAS_HERO_ALIGN_LEFT</option>
+                            <option value="center">MOD_AAS_HERO_ALIGN_CENTER</option>
+                        </field>
+                    </form>
+                </field>
+            </fieldset>
+        </fields>
+    </config>
+</extension>
