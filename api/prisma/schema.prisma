@@ -25,6 +25,7 @@ model User {
   payments      Payment[]
   agentProfile  AgentProfile?
   refreshTokens RefreshToken[]
+  reviews       Review[]
 
   @@map("users")
 }
@@ -77,11 +78,11 @@ model Safari {
   difficulty      Difficulty  @default(MODERATE)
   groupSizeMin    Int         @default(1) @map("group_size_min")
   groupSizeMax    Int         @default(12) @map("group_size_max")
-  highlights      String[]    @db.Text
-  inclusions      String[]    @db.Text
-  exclusions      String[]    @db.Text
+  highlights      Json
+  inclusions      Json
+  exclusions      Json
   itinerary       Json        // Array of day objects
-  images          String[]    // URLs
+  images          Json        // Array of URL strings
   thumbnail       String?
   isActive        Boolean     @default(true) @map("is_active")
   isFeatured      Boolean     @default(false) @map("is_featured")

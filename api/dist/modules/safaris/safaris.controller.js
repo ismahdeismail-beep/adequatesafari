@@ -11,7 +11,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-var _a, _b, _c, _d, _e, _f, _g, _h;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SafarisController = void 0;
 const common_1 = require("@nestjs/common");
@@ -113,7 +112,7 @@ __decorate([
     __param(10, (0, common_1.Query)('availableFrom')),
     __param(11, (0, common_1.Query)('availableTo')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number, Number, typeof (_a = typeof client_1.Country !== "undefined" && client_1.Country) === "function" ? _a : Object, typeof (_b = typeof client_1.SafariStyle !== "undefined" && client_1.SafariStyle) === "function" ? _b : Object, typeof (_c = typeof client_1.AccommodationType !== "undefined" && client_1.AccommodationType) === "function" ? _c : Object, Number, Number, Number, Boolean, String, String, String]),
+    __metadata("design:paramtypes", [Number, Number, String, String, String, Number, Number, Number, Boolean, String, String, String]),
     __metadata("design:returntype", Promise)
 ], SafarisController.prototype, "list", null);
 __decorate([
@@ -133,7 +132,7 @@ __decorate([
     __param(0, (0, common_1.Param)('country')),
     __param(1, (0, common_1.Query)('limit')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [typeof (_d = typeof client_1.Country !== "undefined" && client_1.Country) === "function" ? _d : Object, Number]),
+    __metadata("design:paramtypes", [String, Number]),
     __metadata("design:returntype", Promise)
 ], SafarisController.prototype, "byCountry", null);
 __decorate([
@@ -166,7 +165,7 @@ __decorate([
     (0, swagger_1.ApiOperation)({ summary: 'Create safari (admin)' }),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [typeof (_e = typeof client_2.Prisma !== "undefined" && client_2.Prisma.SafariCreateInput) === "function" ? _e : Object]),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], SafarisController.prototype, "create", null);
 __decorate([
@@ -178,7 +177,7 @@ __decorate([
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, typeof (_f = typeof client_2.Prisma !== "undefined" && client_2.Prisma.SafariUpdateInput) === "function" ? _f : Object]),
+    __metadata("design:paramtypes", [String, Object]),
     __metadata("design:returntype", Promise)
 ], SafarisController.prototype, "update", null);
 __decorate([
@@ -225,7 +224,7 @@ __decorate([
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, typeof (_g = typeof client_2.Prisma !== "undefined" && client_2.Prisma.SafariDateCreateInput) === "function" ? _g : Object]),
+    __metadata("design:paramtypes", [String, Object]),
     __metadata("design:returntype", Promise)
 ], SafarisController.prototype, "addDate", null);
 __decorate([
@@ -237,7 +236,7 @@ __decorate([
     __param(0, (0, common_1.Param)('dateId')),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, typeof (_h = typeof client_2.Prisma !== "undefined" && client_2.Prisma.SafariDateUpdateInput) === "function" ? _h : Object]),
+    __metadata("design:paramtypes", [String, Object]),
     __metadata("design:returntype", Promise)
 ], SafarisController.prototype, "updateDate", null);
 __decorate([

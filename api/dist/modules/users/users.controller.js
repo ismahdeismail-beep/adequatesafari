@@ -11,7 +11,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-var _a, _b, _c;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UsersController = void 0;
 const common_1 = require("@nestjs/common");
@@ -85,7 +84,7 @@ __decorate([
     __param(0, (0, common_1.Request)()),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, typeof (_a = typeof client_2.Prisma !== "undefined" && client_2.Prisma.UserUpdateInput) === "function" ? _a : Object]),
+    __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "updateProfile", null);
 __decorate([
@@ -112,7 +111,7 @@ __decorate([
     __param(2, (0, common_1.Query)('role')),
     __param(3, (0, common_1.Query)('isActive')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number, Number, typeof (_b = typeof client_1.Role !== "undefined" && client_1.Role) === "function" ? _b : Object, Boolean]),
+    __metadata("design:paramtypes", [Number, Number, String, Boolean]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "listUsers", null);
 __decorate([
@@ -133,7 +132,7 @@ __decorate([
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, typeof (_c = typeof client_2.Prisma !== "undefined" && client_2.Prisma.UserUpdateInput) === "function" ? _c : Object]),
+    __metadata("design:paramtypes", [String, Object]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "updateUser", null);
 __decorate([
