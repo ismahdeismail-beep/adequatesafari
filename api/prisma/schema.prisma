@@ -296,6 +296,7 @@ enum BookingStatus {
 }
 
 enum PaymentStatus {
+  PENDING
   UNPAID
   PARTIAL
   PAID

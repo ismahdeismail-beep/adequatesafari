@@ -241,7 +241,9 @@ if ($enableMultiLang && $app->getLanguageFilter()) {
                     <?php if ($phoneKenya) : ?>
                     <li><a href="tel:<?php echo preg_replace('/\s+/', '', $phoneKenya); ?>"><?php echo htmlspecialchars($phoneKenya, ENT_QUOTES, 'UTF-8'); ?></a></li>
                     <?php endif; ?>
-                    <li><a href="https://wa.me/<?php echo preg_replace('/\D+/', '', $phoneWhatsapp); ?>">WhatsApp: <?php echo htmlspecialchars($phoneWhatsapp, ENT_QUOTES, 'UTF-8'); ?></a></li>
+                    <?php if ($phoneWhatsapp) : ?>
+                    <li><a href="https://wa.me/<?php echo preg_replace('/\D+/', '', $phoneWhatsapp); ?>" rel="noopener noreferrer" target="_blank">WhatsApp: <?php echo htmlspecialchars($phoneWhatsapp, ENT_QUOTES, 'UTF-8'); ?></a></li>
+                    <?php endif; ?>
                     <?php if ($emailGeneral) : ?>
                     <li><a href="mailto:<?php echo htmlspecialchars($emailGeneral, ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars($emailGeneral, ENT_QUOTES, 'UTF-8'); ?></a></li>
                     <?php endif; ?>

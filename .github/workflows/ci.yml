@@ -1,0 +1,55 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  php:
+    name: PHP lint (Joomla site)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+      - name: Lint all PHP
+        run: |
+          set -e
+          find joomla-site -name '*.php' -print0 | xargs -0 -n1 php -l
+
+  js:
+    name: JS syntax (template + preview)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Syntax-check all JS
+        run: |
+          set -e
+          find joomla-site preview -name '*.js' -not -path '*/node_modules/*' -print0 | xargs -0 -n1 node --check
+
+  api:
+    name: API build + lint
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: api
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install dependencies
+        run: npm install
+      - name: Prisma generate
+        run: npx prisma generate
+      - name: Build
+        run: npm run build
+      - name: ESLint
+        run: npx eslint "src/**/*.ts"
+      - name: Prisma schema validation
+        run: npx prisma validate

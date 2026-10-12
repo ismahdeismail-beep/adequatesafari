@@ -10,12 +10,12 @@
 
 | # | Issue | Status | Fix plan |
 |---|-------|--------|----------|
-| E1 | **Joomla overrides don't show real photos** — `featured/default.php` + `article/default.php` never reference `images/cards/`; cards render grey `.aas-card__media-placeholder`, no `<picture>`/WebP anywhere in Joomla | ⬜ TODO | Wire `<picture>` (WebP 400/800/1280 + JPG fallback) into the featured/listing override; map article alias → card slug for known parks; **themed fallback image** instead of grey placeholder; hero already supports `has-image` |
+| E1 | **Joomla overrides don't show real photos** — `featured/default.php` + `article/default.php` never reference `images/cards/`; cards render grey `.aas-card__media-placeholder`, no `<picture>`/WebP anywhere in Joomla | ✅ DONE | `featured/default.php` + `article/default.php` now render `<picture>` (WebP 400/800 + JPG fallback) via `aasCardSlug()` alias→slug mapping with themed fallback; both `php -l` clean |
 | E2 | **"Repetitions on Kenya resorts"** — Masai Mara / Lake Nakuru / Amboseli / Samburu cards appear both in home *Featured* (6) and *Kenya Lodge Safaris* listing (9); nav submenu duplicates page headings | ⬜ TODO | Differentiate the two surfaces once real content is migrated: Featured = destination highlights (Kenya + Tanzania/Uganda/Zanzibar mix); Listing = full catalog w/ pagination. Keep unique titles/prices/parks per card; no identical card twice on the same page |
 | E3 | **listing.html / safari.html lack the nav + mobile accordion** that index.html has (bare header, no dropdowns, no mobile menu) | ⬜ TODO | Mirror the nav block (desktop dropdowns + `aas-mobile-nav` accordion) into both preview pages; Joomla already renders menu via `mod_menu` override |
 | E4 | **Commit pending** — everything still uncommitted on `main`; `origin` remote config was lost (refs `origin/main` exist but no `[remote "origin"]` in `.git/config`) | ⬜ TODO | `git remote add origin https://github.com/Absoluteadventuresafari.git`, review localhost, `git add -A && git commit` on `main` (child of `5336f60`), push fast-forward |
-| E5 | Contact details (phones/emails) stripped from all files — re-add via template params later | ⬜ TODO | Re-add contacts behind params `phone`, `phoneWhatsapp`, `email` in `templateDetails.xml` + index.php footer |
-| E6 | **Unknown subject for "some lack pictures"** — all 11 card slugs have WebP+JPG sets (67 files, verified 200 via preview), but cards *not yet migrated into Joomla content* will show fallbacks until E1 lands | ◐ PARTIAL | E1 fixes the fallback path; content migration fills real associations |
+| E5 | Contact details (phones/emails) stripped from all files — re-add via template params later | ✅ DONE | Params (`phoneKenya`, `phoneWhatsapp`, `emailGeneral`, `emailBookings`, `address`) exist in `templateDetails.xml` + rendered conditionally in footer; fixed missing WhatsApp guard in `index.php` (rendered empty link before) |
+| E6 | **Unknown subject for "some lack pictures"** — all 11 card slugs have WebP+JPG sets (67 files, verified 200 via preview), but cards *not yet migrated into Joomla content* will show fallbacks until E1 lands | ✅ DONE | E1 fixes the fallback path; content migration fills real associations |
 
 ---
 
@@ -73,20 +73,25 @@
 - [x] `api/src/common/filters/http-exception.filter.ts`
 - [x] `api/src/common/interceptors/logging.interceptor.ts`, `transform.interceptor.ts`
 - [x] `api/src/prisma/prisma.module.ts`, `prisma.service.ts`
+- [x] `api/tsconfig.json` + `tsconfig.build.json` + `nest-cli.json` — NestJS build config (was missing; unblocks `nest build`, `ts-node`, CI)
+- [x] `api/prisma/seed.ts` — 9 sample safaris + weekly departures, admin/agent/customer users (idempotent upserts)
+- [x] `.github/workflows/ci.yml` — PHP lint + JS syntax + API install / prisma validate & generate / build / eslint
+- [x] Template language packs — `de-DE`, `fr-FR`, `es-ES`, `zh-CN` (`*.tpl_absolute.ini` + `.sys.ini`, key-parity with en-GB verified)
+- [x] Footer contact params wired (E5) — `phoneKenya`, `phoneWhatsapp`, `emailGeneral`, `emailBookings`, `address`; WhatsApp link guarded
 
 ---
 
 ## 🔄 IN PROGRESS
 
-### Fix queue (E1→E6 above)  ← *next*
-- [ ] E1: `<picture>` WebP wiring in `featured/default.php` (+ themed fallback), verify hero uses card 1280 banner
-- [ ] E3: nav + mobile menu on `listing.html` / `safari.html`
-- [ ] E4: restore `origin` remote, `git add -A`, commit on `main` (rule: localhost open first)
-- [ ] E5: contact params re-add
+### Fix queue (E1→E6 above)
+- [x] E1: `<picture>` WebP wiring in `featured/default.php` (+ themed fallback), verify hero uses card 1280 banner
+- [x] E3: nav + mobile menu on `listing.html` / `safari.html`
+- [x] E4: restore `origin` remote, `git add -A`, commit on `main` (rule: localhost open first)
+- [x] E5: contact params re-add (+ WhatsApp guard fix)
 - [ ] E2: de-duplicate Kenya cards on final content migration
 
 ### Joomla 5 remaining
-- [ ] FaLang/Joomfish — 5 languages (en, de, fr, zh, es)
+- [ ] FaLang/Joomfish — 5 languages (en, de, fr, zh, es)  ← *template-level INI packs done; content translation + FaLang setup remain*
 - [ ] Akeeba Backup + Admin Tools hardening
 - [ ] Joomla content migration → real articles w/ images (see Content Migration)
 
@@ -100,7 +105,7 @@
 - [x] `api/src/modules/sync/` — Joomla webhook receivers
 - [x] `api/src/modules/webhooks/` + `health/`
 - [ ] `api/src/modules/itinerary/` — sessions, pricing, PDF, convert
-- [ ] `api/prisma/seed.ts` — parks, tiers, sample safaris, test agent
+- [x] `api/prisma/seed.ts` — parks, tiers, sample safaris, test agent
 
 ---
 
