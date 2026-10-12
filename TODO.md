@@ -90,15 +90,16 @@
 - [ ] Akeeba Backup + Admin Tools hardening
 - [ ] Joomla content migration → real articles w/ images (see Content Migration)
 
-### API — modules (in progress, other session)
-- [ ] `api/src/modules/auth/` — JWT, register, login, refresh, password reset
-- [ ] `api/src/modules/users/` — profiles, preferences, loyalty
-- [ ] `api/src/modules/safaris/` — catalog, availability, search, filters
-- [ ] `api/src/modules/bookings/` — CRUD, hold inventory, pricing, vouchers
-- [ ] `api/src/modules/payments/` — Stripe + M-Pesa, webhooks
+### API — modules (delivered on `main` by other session — synced ✓)
+- [x] `api/src/modules/auth/` — JWT, register, login, refresh, password reset
+- [x] `api/src/modules/users/` — profiles, preferences, loyalty
+- [x] `api/src/modules/safaris/` — catalog, availability, search, filters
+- [x] `api/src/modules/bookings/` — CRUD, hold inventory, pricing, vouchers
+- [x] `api/src/modules/payments/` — Stripe + M-Pesa, webhooks
+- [x] `api/src/modules/agents/` — auth, bookings, commissions
+- [x] `api/src/modules/sync/` — Joomla webhook receivers
+- [x] `api/src/modules/webhooks/` + `health/`
 - [ ] `api/src/modules/itinerary/` — sessions, pricing, PDF, convert
-- [ ] `api/src/modules/agents/` — auth, bookings, commissions
-- [ ] `api/src/modules/sync/` — Joomla webhook receivers
 - [ ] `api/prisma/seed.ts` — parks, tiers, sample safaris, test agent
 
 ---
