@@ -147,7 +147,7 @@ export class SafarisController {
   @Roles(Role.ADMIN, Role.SUPER_ADMIN)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Add safari date (admin)' })
-  async addDate(@Param('id') id: string, @Body() data: Prisma.SafariDateCreateInput) {
+  async addDate(@Param('id') id: string, @Body() data: Omit<Prisma.SafariDateUncheckedCreateInput, 'safariId'>) {
     return this.safarisService.addDate(id, data);
   }
 

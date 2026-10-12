@@ -38,6 +38,8 @@ jobs:
     defaults:
       run:
         working-directory: api
+    env:
+      DATABASE_URL: mysql://ci:ci@localhost:3306/ci
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -45,11 +47,11 @@ jobs:
           node-version: 20
       - name: Install dependencies
         run: npm install
+      - name: Prisma schema validation
+        run: npx prisma validate
       - name: Prisma generate
         run: npx prisma generate
       - name: Build
         run: npm run build
       - name: ESLint
         run: npx eslint "src/**/*.ts"
-      - name: Prisma schema validation
-        run: npx prisma validate

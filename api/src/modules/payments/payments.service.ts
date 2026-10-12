@@ -103,7 +103,7 @@ export class PaymentsService {
         data: {
           status: 'PAID',
           paidAt: new Date(),
-          metadata: { ...payment.metadata as object, stripeResponse: paymentIntent },
+          metadata: { ...(payment.metadata as object), stripeResponse: JSON.parse(JSON.stringify(paymentIntent)) },
         },
       });
       await this.bookingsService.updatePaymentStatus(bookingId, 'PAID');
@@ -153,6 +153,11 @@ export class PaymentsService {
       throw new BadRequestException('Not authorized');
     }
 
+    const safari = await this.prisma.safari.findUnique({
+      where: { id: booking.safariId },
+      select: { title: true },
+    });
+
     const amount = Math.round(Number(booking.totalAmount));
     const shortcode = this.config.get<string>('mpesa.shortcode');
     const passkey = this.config.get<string>('mpesa.passkey');
@@ -182,7 +187,7 @@ export class PaymentsService {
           PhoneNumber: phoneNumber,
           CallBackURL: callbackUrl,
           AccountReference: booking.bookingRef,
-          TransactionDesc: `Payment for ${booking.safari.title}`,
+          TransactionDesc: `Payment for ${safari?.title ?? booking.bookingRef}`,
         }),
       },
     );
@@ -207,7 +212,7 @@ export class PaymentsService {
         method: 'MPESA_STK_PUSH',
         metadata: { merchantRequestId: data.MerchantRequestID, phoneNumber },
       },
-    );
+    });
 
     return { checkoutRequestId: data.CheckoutRequestID, merchantRequestId: data.MerchantRequestID };
   }

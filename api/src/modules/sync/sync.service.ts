@@ -101,8 +101,8 @@ export class SyncService {
     const joomlaApiUrl = this.config.get<string>('joomla.apiUrl');
     const joomlaToken = this.config.get<string>('joomla.apiToken');
 
-    const response = await fetch(`${baseUrl}/api/users`, {
-      headers: { Authorization: `Bearer ${token}` },
+    const response = await fetch(`${joomlaApiUrl}/api/users`, {
+      headers: { Authorization: `Bearer ${joomlaToken}` },
     });
     const users = await response.json();
 

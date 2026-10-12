@@ -51,13 +51,12 @@ docker compose exec joomla php installation/cli/joomla.php \
 # - com_contentbuilder (custom fields for safaris)
 # - plg_system_jwt (JWT auth for micro-apps)
 
-# 4. Scaffold micro-apps (parallel)
-cd micro-apps/booking && npx create-next-app@latest . --typescript --tailwind --eslint --app --src-dir --import-alias="@/*"
-cd micro-apps/itinerary-builder && npx create-next-app@latest . --typescript --tailwind --eslint --app --src-dir --import-alias="@/*"
-cd micro-apps/agent-portal && npx create-next-app@latest . --typescript --tailwind --eslint --app --src-dir --import-alias="@/*"
+# 4. Micro-apps (Next.js) — run per app
+cd micro-apps/booking && npm install && npm run dev        # :3001
+# (itinerary-builder :3002, agent-portal :3003 — same pattern)
 
-# 5. Scaffold shared API
-cd api && npx @nestjs/cli new . --package-manager npm --skip-git
+# 5. Shared API (NestJS + Prisma)
+cd api && npm install && npx prisma generate && npm run start:dev   # :4000
 ```
 
 ## Migration Strategy (Hours, Not Weeks)
@@ -76,6 +75,20 @@ cd api && npx @nestjs/cli new . --package-manager npm --skip-git
 | 10 | Deploy: Joomla on VPS, micro-apps on Vercel, API on Railway/Render | Docker + GitHub Actions | 20 min |
 
 **Total: ~5.5 hours of focused AI-assisted dev**
+
+## Deployment
+
+Three surfaces, three hosts:
+
+- **Micro-apps** → **Vercel** (one project per app, Root Directory `micro-apps/<app>`)
+- **Joomla** → Docker/VPS (PHP + MySQL) — it cannot run on Vercel
+- **API** → Docker/VPS (or Vercel serverless with a serverless-friendly MySQL)
+
+Full guide — env matrix, Prisma migrate/seed, DNS, TLS, post-deploy checks:
+[`docs/deployment.md`](docs/deployment.md).
+
+CI (`.github/workflows/ci.yml`) runs on every push/PR to `main`: PHP lint, JS
+syntax, and API `prisma validate` → `generate` → `build` → ESLint.
 
 ## Directory Structure
 
@@ -113,15 +126,20 @@ absolute-adventure-safari/
 
 ## Environment Variables
 
+Copy [`.env.example`](.env.example) → `.env` and fill in real values. Key groups:
+
 ```env
-# .env (root)
-JOOMLA_DB_PASSWORD=changeme
+# API / Prisma
+DATABASE_URL=mysql://user:pass@host:3306/db
 JWT_SECRET=changeme
-STRIPE_SECRET_KEY=sk_test_...
+PORT=4000
+CORS_ORIGINS=https://www.absoluteadventuresafaris.com
+
+# Payments
+STRIPE_SECRET_KEY=sk_live_...
 MPESA_CONSUMER_KEY=...
-MPESA_CONSUMER_SECRET=...
-MPESA_PASSKEY=...
-MPESA_SHORTCODE=...
+
+# Public URLs (also set on each Vercel project)
 NEXT_PUBLIC_API_URL=https://api.absoluteadventuresafaris.com
 NEXT_PUBLIC_JOOMLA_URL=https://www.absoluteadventuresafaris.com
 ```

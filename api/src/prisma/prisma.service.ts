@@ -17,7 +17,13 @@ export class PrismaService extends PrismaClient implements OnModuleInit, OnModul
 
     // Query logging in development
     if (process.env.NODE_ENV !== 'production') {
-      this.$on('query', (e: Prisma.QueryEvent) => {
+      // Prisma 5 types `$on`'s event union as `never` when PrismaClient is
+      // subclassed, so narrow the event signature explicitly.
+      const on = this.$on as unknown as (
+        event: 'query',
+        cb: (e: Prisma.QueryEvent) => void,
+      ) => void;
+      on('query', (e) => {
         this.logger.debug(`Query: ${e.query} | Params: ${e.params} | Duration: ${e.duration}ms`);
       });
     }

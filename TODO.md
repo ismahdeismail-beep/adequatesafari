@@ -75,7 +75,11 @@
 - [x] `api/src/prisma/prisma.module.ts`, `prisma.service.ts`
 - [x] `api/tsconfig.json` + `tsconfig.build.json` + `nest-cli.json` — NestJS build config (was missing; unblocks `nest build`, `ts-node`, CI)
 - [x] `api/prisma/seed.ts` — 9 sample safaris + weekly departures, admin/agent/customer users (idempotent upserts)
-- [x] `.github/workflows/ci.yml` — PHP lint + JS syntax + API install / prisma validate & generate / build / eslint
+- [x] `.github/workflows/ci.yml` — PHP lint + JS syntax + API install / prisma validate & generate / build / eslint (sets a dummy `DATABASE_URL`; `api/.eslintrc.js` added so the lint step passes)
+- [x] **API build fixed** — MySQL-compatible schema (`Json` columns, `PENDING` enums), NestJS build config, deps (`@nestjs/axios`, `@nestjs/terminus`), 19 TS errors resolved; `prisma validate` + `nest build` + ESLint all green
+- [x] **Repo cleanup** — untracked committed `api/node_modules` (34.3k files) + `api/dist` (build output), expanded root `.gitignore`; tracked set now ~226 files
+- [x] `.env.example` refreshed — added `DATABASE_URL`, `NODE_ENV`, `PORT`, `CORS_ORIGINS`, `CDN_URL` (schema-required vars were missing)
+- [x] `docs/deployment.md` — deployment guide (Vercel micro-apps; Docker/VPS Joomla + API; DNS/TLS; post-deploy checklist)
 - [x] Template language packs — `de-DE`, `fr-FR`, `es-ES`, `zh-CN` (`*.tpl_absolute.ini` + `.sys.ini`, key-parity with en-GB verified)
 - [x] Footer contact params wired (E5) — `phoneKenya`, `phoneWhatsapp`, `emailGeneral`, `emailBookings`, `address`; WhatsApp link guarded
 
@@ -145,7 +149,7 @@
 - [ ] Notifications
 
 ### Deployment & Ops
-- [ ] `.github/workflows/ci.yml` — lint, test, type-check
+- [x] `.github/workflows/ci.yml` — PHP lint, JS syntax, API validate/build/eslint
 - [ ] `deploy-api.yml`, `deploy-apps.yml`, `deploy-joomla.yml`, `sync-content.yml`
 - [ ] VPS (Ubuntu 22.04, Docker, Nginx, Certbot)
 - [ ] DNS: `www`, `api`, `book`, `plan`, `agents`, `cdn`
@@ -212,7 +216,11 @@ cd micro-apps/itinerary-builder && npm run dev  # :3002
 cd micro-apps/agent-portal && npm run dev       # :3003
 
 # Prisma
-cd api && npx prisma generate && npx prisma migrate dev && npx prisma db seed
+cd api && npx prisma generate && npx prisma migrate dev && npm run db:seed
+
+# Verify (same as CI)
+find joomla-site -name '*.php' -print0 | xargs -0 -n1 php -l      # PHP lint
+cd api && npx prisma validate && npm run build && npx eslint "src/**/*.ts"
 
 # Export live Joomla content
 ssh user@server "cd /path/to/export && python3 export_joomla.py"

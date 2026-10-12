@@ -146,7 +146,10 @@ export class SafarisService {
   }
 
   // Safari Dates
-  async addDate(safariId: string, data: Prisma.SafariDateCreateInput) {
+  async addDate(
+    safariId: string,
+    data: Omit<Prisma.SafariDateUncheckedCreateInput, 'safariId'>,
+  ) {
     await this.findById(safariId);
     return this.prisma.safariDate.create({
       data: { ...data, safariId },
@@ -200,10 +203,10 @@ export class SafarisService {
 
       if (filters.search) {
         where.OR = [
-          { title: { contains: filters.search, mode: 'insensitive' } },
-          { description: { contains: filters.search, mode: 'insensitive' } },
-          { shortDescription: { contains: filters.search, mode: 'insensitive' } },
-          { region: { contains: filters.search, mode: 'insensitive' } },
+          { title: { contains: filters.search } },
+          { description: { contains: filters.search } },
+          { shortDescription: { contains: filters.search } },
+          { region: { contains: filters.search } },
         ];
       }
 
