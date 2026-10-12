@@ -1,0 +1,339 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(uuid())
+  email         String    @unique
+  passwordHash  String    @map("password_hash")
+  firstName     String    @map("first_name")
+  lastName      String    @map("last_name")
+  phone         String?
+  role          Role      @default(CUSTOMER)
+  isActive      Boolean   @default(true) @map("is_active")
+  emailVerified Boolean   @default(false) @map("email_verified")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+  lastLoginAt   DateTime? @map("last_login_at")
+
+  bookings      Booking[]
+  payments      Payment[]
+  agentProfile  AgentProfile?
+  refreshTokens RefreshToken[]
+
+  @@map("users")
+}
+
+model RefreshToken {
+  id        String   @id @default(uuid())
+  token     String   @unique
+  userId    String   @map("user_id")
+  expiresAt DateTime @map("expires_at")
+  createdAt DateTime @default(now()) @map("created_at")
+  revokedAt DateTime? @map("revoked_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("refresh_tokens")
+}
+
+model AgentProfile {
+  id            String    @id @default(uuid())
+  userId        String    @unique @map("user_id")
+  companyName   String    @map("company_name")
+  licenseNumber String    @map("license_number")
+  commissionRate Float    @default(10.0) @map("commission_rate")
+  isApproved    Boolean   @default(false) @map("is_approved")
+  approvedAt    DateTime? @map("approved_at")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  bookings Booking[]
+
+  @@map("agent_profiles")
+}
+
+model Safari {
+  id              String      @id @default(uuid())
+  slug            String      @unique
+  title           String
+  shortDescription String?    @map("short_description")
+  description     String      @db.Text
+  country         Country
+  region          String?
+  durationDays    Int         @map("duration_days")
+  durationNights  Int         @map("duration_nights")
+  minPrice        Decimal     @db.Decimal(10, 2) @map("min_price")
+  maxPrice        Decimal     @db.Decimal(10, 2) @map("max_price")
+  currency        Currency    @default(USD)
+  accommodationType AccommodationType @map("accommodation_type")
+  safariStyle     SafariStyle @map("safari_style")
+  difficulty      Difficulty  @default(MODERATE)
+  groupSizeMin    Int         @default(1) @map("group_size_min")
+  groupSizeMax    Int         @default(12) @map("group_size_max")
+  highlights      String[]    @db.Text
+  inclusions      String[]    @db.Text
+  exclusions      String[]    @db.Text
+  itinerary       Json        // Array of day objects
+  images          String[]    // URLs
+  thumbnail       String?
+  isActive        Boolean     @default(true) @map("is_active")
+  isFeatured      Boolean     @default(false) @map("is_featured")
+  sortOrder       Int         @default(0) @map("sort_order")
+  joomlaArticleId Int?        @unique @map("joomla_article_id")
+  createdAt       DateTime    @default(now()) @map("created_at")
+  updatedAt       DateTime    @updatedAt @map("updated_at")
+
+  bookings        Booking[]
+  safariDates     SafariDate[]
+  reviews         Review[]
+
+  @@index([country, isActive])
+  @@index([safariStyle, isActive])
+  @@index([accommodationType, isActive])
+  @@index([isFeatured, isActive])
+  @@map("safaris")
+}
+
+model SafariDate {
+  id           String   @id @default(uuid())
+  safariId     String   @map("safari_id")
+  startDate    DateTime @map("start_date")
+  endDate      DateTime @map("end_date")
+  price        Decimal  @db.Decimal(10, 2)
+  currency     Currency @default(USD)
+  availability Int      @default(12)
+  booked       Int      @default(0)
+  isGuaranteed Boolean  @default(false) @map("is_guaranteed")
+  status       DateStatus @default(OPEN)
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  safari       Safari   @relation(fields: [safariId], references: [id], onDelete: Cascade)
+  bookings     Booking[]
+
+  @@unique([safariId, startDate])
+  @@index([startDate, status])
+  @@map("safari_dates")
+}
+
+model Booking {
+  id              String        @id @default(uuid())
+  bookingRef      String        @unique @map("booking_ref")
+  userId          String        @map("user_id")
+  safariId        String        @map("safari_id")
+  safariDateId    String        @map("safari_date_id")
+  agentId         String?       @map("agent_id")
+  status          BookingStatus @default(PENDING)
+  paymentStatus   PaymentStatus @default(UNPAID) @map("payment_status")
+  adults          Int           @default(1)
+  children        Int           @default(0)
+  specialRequests String?       @db.Text @map("special_requests")
+  internalNotes   String?       @db.Text @map("internal_notes")
+  confirmedAt     DateTime?     @map("confirmed_at")
+  cancelledAt     DateTime?     @map("cancelled_at")
+  cancelledReason String?       @map("cancelled_reason")
+  totalAmount     Decimal       @db.Decimal(10, 2) @map("total_amount")
+  currency        Currency      @default(USD)
+  commissionAmount Decimal?     @db.Decimal(10, 2) @map("commission_amount")
+  commissionPaid  Boolean       @default(false) @map("commission_paid")
+  createdAt       DateTime      @default(now()) @map("created_at")
+  updatedAt       DateTime      @updatedAt @map("updated_at")
+
+  user        User          @relation(fields: [userId], references: [id])
+  safari      Safari        @relation(fields: [safariId], references: [id])
+  safariDate  SafariDate    @relation(fields: [safariDateId], references: [id])
+  agent       AgentProfile? @relation(fields: [agentId], references: [id])
+  payments    Payment[]
+  passengers  Passenger[]
+
+  @@index([userId, status])
+  @@index([safariId, status])
+  @@index([agentId, status])
+  @@index([bookingRef])
+  @@map("bookings")
+}
+
+model Passenger {
+  id            String @id @default(uuid())
+  bookingId     String @map("booking_id")
+  firstName     String @map("first_name")
+  lastName      String @map("last_name")
+  dateOfBirth   DateTime? @map("date_of_birth")
+  passportNumber String? @map("passport_number")
+  nationality   String?
+  specialNeeds  String? @db.Text @map("special_needs")
+  isLead        Boolean @default(false) @map("is_lead")
+
+  booking Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+
+  @@map("passengers")
+}
+
+model Payment {
+  id              String         @id @default(uuid())
+  paymentRef      String         @unique @map("payment_ref")
+  bookingId       String         @map("booking_id")
+  userId          String         @map("user_id")
+  amount          Decimal        @db.Decimal(10, 2)
+  currency        Currency       @default(USD)
+  provider        PaymentProvider
+  providerRef     String?        @map("provider_ref")
+  status          PaymentStatus  @default(PENDING)
+  method          PaymentMethod?
+  metadata        Json?
+  paidAt          DateTime?      @map("paid_at")
+  failedAt        DateTime?      @map("failed_at")
+  failureReason   String?        @map("failure_reason")
+  refundedAt      DateTime?      @map("refunded_at")
+  refundAmount    Decimal?       @db.Decimal(10, 2) @map("refund_amount")
+  createdAt       DateTime       @default(now()) @map("created_at")
+  updatedAt       DateTime       @updatedAt @map("updated_at")
+
+  booking Booking @relation(fields: [bookingId], references: [id])
+  user    User    @relation(fields: [userId], references: [id])
+
+  @@index([bookingId])
+  @@index([userId, status])
+  @@index([provider, providerRef])
+  @@map("payments")
+}
+
+model Review {
+  id        String   @id @default(uuid())
+  safariId  String   @map("safari_id")
+  userId    String   @map("user_id")
+  rating    Int      // 1-5
+  title     String?
+  content   String   @db.Text
+  isPublished Boolean @default(false) @map("is_published")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  safari Safari @relation(fields: [safariId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id])
+
+  @@unique([safariId, userId])
+  @@map("reviews")
+}
+
+model SyncLog {
+  id          String      @id @default(uuid())
+  entityType  String      @map("entity_type")
+  entityId    String      @map("entity_id")
+  action      SyncAction
+  status      SyncStatus  @default(PENDING)
+  payload     Json?
+  error       String?     @db.Text
+  retries     Int         @default(0)
+  completedAt DateTime?   @map("completed_at")
+  createdAt   DateTime    @default(now()) @map("created_at")
+
+  @@index([entityType, entityId])
+  @@index([status, createdAt])
+  @@map("sync_logs")
+}
+
+enum Role {
+  CUSTOMER
+  AGENT
+  ADMIN
+  SUPER_ADMIN
+}
+
+enum Country {
+  KENYA
+  TANZANIA
+  UGANDA
+  RWANDA
+  BURUNDI
+}
+
+enum Currency {
+  USD
+  KES
+  EUR
+  GBP
+}
+
+enum AccommodationType {
+  LODGE
+  TENTED_CAMP
+  CAMPING
+  HOTEL
+  GUEST_HOUSE
+}
+
+enum SafariStyle {
+  LODGE_SAFARI
+  CAMPING_SAFARI
+  FLYING_SAFARI
+  WALKING_TREKKING
+  MOUNTAIN_CLIMB
+  SHORT_EXCURSION
+  CULTURAL
+}
+
+enum Difficulty {
+  EASY
+  MODERATE
+  CHALLENGING
+  EXTREME
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  COMPLETED
+  NO_SHOW
+}
+
+enum PaymentStatus {
+  UNPAID
+  PARTIAL
+  PAID
+  REFUNDED
+  FAILED
+}
+
+enum PaymentProvider {
+  STRIPE
+  MPESA
+  BANK_TRANSFER
+  CASH
+}
+
+enum PaymentMethod {
+  CARD
+  MPESA_STK_PUSH
+  MPESA_PAYBILL
+  BANK_TRANSFER
+  CASH
+}
+
+enum DateStatus {
+  OPEN
+  FULL
+  CANCELLED
+  GUARANTEED
+}
+
+enum SyncAction {
+  CREATE
+  UPDATE
+  DELETE
+}
+
+enum SyncStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+}
