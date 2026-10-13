@@ -1,4 +1,4 @@
-# Current Site Analysis: absoluteadventuresafaris.com
+# Current Site Analysis: adequatesafaris.com
 
 *Analysis date: 2026-10-12*
 
@@ -7,7 +7,7 @@
 ## 🌳 Site Map / Information Architecture (Braintree)
 
 ```
-absoluteadventuresafaris.com
+adequatesafaris.com
 │
 ├── 🏠 Home (SP PageBuilder landing)
 │   ├── Hero Slider (5 slides with CTAs)
@@ -193,7 +193,7 @@ absoluteadventuresafaris.com
 
 ## 📎 Raw Data Reference
 
-- **Homepage fetch**: `webfetch` of `https://www.absoluteadventuresafaris.com/` (markdown)
+- **Homepage fetch**: `webfetch` of `https://www.adequatesafaris.com/` (markdown)
 - **Menu structure**: Extracted from `<nav>` and mobile off-canvas duplicate
 - **Module positions**: Inferred from HTML structure and Joomla module class names
 - **Form fields**: Observed from BreezingForms rendering on homepage sidebar

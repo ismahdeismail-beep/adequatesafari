@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Joomla Content Exporter — Absolute Adventure Safaris
+Joomla Content Exporter — Adequate Safaris
 Exports articles, categories, users, custom fields to JSON for migration.
 Run ON THE LIVE SERVER (SSH) or via Docker exec.
 """

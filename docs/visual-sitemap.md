@@ -1,4 +1,4 @@
-# Visual Sitemap — Absolute Adventure Safaris (Current)
+# Visual Sitemap — Adequate Safaris (Current)
 
 ```mermaid
 flowchart TD
@@ -77,7 +77,7 @@ flowchart TD
 ```mermaid
 flowchart TB
     subgraph Header["🔝 Header"]
-        Logo[Logo<br/>absolute adventure safaris]
+        Logo[Logo<br/>adequate safaris]
         Nav[Mega Menu Navigation<br/>7 top-level items + dropdowns]
         Mobile[☰ Mobile Toggle]
     end
@@ -103,7 +103,7 @@ flowchart TB
     end
 
     subgraph Footer["🔚 Footer"]
-        Copyright[© 2026 Absolute Adventure Safaris]
+        Copyright[© 2026 Adequate Safaris]
         Credit[Designed by SmartAddons.Com]
         TopLink[↑ Top]
     end
@@ -120,7 +120,7 @@ flowchart TB
 
 ```mermaid
 mindmap
-  root((Absolute Adventure Safaris))
+  root((Adequate Safaris))
     Kenya Lodge Safaris
       2 days
         Aberdares -Nairobi

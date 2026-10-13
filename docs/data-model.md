@@ -1,4 +1,4 @@
-# Data Model — Absolute Adventure Safaris
+# Data Model — Adequate Safaris
 
 ## Core Entities (Joomla Custom Fields + Micro-app Tables)
 
@@ -46,7 +46,7 @@ custom_fields:
     Day 2: Full day Masai Mara (morning & afternoon drives)
     Day 3: Morning drive → Nairobi
   images: ["mara-1.jpg", "mara-2.jpg", "mara-3.jpg"]
-  seo_title: "3-Day Masai Mara Big Five Safari | Absolute Adventure Safaris"
+  seo_title: "3-Day Masai Mara Big Five Safari | Adequate Safaris"
   seo_description: "Experience the Big Five in Masai Mara on a 3-day luxury lodge safari. Expert guides, 4x4 Land Cruiser, all meals included."
   slug: "masai-mara-big-game-safari"
 ```
@@ -117,7 +117,7 @@ custom_fields:
 ```sql
 CREATE TABLE bookings (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    reference VARCHAR(20) UNIQUE NOT NULL,  -- AAS-2026-001234
+    reference VARCHAR(20) UNIQUE NOT NULL,  -- ADQ-2026-001234
     user_id UUID REFERENCES users(id),
     agent_id UUID REFERENCES agents(id),    -- NULL if direct booking
     status ENUM('pending','confirmed','cancelled','completed','failed') DEFAULT 'pending',

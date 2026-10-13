@@ -1,6 +1,6 @@
 # Deployment
 
-Absolute Adventure Safaris has three deployable surfaces. They map to different
+Adequate Safaris has three deployable surfaces. They map to different
 hosts on purpose.
 
 | Surface | Path | Recommended host | Notes |
@@ -21,7 +21,7 @@ Each micro-app under `micro-apps/` is a standalone Next.js app (its own
 
 **Dashboard**
 
-1. Import the `Absoluteadventuresafari` GitHub repo into Vercel.
+1. Import the `adequatesafaris` GitHub repo into Vercel.
 2. Create one Vercel project **per app** and set **Root Directory** to the app
    folder, e.g. `micro-apps/booking`.
 3. Framework preset: **Next.js** (auto-detected).
@@ -38,11 +38,11 @@ vercel --prod --cwd micro-apps/booking
 Environment variables to set on each Vercel project:
 
 ```
-NEXT_PUBLIC_API_URL=https://api.absoluteadventuresafaris.com
-NEXT_PUBLIC_JOOMLA_URL=https://www.absoluteadventuresafaris.com
-NEXT_PUBLIC_BOOKING_URL=https://book.absoluteadventuresafaris.com
-NEXT_PUBLIC_ITINERARY_URL=https://plan.absoluteadventuresafaris.com
-NEXT_PUBLIC_AGENT_URL=https://agents.absoluteadventuresafaris.com
+NEXT_PUBLIC_API_URL=https://api.adequatesafaris.com
+NEXT_PUBLIC_JOOMLA_URL=https://www.adequatesafaris.com
+NEXT_PUBLIC_BOOKING_URL=https://book.adequatesafaris.com
+NEXT_PUBLIC_ITINERARY_URL=https://plan.adequatesafaris.com
+NEXT_PUBLIC_AGENT_URL=https://agents.adequatesafaris.com
 ```
 
 > `NEXT_PUBLIC_*` values are inlined at build time — changing them requires a
@@ -89,10 +89,10 @@ docker compose -f docker/docker-compose.yml up -d db joomla nginx
 
 - Image: `docker/Dockerfile.joomla` (PHP 8.3 + Apache + extensions + opcache).
 - Reverse proxy / TLS: `docker/nginx/` (upstreams, SSL, HSTS, rate limits).
-- Install the template by zipping `joomla-site/templates/absolute/` and uploading
+- Install the template by zipping `joomla-site/templates/adequate/` and uploading
   it via **System → Install → Extensions**, or drop it into the Joomla tree.
 - Template params (contact details, social, micro-app URLs, colours) are set in
-  **System → Site Templates → Absolute → Options**.
+  **System → Site Templates → adequate → Options**.
 
 ---
 

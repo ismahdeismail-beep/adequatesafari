@@ -13,7 +13,7 @@ import urllib.parse
 import urllib.request
 
 API = "https://commons.wikimedia.org/w/api.php"
-UA = "AbsoluteAdventureSafaris-image-research/1.0 (contact: dev@absoluteadventuresafaris.com)"
+UA = "AdequateSafaris-image-research/1.0 (contact: dev@example.com)"
 
 QUERIES = {
     # Kenya – parks / destinations

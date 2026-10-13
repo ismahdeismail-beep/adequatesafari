@@ -1,9 +1,9 @@
-# API Specification — Absolute Adventure Safaris
+# API Specification — Adequate Safaris
 
 ## Base URL
 ```
-Production:  https://api.absoluteadventuresafaris.com/v1
-Staging:     https://api-staging.absoluteadventuresafaris.com/v1
+Production:  https://api.adequatesafaris.com/v1
+Staging:     https://api-staging.adequatesafaris.com/v1
 Development: http://localhost:4000/v1
 ```
 
@@ -18,7 +18,7 @@ Authorization: Bearer <access_token>
 
 ### API Key (Agent/Partner)
 ```
-X-API-Key: aas_live_abc123...
+X-API-Key: adq_live_abc123...
 ```
 - Scoped permissions per agent tier
 
@@ -98,8 +98,8 @@ GET /safaris
       "group_size_min": 2,
       "group_size_max": 7,
       "highlights": ["Rhino sanctuary", "Flamingo viewing", "Game drives"],
-      "images": ["https://cdn.aas.com/safaris/nakuru-1.webp"],
-      "seo_title": "3-Day Lake Nakuru Rhino Safari | Absolute Adventure Safaris",
+      "images": ["https://cdn.adequatesafaris.com/safaris/nakuru-1.webp"],
+      "seo_title": "3-Day Lake Nakuru Rhino Safari | Adequate Safaris",
       "seo_description": "See rhinos at Lake Nakuru National Park on a 3-day lodge safari...",
       "availability": "available"
     }
@@ -175,7 +175,7 @@ POST /bookings
 **Response:**
 ```json
 {
-  "reference": "AAS-2026-001234",
+  "reference": "ADQ-2026-001234",
   "status": "pending",
   "expires_at": "2026-01-15T10:45:00Z",  // 15 min hold
   "pricing": {
@@ -209,8 +209,8 @@ POST /bookings/:reference/pay
   "method": "mpesa",  // stripe | mpesa | bank_transfer
   "amount_usd": 192,  // deposit amount
   "phone_number": "+254712345678",  // required for M-Pesa
-  "return_url": "https://book.aas.com/booking/AAS-2026-001234/success",
-  "cancel_url": "https://book.aas.com/booking/AAS-2026-001234/cancel"
+  "return_url": "https://book.adequatesafaris.com/booking/ADQ-2026-001234/success",
+  "cancel_url": "https://book.adequatesafaris.com/booking/ADQ-2026-001234/cancel"
 }
 ```
 **Response (Stripe):**
@@ -326,7 +326,7 @@ GET /agent/commissions?period=2026-01&status=paid
 ```json {
   "summary": { "total_bookings": 12, "total_commission_usd": 3840, "pending_usd": 1200, "paid_usd": 2640 },
   "rows": [
-    { "booking_ref": "AAS-2026-001234", "client": "John Doe", "safari": "Masai Mara 3-Day", "departure": "2026-07-15", "commission_usd": 64, "status": "paid", "paid_at": "2026-01-20" }
+    { "booking_ref": "ADQ-2026-001234", "client": "John Doe", "safari": "Masai Mara 3-Day", "departure": "2026-07-15", "commission_usd": 64, "status": "paid", "paid_at": "2026-01-20" }
   ]
 }
 ```
@@ -366,7 +366,7 @@ GET  /auth/me
 {
   "event": "booking.confirmed",
   "timestamp": "2026-01-15T10:30:00Z",
-  "data": { "reference": "AAS-2026-001234", ... }
+  "data": { "reference": "ADQ-2026-001234", ... }
 }
 ```
 
@@ -374,18 +374,18 @@ GET  /auth/me
 
 ```bash
 # JavaScript/TypeScript
-npm install @absolute-adventures/safari-client
+npm install @adequate-safaris/safari-client
 
 # Python
-pip install absolute-adventures-safari
+pip install adequate-safaris
 ```
 
 ```typescript
-import { SafariClient } from '@absolute-adventures/safari-client';
+import { SafariClient } from '@adequate-safaris/safari-client';
 
 const client = new SafariClient({ 
-  apiKey: 'aas_live_...', 
-  baseUrl: 'https://api.absoluteadventuresafaris.com/v1' 
+  apiKey: 'adq_live_...', 
+  baseUrl: 'https://api.adequatesafaris.com/v1' 
 });
 
 const safaris = await client.safaris.list({ country: 'kenya', type: 'lodge' });

@@ -13,7 +13,7 @@ import sys
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PREVIEW = os.path.join(REPO, "preview")
 CARDS = os.path.join(REPO, "joomla-site", "templates", "absolute", "images", "cards")
-CARD_URL = "/templates/absolute/images/cards"
+CARD_URL = "/templates/adequate/images/cards"
 
 SIZES = "(min-width: 992px) 33vw, (min-width: 640px) 50vw, 100vw"
 
@@ -65,17 +65,17 @@ PAGES = {
 }
 
 CARD = """\
-{pad}<article class="aas-card aas-card--safari">
-{pad}    <a class="aas-card__media" href="/safari.html"><picture>
+{pad}<article class="adq-card adq-card--safari">
+{pad}    <a class="adq-card__media" href="/safari.html"><picture>
 {pad}        <source type="image/webp" srcset="{u}/{s}-400.webp 400w, {u}/{s}-800.webp 800w" sizes="{sizes}" />
 {pad}        <img src="{u}/{s}-800.jpg" srcset="{u}/{s}-400.jpg 400w, {u}/{s}-800.jpg 800w" sizes="{sizes}" alt="{alt}" loading="lazy" decoding="async" />
 {pad}    </picture></a>
-{pad}    <div class="aas-card__body">
-{pad}        <h2 class="aas-card__title"><a href="/safari.html">{title}</a></h2>
-{pad}        <p class="aas-card__excerpt">{excerpt}</p>
-{pad}        <div class="aas-card__footer">
-{pad}            <a class="aas-btn aas-btn--primary aas-btn--sm" href="#">Book Now</a>
-{pad}            <a class="aas-btn aas-btn--ghost aas-btn--sm" href="/safari.html">View details</a>
+{pad}    <div class="adq-card__body">
+{pad}        <h2 class="adq-card__title"><a href="/safari.html">{title}</a></h2>
+{pad}        <p class="adq-card__excerpt">{excerpt}</p>
+{pad}        <div class="adq-card__footer">
+{pad}            <a class="adq-btn adq-btn--primary adq-btn--sm" href="#">Book Now</a>
+{pad}            <a class="adq-btn adq-btn--ghost adq-btn--sm" href="/safari.html">View details</a>
 {pad}        </div>
 {pad}    </div>
 {pad}</article>"""
@@ -107,7 +107,7 @@ def main():
         path = os.path.join(PREVIEW, page)
         html = open(path, encoding="utf-8").read()
         ARTICLE_RE = re.compile(
-            r'[ \t]*<article class="aas-card aas-card--safari".*?</article>',
+            r'[ \t]*<article class="adq-card adq-card--safari".*?</article>',
             re.S,
         )
         matches = list(ARTICLE_RE.finditer(html))
