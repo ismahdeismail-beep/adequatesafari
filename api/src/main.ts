@@ -55,7 +55,7 @@ async function bootstrap() {
 
   // Swagger documentation
   const config = new DocumentBuilder()
-    .setTitle('Absolute Adventure Safaris API')
+    .setTitle('Adequate Safaris API')
     .setDescription('REST API for bookings, payments, safaris, and agent management')
     .setVersion('1.0')
     .addBearerAuth(

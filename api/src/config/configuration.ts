@@ -38,7 +38,7 @@ const envSchema = z.object({
   SMTP_USER: z.string().optional(),
   SMTP_PASS: z.string().optional(),
   EMAIL_FROM: z.string().email().optional(),
-  EMAIL_FROM_NAME: z.string().default('Absolute Adventure Safaris'),
+  EMAIL_FROM_NAME: z.string().default('Adequate Safaris'),
 
   // Storage
   AWS_ACCESS_KEY_ID: z.string().optional(),
@@ -48,11 +48,11 @@ const envSchema = z.object({
   AWS_CLOUDFRONT_DOMAIN: z.string().optional(),
 
   // Frontend URLs
-  NEXT_PUBLIC_JOOMLA_URL: z.string().url().default('https://www.absoluteadventuresafaris.com'),
-  NEXT_PUBLIC_API_URL: z.string().url().default('https://api.absoluteadventuresafaris.com'),
-  NEXT_PUBLIC_BOOKING_URL: z.string().url().default('https://book.absoluteadventuresafaris.com'),
-  NEXT_PUBLIC_ITINERARY_URL: z.string().url().default('https://plan.absoluteadventuresafaris.com'),
-  NEXT_PUBLIC_AGENT_URL: z.string().url().default('https://agents.absoluteadventuresafaris.com'),
+  NEXT_PUBLIC_JOOMLA_URL: z.string().url().default('https://www.adequatesafaris.com'),
+  NEXT_PUBLIC_API_URL: z.string().url().default('https://api.adequatesafaris.com'),
+  NEXT_PUBLIC_BOOKING_URL: z.string().url().default('https://book.adequatesafaris.com'),
+  NEXT_PUBLIC_ITINERARY_URL: z.string().url().default('https://plan.adequatesafaris.com'),
+  NEXT_PUBLIC_AGENT_URL: z.string().url().default('https://agents.adequatesafaris.com'),
 
   // CORS
   CORS_ORIGIN: z.string().default('http://localhost:3000,http://localhost:3001,http://localhost:3002,http://localhost:3003'),
@@ -110,7 +110,7 @@ export default registerAs('app', () => ({
     user: process.env.SMTP_USER,
     pass: process.env.SMTP_PASS,
     from: process.env.EMAIL_FROM,
-    fromName: process.env.EMAIL_FROM_NAME || 'Absolute Adventure Safaris',
+    fromName: process.env.EMAIL_FROM_NAME || 'Adequate Safaris',
   },
   storage: {
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,

@@ -1,8 +1,8 @@
 {
-  "name": "aas-api",
+  "name": "adq-api",
   "version": "1.0.0",
-  "description": "Absolute Adventure Safaris - Shared API (Payments, Auth, Bookings, Sync)",
-  "author": "Absolute Adventure Safaris",
+  "description": "Adequate Safaris - Shared API (Payments, Auth, Bookings, Sync)",
+  "author": "Adequate Safaris",
   "license": "UNLICENSED",
   "scripts": {
     "build": "nest build",

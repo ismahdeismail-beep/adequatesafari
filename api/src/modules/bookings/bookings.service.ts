@@ -43,6 +43,11 @@ export class BookingsService {
       throw new BadRequestException('Safari date is not available for booking');
     }
 
+    // Never allow booking a departure that has already commenced.
+    if (safariDate.startDate.getTime() <= Date.now()) {
+      throw new BadRequestException('This departure has already commenced — please choose an upcoming date');
+    }
+
     const totalPassengers = dto.adults + dto.children;
     const available = safariDate.availability - safariDate.booked;
     if (totalPassengers > available) {
@@ -244,6 +249,6 @@ export class BookingsService {
   private generateBookingRef(): string {
     const date = new Date().toISOString().slice(0, 10).replace(/-/g, '');
     const random = Math.random().toString(36).substring(2, 8).toUpperCase();
-    return `AAS-${date}-${random}`;
+    return `ADQ-${date}-${random}`;
   }
 }
