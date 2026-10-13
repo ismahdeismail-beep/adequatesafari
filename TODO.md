@@ -1,12 +1,16 @@
-# Absolute Adventure Safaris - Modernization TODO
+# Adequate Safaris — Modernization TODO
 
-> **Repo:** `github.com/Absoluteadventuresafari` (cloned to `/mnt/sdcard/OpenCode/Absoluteadventuresafari`)
+> **Brand:** **Adequate Safaris** — live domain **https://adequatesafaris.com/**
+> **Repo (GitHub):** `github.com/adequatesafaris` (**rename to `adequatesafaris` pending — see R1**)
+> **Local clone:** `~/Desktop/adequatesafari` (folder already renamed)
 > **Deploy:** Vercel preview (booking micro-app) — `*.vercel.app` (deployment protection on)
-> **Rule:** before any commit/push → open localhost for review.
+> **Rule:** before any commit/push → open localhost for review. **Never hard-code secrets/keys.**
 
-*Last updated: Oct 13 2026 — README rewritten (single source of truth, no duplicate repo); booking micro-app **build passes** (E7/E8/E10). Next: E9 deploy workflows + booking sub-pages.*
+*Last updated: Oct 13 2026 — **REBRAND EXECUTED** (option b) to "Adequate Safaris": template `adequate/`, module `mod_adq_hero`, prefix `adq-`, all builds green. Remaining: R1/R2 repo rename (user creating new GitHub repo; also fixes E11).*
 
-> ⚠️ **Deployment error:** the Vercel preview failed because `next build` errored (missing components E7 + `undefined` rewrite E10). Both fixed on `main`; a fresh deploy is required once the commit is pushed (blocked: no GitHub credentials). Production is **not ready** until the deploy goes green.
+> ⚠️ **Open CI failure (E11):** GitHub Actions docker build fails with
+> `invalid tag "ghcr.io/adequatesafaris/api:latest": repository name must be lowercase`.
+> Root cause: the GitHub repo name contains uppercase (`adequatesafaris`); GHCR requires lowercase image tags. Fix by renaming the repo to `adequatesafari` (R1) **or** lowercasing the image name in the workflow.
 
 ---
 
@@ -16,10 +20,10 @@
 
 | # | Issue | Status | Resolution |
 |---|-------|--------|-----------|
-| E1 | **Joomla overrides don't show real photos** — `featured/default.php` + `article/default.php` never referenced `images/cards/`; cards rendered grey placeholders, no `<picture>`/WebP | ✅ DONE | Both overrides render `<picture>` (WebP 400/800 + JPG fallback) via `aasCardSlug()` alias→slug mapping with themed fallback; `php -l` clean |
+| E1 | **Joomla overrides don't show real photos** — `featured/default.php` + `article/default.php` never referenced `images/cards/`; cards rendered grey placeholders, no `<picture>`/WebP | ✅ DONE | Both overrides render `<picture>` (WebP 400/800 + JPG fallback) via `adqCardSlug()` alias→slug mapping with themed fallback; `php -l` clean |
 | E2 | **"Repetitions on Kenya resorts"** — duplicate cards across home *Featured* and *Kenya Lodge Safaris* listing | ✅ DONE | Verified: `preview/index.html` = 6 distinct cards, `preview/listing.html` = 9 distinct, **zero overlap** |
-| E3 | **listing.html / safari.html lack nav + mobile accordion** | ✅ DONE | Nav block + `aas-mobile-nav` accordion mirrored into both preview pages |
-| E4 | **Commit pending / `origin` remote lost** | ✅ DONE | `origin` restored (`.../Absoluteadventuresafari.git`); work committed on `main`; working tree clean |
+| E3 | **listing.html / safari.html lack nav + mobile accordion** | ✅ DONE | Nav block + `adq-mobile-nav` accordion mirrored into both preview pages |
+| E4 | **Commit pending / `origin` remote lost** | ✅ DONE | `origin` restored (`.../adequatesafaris.git`); work committed on `main`; working tree clean |
 | E5 | **Contact details stripped** | ✅ DONE | Params (`phoneKenya`, `phoneWhatsapp`, `emailGeneral`, `emailBookings`, `address`) in `templateDetails.xml` + footer rendering; WhatsApp guard fixed |
 | E6 | **"Some lack pictures"** | ✅ DONE | E1 fixes fallback path; content migration fills real associations |
 
@@ -27,10 +31,36 @@
 
 | # | Issue | Status | Fix plan |
 |---|-------|--------|----------|
-| E7 | **Booking micro-app build is broken** — `micro-apps/booking/src/app/page.tsx` imports 8 components (`Footer`, `SafariCard`, `Hero`, `SearchSection`, `FeaturedSafaris`, `WhyChooseUs`, `Testimonials`, `Newsletter`) that did not exist; only `components/Header.tsx` was present → `next build` fails (likely cause of the Vercel deploy error) | ✅ CODE FIXED (build unverified) | Created all 8 components + `lib/sample-data.ts`; added missing Tailwind tokens (`border/background/foreground/…`) used by `globals.css`; fixed `layout.tsx` `class`→`className`; replaced `next-auth` `SessionProvider` (not a dependency) with a pass-through. **Build must be verified locally (B1) before calling it done.** |
+| E7 | **Booking micro-app build is broken** — `micro-apps/booking/src/app/page.tsx` imports 8 components (`Footer`, `SafariCard`, `Hero`, `SearchSection`, `FeaturedSafaris`, `WhyChooseUs`, `Testimonials`, `Newsletter`) that did not exist; only `components/Header.tsx` was present → `next build` fails (likely cause of the Vercel deploy error) | ✅ DONE | All 8 components + `lib/sample-data.ts` created; Tailwind tokens added; `layout.tsx` `class`→`className`; `SessionProvider` pass-through. **`npm run build` green** (28 routes). |
 | E8 | **`micro-apps/booking/vercel.json` rewrote everything to `/`** — `{ "src": "/(.*)", "dest": "/" }` broke `/safaris`, `/booking`, etc. | ✅ DONE | Reduced to `{ "framework": "nextjs" }` |
 | E9 | **Root has no deploy config / CI deploy workflows** — only `.github/workflows/ci.yml` exists; `deploy-*.yml` pending | ⬜ TODO | Add deploy workflows when VPS/DNS is provisioned (see Deployment & Ops) |
 | E10 | **`next.config.js` rewrite produced `destination: "undefined/api/:path*"`** when `NEXT_PUBLIC_API_URL` was unset → `next build` failed with "Invalid rewrite found" (another Vercel deploy killer) | ✅ DONE | Guard the rewrite: return `[]` when `NEXT_PUBLIC_API_URL` is not set. Build now green. |
+| E11 | **CI docker build fails** — `invalid tag "ghcr.io/adequatesafaris/api:latest": repository name must be lowercase` | ⬜ TODO (fix R1) | GitHub repo name has uppercase. Rename repo → `adequatesafari` (lowercase) and/or hard-code a lowercase image name in the workflow. Note: no `ghcr` reference exists in this checkout — the failing workflow lives on GitHub only. |
+| E12 | **Image audit** — "we only have safaris of Kenya" | ✅ VERIFIED | 16 card stems, **all complete** (400/800/1280 JPG+WebP): Kenya ×10, Tanzania ×2 (`tanzania-ngorongoro`, `zanzibar-beach`), Uganda ×1 (`bwindi-gorilla`), + `leopard-sighting`, `tented-camp`, `lodge-pool`. `amboseli-kilimanjaro` set **is present** (earlier "0 files" was a path typo, not a real gap). |
+| E13 | **No hard-coded secrets/keys** | ✅ VERIFIED | No secrets committed; credentials live in `.env*` only. Re-check after each change. |
+
+---
+
+## 🏷️ REBRAND → "Adequate Safaris"
+
+**Goal:** every `Absolute Adventure Safaris` / `Absoluteadventuresafari` / `absoluteadventuresafaris` / `AAS` / `aas-` reference replaced with **Adequate Safaris** (`adequatesafaris.com`) and **ADQ** / **adq-**. Executed via `docs/rebrand.py` (guards: `Maasai`, `path-is-absolute`, `absolutecabs.co.ke`, CSS `position: absolute` untouched).
+
+| # | Item | Status | Notes |
+|---|------|--------|-------|
+| R1 | **GitHub repo naming** → lowercase `adequatesafaris` | ⬜ TODO (user is creating a new repo) | Also fixes E11 (ghcr lowercase tag). After create: `git remote set-url origin https://github.com/<new>.git` |
+| R2 | Update local remote URL after new repo created | ⬜ TODO | `git remote set-url origin …` |
+| R3 | Rebrand **Joomla template** — folder `absolute/` → `adequate/`; `templateDetails.xml` (`<name>adequate</name>`, author, siteName default), `index.php`, `component.php`, `error.php`, `offline.php`, overrides, menu override | ✅ DONE | Full rename executed (option **b**) — folder now `joomla-site/templates/adequate/` |
+| R4 | Rebrand **language packs** (5 langs) — files `*.tpl_absolute.*` renamed to `tpl_adequate`, keys `TPL_ABSOLUTE_*` → `TPL_ADEQUATE_*` | ✅ DONE | Key parity verified (manifest keys all present in en-GB) |
+| R5 | Rebrand **preview pages** — `index.html`, `listing.html`, `safari.html`, `credits.html` (`<title>`, `adq-brand__name`, hero eyebrow, copyright) | ✅ DONE | Preview renders "Adequate Safaris" (verified via localhost) |
+| R6 | Rebrand **booking micro-app** — `layout.tsx`, `Header`/`Footer`/`Hero`/`Testimonials`, all static pages, `sitemap.ts`, `robots.ts`, `next.config.js`, package `adq-booking`, store `adq-auth`, refs `ADQ-…` | ✅ DONE | `npm run build` green (28 routes) |
+| R7 | Rebrand **API** — package `adq-api`, `prisma/seed.ts`, `main.ts`, `config/*.ts`, booking refs `ADQ-…` | ✅ DONE | `nest build` green |
+| R8 | Rebrand **Docker/ops** — `docker-compose.yml` (`adq-*` containers/network), `docker/nginx/conf.d/default.conf`, `.env.example` (`adq-assets`) | ✅ DONE | |
+| R9 | Rebrand **docs** — `README.md`, `TODO.md`, `docs/*.md`, `export_joomla.py`, `find_images.py`, `set_preview_cards.py`, `rebrand.py` | ✅ DONE | |
+| R10 | Template **thumbnails** regenerated with new brand | ✅ DONE | `templatePreview.png` (800×600) + `templateThumbnail.png` (400×300) rebuilt over hero photo. No `images/social/` OG assets exist in this checkout. `favicon.ico` is a gold "A" (name-agnostic) → kept |
+| R11 | Rebrand **modules/plugins** — `mod_aas_hero` → `mod_adq_hero` (dir + files + keys `MOD_ADQ_HERO_*`), plugins `ADQ` labels, table `#__adq_sync_queue`, cookie `adq_token`, `install.sh` | ✅ DONE | |
+
+**Decision executed:** option **(b) Full rename** — `templates/absolute/` → `templates/adequate/`, module `mod_aas_hero` → `mod_adq_hero`, prefix `aas-` → `adq-`, `AAS` → `ADQ`, lang files `tpl_absolute` → `tpl_adequate`.
+**Remaining for new repo:** R1/R2 (repo URL) — then commit this tree as-is.
 
 ---
 
@@ -38,19 +68,29 @@
 
 | # | Blocker | Status | Notes |
 |---|---------|--------|-------|
-| B1 | **`npm install` fails in this environment (Termux/Android)** — npm cacache `ENOENT rename`; `pnpm` default symlinks `EACCES`; emulated FS (`/mnt/sdcard`,`/tmp`,`/root/.npm`) can't do npm's cache rename/symlinks | ✅ RESOLVED | Built in a copy on the **native f2fs root** (`/root/aas-build`) with `corepack pnpm` → `next build` **green** (4/4 pages). `node_modules/` stays out of the repo. |
+| B1 | **`npm install` fails in this environment (Termux/Android)** — npm cacache `ENOENT rename`; `pnpm` default symlinks `EACCES`; emulated FS (`/mnt/sdcard`,`/tmp`,`/root/.npm`) can't do npm's cache rename/symlinks | ✅ RESOLVED | Built in a copy on the **native f2fs root** (`/root/adq-build`) with `corepack pnpm` → `next build` **green** (4/4 pages). `node_modules/` stays out of the repo. |
 | B2 | **Visual verification (localhost)** — review the UI against the Joomla preview | 🔄 ACTIVE | `next start` running at **http://localhost:3001** (HTTP 200; Hero/Search/Featured/Why-Us/Testimonials render). Review in browser; rebuild copy after each fix. |
 
 ---
 
 ## 🧾 SESSION LOG
 
+- **Oct 13 2026 (latest — rebrand executed)**
+  - **Full rebrand to "Adequate Safaris" executed (option b, no commit):**
+    - `joomla-site/templates/absolute/` → `templates/adequate/`; lang files `tpl_absolute` → `tpl_adequate`; keys `TPL_ABSOLUTE_*` → `TPL_ADEQUATE_*` (parity verified).
+    - Module `mod_aas_hero` → `mod_adq_hero` (dir + php/xml + lang keys `MOD_ADQ_HERO_*`).
+    - Prefix `aas-`/`aas_`/`AAS` → `adq-`/`adq_`/`ADQ` everywhere (CSS classes, JS globals `window.ADQ_CONFIG`, booking refs `ADQ-…`, JWT cookie `adq_token`, DB table `#__adq_sync_queue`, docker `adq-*` services/network, npm packages `adq-api`/`adq-booking`).
+    - Domains/emails → `adequatesafaris.com`; npm/pip example names → `@adequate-safaris/`.
+    - Guards verified intact across 171 scanned files: `Maasai` (50), `path-is-absolute` (10), `absolutecabs.co.ke` (4), CSS `position: absolute` (9).
+    - `templates/adequate` thumbs regenerated with new brand (800×600 + 400×300).
+    - **Verified:** PHP lint clean, JS syntax clean, `php -l` all green, `nest build` green (adq-api), booking `npm run build` green (28 routes), preview server 200 with new `/templates/adequate/` paths (old path 404).
+  - **Remaining:** R1/R2 — user is creating a new GitHub repo (this will also fix E11's lowercase-tag requirement). Nothing committed in this tree since the rename (user will own the commit), except the earlier TODO-only edit.
 - **Oct 13 2026**
   - Re-verified repo: tree clean, `origin` restored, E1–E6 confirmed done (index 6 / listing 9 distinct cards, `<picture>` wiring present).
   - Diagnosed Vercel deploy failure → E7 (missing components) + E8 (bad `vercel.json` routes).
   - Implemented E7/E8 fixes; copied card imagery (`public/cards/*-800.jpg`) and hero images (`public/hero/slider1.jpg`, `slider5.jpg`) into the booking app.
   - `npm install` **blocked** (B1) → build not yet verified. Committed code anyway so Vercel can attempt a fresh build.
-  - **B1 workarounds tried:** npm (cacache ENOENT rename), `corepack pnpm` direct (symlink EACCES — emulated FS), then **green build via copy on native f2fs** (`/root/aas-build`, `corepack pnpm`, `next build` OK).
+  - **B1 workarounds tried:** npm (cacache ENOENT rename), `corepack pnpm` direct (symlink EACCES — emulated FS), then **green build via copy on native f2fs** (`/root/adq-build`, `corepack pnpm`, `next build` OK).
   - Found & fixed **E10** (`next.config.js` rewrite → `undefined/api/...`) which also broke the build.
   - **`next start` running at http://localhost:3001** (HTTP 200) for visual review (B2).
   - **Push:** authenticated via PAT and pushed `main` (`96916919..ad46d0ae`); token to be revoked by user.
@@ -85,13 +125,13 @@
 - [x] `html/com_content/featured/default.php` — listing grid (cards, pagination, CTAs, `<picture>` cards)
 - [x] Language packs `en-GB`, `de-DE`, `fr-FR`, `es-ES`, `zh-CN` (key-parity verified)
 - [x] Plugin `plg_system_jwt`, `plg_content_api_sync`
-- [x] Module `mod_safari_search`, `mod_aas_hero`
+- [x] Module `mod_safari_search`, `mod_adq_hero`
 - [x] `setup/safari-fields.xml` + `install.sh`
 
 ### Hero + cards imagery (preview verified 200)
 - [x] Client hero slides → `images/hero/` (WebP 1300/960/640 + JPG)
 - [x] Ken Burns, crossfade, staggered captions, pause/swipe/keyboard, `prefers-reduced-motion`
-- [x] 11 CC-licensed destination photos → `images/cards/` (WebP 400/800/1280 + JPG; 67 files)
+- [x] 16 CC-licensed destination photo stems → `images/cards/` (WebP+JPG at 400/800/1280; **all sets complete** — includes Tanzania ×2, Uganda ×2, Kenya ×10, general ×2)
 - [x] `images/cards/CREDITS.md` + preview `/credits.html`
 - [x] Preview pages wired with real photos: index (6), listing (9), safari hero banner
 - [x] Animated nav dropdowns (fade+lift, 2nd-level flyout, `Esc`, `:focus-within`)
@@ -115,8 +155,16 @@
 ### Fix queue
 - [x] E1–E6 landed and verified
 - [x] E8 vercel.json fixed
-- [x] E7 components created (build verification blocked → B1)
+- [x] E7 components created + build green (B1 resolved)
+- [x] E10 rewrite guard (build green)
+- [x] E12 image audit — all 16 stems complete
+- [x] E13 no hard-coded secrets verified
+- [ ] E11 CI docker tag lowercase → **fix via repo rename R1**
 - [ ] E9 deploy workflows
+
+### Rebrand → "Adequate Safaris" (§ REBRAND)
+- [x] R3–R11 executed — full rename (option b): dirs `absolute/`→`adequate/`, `mod_aas_hero`→`mod_adq_hero`, prefix `aas-`→`adq-`, `AAS`→`ADQ`, brand strings→Adequate Safaris, thumbs regenerated, all builds green
+- [ ] R1/R2 — user creating new lowercase GitHub repo (also fixes E11)
 
 ### Joomla 5 remaining
 - [ ] FaLang/Joomfish — 5 languages (content translation; INI packs done)
@@ -193,7 +241,8 @@
 |-------|------|
 | Foundation | ✅ Done |
 | Fix queue E1–E6 | ✅ Done |
-| Fix queue E7–E9 | E7/E8 done · E9 ~15 min |
+| Fix queue E7–E9 | E7/E8/E10 done · E9 ~15 min |
+| Rebrand → Adequate Safaris (R1–R11) | ~45 min (R1 needs GitHub admin) |
 | API Core (modules + Prisma + tests) | ~60 min |
 | Joomla 5 (content migration, harden, i18n) | ~45 min |
 | Booking App | ~90 min |

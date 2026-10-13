@@ -1,6 +1,6 @@
-# Absolute Adventure Safaris — Modernized Platform
+# Adequate Safaris — Modernized Platform
 
-> **Canonical repository:** `github.com/Absoluteadventuresafari`
+> **Canonical repository:** `github.com/adequatesafaris`
 > **Single source of truth. There is exactly one repo, one `main` branch, one remote (`origin`).**
 > Do **not** create parallel copies/clones or edit from other folders — work here only.
 > Task status & next steps live in [`TODO.md`](TODO.md).
@@ -9,8 +9,8 @@
 
 ## ⚠️ Repo policy (read first)
 
-- **One repo, one branch.** `origin` → `https://github.com/Absoluteadventuresafari.git`, branch `main`.
-- **No second working copy.** Older docs referenced `~/Desktop/Absoluteadventuresafari` and a separate "shared work dir" — those no longer exist and must not be recreated.
+- **One repo, one branch.** `origin` → `https://github.com/adequatesafaris.git`, branch `main`.
+- **No second working copy.** Older docs referenced `~/Desktop/adequatesafaris` and a separate "shared work dir" — those no longer exist and must not be recreated.
 - **One worktree.** `git worktree list` should show only this checkout.
 - **Commit small and often.** After any change: run a build/verify, then commit. Don't leave `main` dirty for long.
 - **Never commit build output or deps.** `node_modules/`, `.next/`, `dist/`, `.env` are gitignored.
@@ -63,14 +63,14 @@ Full breakdown → [`TODO.md`](TODO.md).
 ## Directory Structure
 
 ```
-Absoluteadventuresafari/
+adequatesafaris/
 ├── README.md                 # this file
 ├── TODO.md                   # task board + session log (keep updated)
 ├── .env.example              # every env var the stack needs
 ├── .github/workflows/ci.yml  # PHP lint + JS syntax + API validate/build/lint
 ├── joomla-site/              # Joomla 5 site
-│   └── templates/absolute/   #   custom API-first template (+ images/, html/ overrides)
-│   └── modules/              #   mod_aas_hero, mod_safari_search
+│   └── templates/adequate/   #   custom API-first template (+ images/, html/ overrides)
+│   └── modules/              #   mod_adq_hero, mod_safari_search
 │   └── plugins/              #   plg_system_jwt, plg_content_api_sync
 ├── api/                      # NestJS + Prisma shared API
 │   ├── prisma/schema.prisma  #   12 models + seed
@@ -109,7 +109,7 @@ docker compose -f docker/docker-compose.yml up -d
 
 > **Note on this environment (Termux/Android):** `npm install` fails here (emulated FS
 > can't do npm's cache rename/symlinks). Build/verify from a copy on a native filesystem
-> (`/root/aas-build`) using `corepack pnpm`, or rely on Vercel CI. See `TODO.md` → Blockers.
+> (`/root/adq-build`) using `corepack pnpm`, or rely on Vercel CI. See `TODO.md` → Blockers.
 
 ---
 
@@ -131,7 +131,7 @@ docker compose -f docker/docker-compose.yml up -d
 
 - Custom `templateDetails.xml` params (colors, API URLs, social, contact).
 - Overrides: `html/mod_menu` (recursive menu), `html/com_content/article` (safari detail), `html/com_content/featured` (listing) — all render `<picture>` WebP/JPG cards.
-- `mod_aas_hero` (carousel), `mod_safari_search`, `plg_system_jwt` (SSO bridge), `plg_content_api_sync`.
+- `mod_adq_hero` (carousel), `mod_safari_search`, `plg_system_jwt` (SSO bridge), `plg_content_api_sync`.
 - Cannot run on Vercel — deploy via Docker/VPS.
 
 ---
@@ -145,15 +145,15 @@ Copy [`.env.example`](.env.example) → `.env` and fill in real values. Key grou
 DATABASE_URL=mysql://user:pass@host:3306/db
 JWT_SECRET=changeme
 PORT=4000
-CORS_ORIGINS=https://www.absoluteadventuresafaris.com
+CORS_ORIGINS=https://www.adequatesafaris.com
 
 # Payments
 STRIPE_SECRET_KEY=sk_live_...
 MPESA_CONSUMER_KEY=...
 
 # Public URLs (also set on each Vercel project)
-NEXT_PUBLIC_API_URL=https://api.absoluteadventuresafaris.com
-NEXT_PUBLIC_JOOMLA_URL=https://www.absoluteadventuresafaris.com
+NEXT_PUBLIC_API_URL=https://api.adequatesafaris.com
+NEXT_PUBLIC_JOOMLA_URL=https://www.adequatesafaris.com
 ```
 
 ## Deployment

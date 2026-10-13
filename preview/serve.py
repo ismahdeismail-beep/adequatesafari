@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Local preview server for the Absolute Adventure Safaris Joomla template.
+Local preview server for the Adequate Safaris Joomla template.
 
 Renders static preview pages that use the REAL template CSS/JS so the design
 can be reviewed in a browser before anything is committed.
@@ -25,7 +25,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
     def translate_path(self, path):
         # Map template + module asset paths to the real files in the repo
         clean = path.split("?", 1)[0].split("#", 1)[0]
-        for prefix in ("/templates/absolute/", "/modules/"):
+        for prefix in ("/templates/adequate/", "/modules/"):
             if clean.startswith(prefix):
                 real = REPO / "joomla-site" / clean.lstrip("/")
                 if real.exists():
@@ -42,7 +42,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
 
 if __name__ == "__main__":
     with socketserver.TCPServer(("127.0.0.1", PORT), Handler) as httpd:
-        print(f"\n  Absolute Adventure Safaris — template preview")
+        print(f"\n  Adequate Safaris — template preview")
         print(f"  →  http://localhost:{PORT}/")
         print(f"     http://localhost:{PORT}/safari.html")
         print(f"     http://localhost:{PORT}/listing.html\n")
