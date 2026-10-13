@@ -4,7 +4,7 @@
 > **Deploy:** Vercel preview (booking micro-app) — `*.vercel.app` (deployment protection on)
 > **Rule:** before any commit/push → open localhost for review.
 
-*Last updated: Oct 13 2026 — booking micro-app **build passes** (E7/E8/E10 fixed & committed); local server verified at `localhost:3001`. Remaining: push/deploy (needs GitHub auth) + itinerary/agent apps.*
+*Last updated: Oct 13 2026 — README rewritten (single source of truth, no duplicate repo); booking micro-app **build passes** (E7/E8/E10). Next: E9 deploy workflows + booking sub-pages.*
 
 > ⚠️ **Deployment error:** the Vercel preview failed because `next build` errored (missing components E7 + `undefined` rewrite E10). Both fixed on `main`; a fresh deploy is required once the commit is pushed (blocked: no GitHub credentials). Production is **not ready** until the deploy goes green.
 
@@ -53,8 +53,9 @@
   - **B1 workarounds tried:** npm (cacache ENOENT rename), `corepack pnpm` direct (symlink EACCES — emulated FS), then **green build via copy on native f2fs** (`/root/aas-build`, `corepack pnpm`, `next build` OK).
   - Found & fixed **E10** (`next.config.js` rewrite → `undefined/api/...`) which also broke the build.
   - **`next start` running at http://localhost:3001** (HTTP 200) for visual review (B2).
-  - **Push still blocked:** no GitHub credentials (`gh` not logged in, no `GH_TOKEN`) → cannot redeploy yet.
-  - **Next:** user reviews localhost; commit E10 + TODO; authenticate GitHub to push; retrigger Vercel deploy.
+  - **Push:** authenticated via PAT and pushed `main` (`96916919..ad46d0ae`); token to be revoked by user.
+  - **README rewritten** — documented the single canonical repo/branch/remote, accurate directory tree, status table, Termux build caveat, and contribution workflow. Confirmed via `git branch -a` / `worktree list` that there is **no duplicate repo** (the "two repos" worry was stale `~/Desktop/...` + "shared work dir" text, now removed).
+  - **Next:** E9 deploy workflows; booking sub-pages (`/safaris`, `/safaris/[slug]`, `/auth/*`); then itinerary/agent apps.
 
 ---
 
@@ -62,7 +63,8 @@
 
 ### Foundation / Infrastructure
 - [x] Project structure + git repo
-- [x] `README.md` — architecture, migration strategy, commands
+- [x] `README.md` — rewritten: single source of truth (one repo / one `main` / one remote), accurate directory tree, status table, build notes, contribution workflow
+- [x] **Repo hygiene confirmed** — exactly one clone, one branch (`main`), one remote (`origin`), one worktree; no duplicate repo. Stale `~/Desktop/...` + "shared work dir" references removed.
 - [x] `docker/docker-compose.yml` — Joomla 5, MariaDB, Redis, Nginx, API, 3× Next.js
 - [x] `docker/Dockerfile.joomla`, `Dockerfile.api`, `Dockerfile.nextjs`
 - [x] `docker/nginx/nginx.conf` + `conf.d/default.conf` — upstreams, SSL, HSTS, rate limits
