@@ -1,0 +1,6 @@
+{
+  "version": 2,
+  "builds": [
+    { "src": "micro-apps/booking/package.json", "use": "@vercel/next" }
+  ]
+}
