@@ -162,6 +162,18 @@ export interface AgentProfile {
   bookings?: Booking[];
 }
 
+export interface SafariCardData {
+  slug: string;
+  title: string;
+  excerpt: string;
+  image: string;
+  price?: number;
+  currency?: string;
+  durationDays?: number;
+  country?: string;
+  featured?: boolean;
+}
+
 export interface PaginatedResponse<T> {
   data: T[];
   total: number;

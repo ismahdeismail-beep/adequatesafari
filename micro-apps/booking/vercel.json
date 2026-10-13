@@ -1,12 +1,3 @@
 {
-  "framework": "nextjs",
-  "functions": {
-    "api/**/*.ts": {
-      "maxMemory": "128MB",
-      "timeout": 30
-    }
-  },
-  "routes": [
-    { "src": "/(.*)", "dest": "/" }
-  ]
+  "framework": "nextjs"
 }
