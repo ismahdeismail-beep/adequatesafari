@@ -8,14 +8,14 @@ services:
     build:
       context: ..
       dockerfile: docker/Dockerfile.joomla
-    container_name: aas-joomla
+    container_name: adq-joomla
     restart: unless-stopped
     environment:
       JOOMLA_DB_HOST: db
       JOOMLA_DB_USER: joomla
       JOOMLA_DB_PASSWORD: ${JOOMLA_DB_PASSWORD:-joomla}
       JOOMLA_DB_NAME: joomla
-      JOOMLA_SITE_NAME: "Absolute Adventure Safaris"
+      JOOMLA_SITE_NAME: "Adequate Safaris"
       JOOMLA_ADMIN_USER: admin
       JOOMLA_ADMIN_PASSWORD: ${JOOMLA_ADMIN_PASSWORD:-changeme123}
       JOOMLA_ADMIN_EMAIL: ${JOOMLA_ADMIN_EMAIL:-admin@localhost}
@@ -34,14 +34,14 @@ services:
       db:
         condition: service_healthy
     networks:
-      - aas-network
+      - adq-network
 
   # ──────────────────────────────────────────────
   # MARIADB (Joomla DB)
   # ──────────────────────────────────────────────
   db:
     image: mariadb:11.4
-    container_name: aas-db
+    container_name: adq-db
     restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-rootpass}
@@ -58,14 +58,14 @@ services:
       timeout: 5s
       retries: 5
     networks:
-      - aas-network
+      - adq-network
 
   # ──────────────────────────────────────────────
   # REDIS (Cache / Sessions / Queue)
   # ──────────────────────────────────────────────
   redis:
     image: redis:7-alpine
-    container_name: aas-redis
+    container_name: adq-redis
     restart: unless-stopped
     command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
     volumes:
@@ -73,14 +73,14 @@ services:
     ports:
       - "6379:6379"
     networks:
-      - aas-network
+      - adq-network
 
   # ──────────────────────────────────────────────
   # NGINX (Reverse Proxy + SSL Termination)
   # ──────────────────────────────────────────────
   nginx:
     image: nginx:alpine
-    container_name: aas-nginx
+    container_name: adq-nginx
     restart: unless-stopped
     ports:
       - "80:80"
@@ -93,7 +93,7 @@ services:
     depends_on:
       - joomla
     networks:
-      - aas-network
+      - adq-network
 
   # ──────────────────────────────────────────────
   # API (NestJS - Payments, Auth, Webhooks, Sync)
@@ -102,7 +102,7 @@ services:
     build:
       context: ..
       dockerfile: docker/Dockerfile.api
-    container_name: aas-api
+    container_name: adq-api
     restart: unless-stopped
     environment:
       NODE_ENV: development
@@ -128,7 +128,7 @@ services:
       - db
       - redis
     networks:
-      - aas-network
+      - adq-network
 
   # ──────────────────────────────────────────────
   # MICRO-APPS (Next.js) - Development only
@@ -139,7 +139,7 @@ services:
       dockerfile: docker/Dockerfile.nextjs
       args:
         APP_DIR: micro-apps/booking
-    container_name: aas-booking
+    container_name: adq-booking
     restart: unless-stopped
     environment:
       NODE_ENV: development
@@ -152,7 +152,7 @@ services:
     ports:
       - "3001:3000"
     networks:
-      - aas-network
+      - adq-network
 
   itinerary-app:
     build:
@@ -160,7 +160,7 @@ services:
       dockerfile: docker/Dockerfile.nextjs
       args:
         APP_DIR: micro-apps/itinerary-builder
-    container_name: aas-itinerary
+    container_name: adq-itinerary
     restart: unless-stopped
     environment:
       NODE_ENV: development
@@ -173,7 +173,7 @@ services:
     ports:
       - "3002:3000"
     networks:
-      - aas-network
+      - adq-network
 
   agent-app:
     build:
@@ -181,7 +181,7 @@ services:
       dockerfile: docker/Dockerfile.nextjs
       args:
         APP_DIR: micro-apps/agent-portal
-    container_name: aas-agent
+    container_name: adq-agent
     restart: unless-stopped
     environment:
       NODE_ENV: development
@@ -194,7 +194,7 @@ services:
     ports:
       - "3003:3000"
     networks:
-      - aas-network
+      - adq-network
 
 volumes:
   joomla-data:
@@ -202,5 +202,5 @@ volumes:
   redis-data:
 
 networks:
-  aas-network:
+  adq-network:
     driver: bridge
