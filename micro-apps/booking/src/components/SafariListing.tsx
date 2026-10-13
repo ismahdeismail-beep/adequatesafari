@@ -19,6 +19,18 @@ const countries = [
   { value: 'TANZANIA', label: 'Tanzania' },
   { value: 'UGANDA', label: 'Uganda' },
   { value: 'RWANDA', label: 'Rwanda' },
+  { value: 'MAURITIUS', label: 'Mauritius' },
+  { value: 'MALDIVES', label: 'Maldives' },
+  { value: 'SEYCHELLES', label: 'Seychelles' },
+  { value: 'INDONESIA', label: 'Indonesia (Bali)' },
+  { value: 'UNITED_ARAB_EMIRATES', label: 'UAE (Dubai)' },
+  { value: 'TURKEY', label: 'Turkey' },
+  { value: 'THAILAND', label: 'Thailand' },
+  { value: 'MALAYSIA', label: 'Malaysia' },
+  { value: 'SOUTH_AFRICA', label: 'South Africa' },
+  { value: 'JORDAN', label: 'Jordan' },
+  { value: 'EGYPT', label: 'Egypt' },
+  { value: 'EUROPE', label: 'Europe' },
 ];
 
 type SortKey = 'featured' | 'price-asc' | 'price-desc' | 'duration';

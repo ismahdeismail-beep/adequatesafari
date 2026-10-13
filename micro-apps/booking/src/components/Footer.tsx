@@ -37,7 +37,7 @@ export function Footer() {
       <div className="container-custom py-14">
         <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-5">
           <div className="lg:col-span-2">
-            <span className="font-heading text-xl font-bold text-white">Absolute Adventure Safaris</span>
+            <span className="font-heading text-xl font-bold text-white">Adequate Safaris</span>
             <p className="mt-3 max-w-sm text-sm leading-relaxed">
               Leading provider of quality leisure and vacation experiences and services across East Africa.
             </p>
@@ -48,8 +48,8 @@ export function Footer() {
               </li>
               <li className="flex items-center gap-2">
                 <Mail className="h-4 w-4 text-safari-gold" />
-                <a href="mailto:info@absoluteadventuresafaris.com" className="hover:text-white">
-                  info@absoluteadventuresafaris.com
+                <a href="mailto:info@example.com" className="hover:text-white">
+                  info@example.com
                 </a>
               </li>
               <li className="flex items-center gap-2">
@@ -89,7 +89,7 @@ export function Footer() {
 
       <div className="border-t border-white/10">
         <div className="container-custom flex flex-col items-center justify-between gap-3 py-5 text-xs sm:flex-row">
-          <p>&copy; {new Date().getFullYear()} Absolute Adventure Safaris. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} Adequate Safaris. All rights reserved.</p>
           <div className="flex items-center gap-4">
             <Link href="/privacy" className="hover:text-white">
               Privacy

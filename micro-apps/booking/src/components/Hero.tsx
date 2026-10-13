@@ -8,7 +8,7 @@ import { cn } from '@/lib/utils';
 const slides = [
   {
     image: '/hero/slider1.jpg',
-    eyebrow: 'Absolute Adventure Safaris',
+    eyebrow: 'Adequate Safaris',
     heading: 'Discover the wild heart of East Africa',
     subtext: 'Leading provider of quality leisure and vacation experiences and services.',
     cta: { label: 'Book a safari', href: '/safaris' },

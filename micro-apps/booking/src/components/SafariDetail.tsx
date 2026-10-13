@@ -2,36 +2,12 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { Check, Clock, MapPin, Minus, Star, X } from 'lucide-react';
+import { CalendarDays, Check, Clock, MapPin, Minus, Star, X } from 'lucide-react';
 import { api } from '@/lib/api';
+import { safariToDetail } from '@/lib/mappers';
 import { getSampleSafari } from '@/lib/sample-data';
-import { formatCurrency } from '@/lib/utils';
+import { formatCurrency, formatDateShort } from '@/lib/utils';
 import type { Safari, SafariDetailData } from '@/types';
-
-function mapDetail(safari: Safari): SafariDetailData {
-  return {
-    slug: safari.slug,
-    title: safari.title,
-    excerpt: safari.shortDescription || safari.description?.slice(0, 160) || '',
-    image: safari.thumbnail || safari.images?.[0] || '/cards/maasai-mara-wildebeest-800.jpg',
-    price: safari.minPrice,
-    currency: safari.currency,
-    durationDays: safari.durationDays,
-    country: safari.country ? safari.country.charAt(0) + safari.country.slice(1).toLowerCase() : undefined,
-    region: safari.region,
-    accommodationType: safari.accommodationType,
-    safariStyle: safari.safariStyle,
-    groupSizeMin: safari.groupSizeMin,
-    groupSizeMax: safari.groupSizeMax,
-    highlights: safari.highlights ?? [],
-    inclusions: safari.inclusions ?? [],
-    exclusions: safari.exclusions ?? [],
-    itinerary: safari.itinerary ?? [],
-    gallery: safari.images ?? [],
-    rating: safari.averageRating,
-    reviewCount: safari.reviewCount,
-  };
-}
 
 export function SafariDetail({ slug }: { slug: string }) {
   const [safari, setSafari] = useState<SafariDetailData | null>(null);
@@ -44,7 +20,7 @@ export function SafariDetail({ slug }: { slug: string }) {
       .getSafari(slug)
       .then((res) => {
         const item = (res?.data ?? res) as Safari | undefined;
-        if (!cancelled) setSafari(item && item.slug ? mapDetail(item) : getSampleSafari(slug) ?? null);
+        if (!cancelled) setSafari(item && item.slug ? safariToDetail(item) : getSampleSafari(slug) ?? null);
       })
       .catch(() => {
         if (!cancelled) setSafari(getSampleSafari(slug) ?? null);
@@ -79,6 +55,16 @@ export function SafariDetail({ slug }: { slug: string }) {
 
   const priceLabel =
     typeof safari.price === 'number' ? formatCurrency(safari.price, safari.currency ?? 'USD') : null;
+  const rangeLabel =
+    typeof safari.maxPrice === 'number' && safari.maxPrice > (safari.price ?? 0)
+      ? `${priceLabel} – ${formatCurrency(safari.maxPrice, safari.currency ?? 'USD')}`
+      : priceLabel;
+
+  const upcoming = (safari.dates ?? [])
+    .filter((d) => d.status === 'OPEN' || d.status === 'GUARANTEED')
+    .filter((d) => new Date(d.startDate).getTime() > Date.now() - 86400000)
+    .sort((a, b) => +new Date(a.startDate) - +new Date(b.startDate))
+    .slice(0, 3);
 
   return (
     <article className="pb-20 pt-16">
@@ -184,9 +170,9 @@ export function SafariDetail({ slug }: { slug: string }) {
 
         <aside className="lg:col-span-1">
           <div className="sticky top-24 rounded-2xl border border-gray-100 bg-white p-6 shadow-md">
-            {priceLabel && (
+            {rangeLabel && (
               <p className="text-gray-500">
-                From <span className="font-heading text-3xl font-bold text-safari-dusk">{priceLabel}</span>{' '}
+                From <span className="font-heading text-3xl font-bold text-safari-dusk">{rangeLabel}</span>{' '}
                 <span className="text-sm">per person</span>
               </p>
             )}
@@ -195,6 +181,31 @@ export function SafariDetail({ slug }: { slug: string }) {
                 <Minus className="h-4 w-4" /> {safari.groupSizeMin}–{safari.groupSizeMax} travellers
               </p>
             )}
+
+            {upcoming.length > 0 && (
+              <div className="mt-5 border-t border-gray-100 pt-4">
+                <p className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-gray-400">
+                  <CalendarDays className="h-3.5 w-3.5" /> Upcoming departures
+                </p>
+                <ul className="mt-2 space-y-1.5">
+                  {upcoming.map((d) => (
+                    <li key={d.id} className="flex items-center justify-between text-sm">
+                      <span className="text-gray-600">{formatDateShort(d.startDate)}</span>
+                      <span className="font-semibold text-safari-dusk">
+                        {formatCurrency(d.price, d.currency ?? safari.currency ?? 'USD')}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+                <Link
+                  href={`/booking/new?safari=${safari.slug}`}
+                  className="mt-2 inline-block text-sm font-medium text-primary-600 hover:text-primary-700"
+                >
+                  See all dates &amp; prices →
+                </Link>
+              </div>
+            )}
+
             <Link
               href={`/booking/new?safari=${safari.slug}`}
               className="btn-primary mt-6 flex w-full items-center justify-center"
@@ -208,7 +219,7 @@ export function SafariDetail({ slug }: { slug: string }) {
               Ask a question
             </Link>
             <p className="mt-4 text-center text-xs text-gray-400">
-              No payment now — we’ll confirm availability first.
+              Prices are per person. Your total is shown before you confirm — no payment now.
             </p>
           </div>
         </aside>

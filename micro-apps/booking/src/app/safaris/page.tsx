@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { SafariListing } from '@/components/SafariListing';
 
 export const metadata: Metadata = {
-  title: 'Our Safaris | Absolute Adventure Safaris',
+  title: 'Our Safaris | Adequate Safaris',
   description: 'Browse safari journeys across Kenya, Tanzania and Uganda — filter by country, price and duration.',
 };
 

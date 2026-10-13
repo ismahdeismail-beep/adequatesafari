@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
@@ -12,7 +12,16 @@ export default function LoginPage() {
   const setAuth = useAuthStore((s) => s.setAuth);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [next, setNext] = useState('/booking/my-bookings');
   const [loading, setLoading] = useState(false);
+
+  // Read ?next= after mount (client-side) so this static page doesn't need a Suspense boundary.
+  useEffect(() => {
+    const n = new URLSearchParams(window.location.search).get('next');
+    if (n && n.startsWith('/') && !n.startsWith('//')) {
+      setNext(n);
+    }
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -22,7 +31,7 @@ export default function LoginPage() {
       const payload = data?.data ?? data;
       setAuth(payload.user, payload.accessToken, payload.refreshToken);
       toast.success('Welcome back!');
-      router.push('/booking/my-bookings');
+      router.push(next);
     } catch {
       toast.error('Invalid email or password.');
     } finally {

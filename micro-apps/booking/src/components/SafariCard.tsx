@@ -33,7 +33,7 @@ export function SafariCard({ safari, className }: SafariCardProps) {
         )}
         {priceLabel && (
           <span className="absolute bottom-3 left-3 rounded-full bg-white/95 px-3 py-1 text-sm font-semibold text-primary-700 shadow-sm">
-            From {priceLabel}
+            From {priceLabel} / person
           </span>
         )}
       </Link>

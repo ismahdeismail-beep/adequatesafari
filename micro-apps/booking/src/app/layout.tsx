@@ -17,16 +17,16 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://www.absoluteadventuresafaris.com'),
-  title: 'Book Your Safari | Absolute Adventure Safaris',
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://www.adequatesafaris.com'),
+  title: 'Book Your Safari | Adequate Safaris',
   description: 'Book unforgettable safari adventures in Kenya, Tanzania, and Uganda. Secure online booking with M-Pesa and Stripe.',
   keywords: ['safari booking', 'Kenya safari', 'Tanzania safari', 'Uganda gorilla trekking', 'African safari'],
   openGraph: {
-    title: 'Book Your Safari | Absolute Adventure Safaris',
+    title: 'Book Your Safari | Adequate Safaris',
     description: 'Book unforgettable safari adventures in Kenya, Tanzania, and Uganda.',
     type: 'website',
     locale: 'en_US',
-    siteName: 'Absolute Adventure Safaris',
+    siteName: 'Adequate Safaris',
   },
 };
 

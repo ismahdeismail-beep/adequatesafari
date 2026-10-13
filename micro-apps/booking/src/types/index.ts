@@ -17,7 +17,7 @@ export interface Safari {
   title: string;
   shortDescription?: string;
   description: string;
-  country: 'KENYA' | 'TANZANIA' | 'UGANDA' | 'RWANDA' | 'BURUNDI';
+  country: Country;
   region?: string;
   durationDays: number;
   durationNights: number;
@@ -175,6 +175,8 @@ export interface SafariCardData {
 }
 
 export interface SafariDetailData extends SafariCardData {
+  id?: string;
+  maxPrice?: number;
   region?: string;
   accommodationType?: string;
   safariStyle?: string;
@@ -187,6 +189,8 @@ export interface SafariDetailData extends SafariCardData {
   gallery?: string[];
   rating?: number;
   reviewCount?: number;
+  /** Upcoming departures with their own per-person prices (from the API). */
+  dates?: SafariDate[];
 }
 
 export interface PaginatedResponse<T> {
@@ -243,7 +247,24 @@ export interface PassengerFormData {
   isLead?: boolean;
 }
 
-export type Country = 'KENYA' | 'TANZANIA' | 'UGANDA' | 'RWANDA' | 'BURUNDI';
+export type Country =
+  | 'KENYA'
+  | 'TANZANIA'
+  | 'UGANDA'
+  | 'RWANDA'
+  | 'BURUNDI'
+  | 'MAURITIUS'
+  | 'MALDIVES'
+  | 'SEYCHELLES'
+  | 'INDONESIA'
+  | 'UNITED_ARAB_EMIRATES'
+  | 'TURKEY'
+  | 'THAILAND'
+  | 'MALAYSIA'
+  | 'SOUTH_AFRICA'
+  | 'JORDAN'
+  | 'EGYPT'
+  | 'EUROPE';
 
 export const COUNTRY_LABELS: Record<Country, string> = {
   KENYA: 'Kenya',
@@ -251,6 +272,18 @@ export const COUNTRY_LABELS: Record<Country, string> = {
   UGANDA: 'Uganda',
   RWANDA: 'Rwanda',
   BURUNDI: 'Burundi',
+  MAURITIUS: 'Mauritius',
+  MALDIVES: 'Maldives',
+  SEYCHELLES: 'Seychelles',
+  INDONESIA: 'Indonesia',
+  UNITED_ARAB_EMIRATES: 'UAE',
+  TURKEY: 'Turkey',
+  THAILAND: 'Thailand',
+  MALAYSIA: 'Malaysia',
+  SOUTH_AFRICA: 'South Africa',
+  JORDAN: 'Jordan',
+  EGYPT: 'Egypt',
+  EUROPE: 'Europe',
 };
 
 export const ACCOMMODATION_LABELS: Record<Safari['accommodationType'], string> = {

@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { ContentPage } from '@/components/ContentPage';
 
 export const metadata: Metadata = {
-  title: 'Booking Terms | Absolute Adventure Safaris',
+  title: 'Booking Terms | Adequate Safaris',
 };
 
 export default function TermsPage() {

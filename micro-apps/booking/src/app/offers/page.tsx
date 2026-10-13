@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { ContentPage } from '@/components/ContentPage';
 
 export const metadata: Metadata = {
-  title: 'Special Offers | Absolute Adventure Safaris',
+  title: 'Special Offers | Adequate Safaris',
   description: 'Seasonal safari deals and value departures across East Africa.',
 };
 

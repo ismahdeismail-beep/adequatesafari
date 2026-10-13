@@ -2,11 +2,11 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ['localhost', 'absoluteadventuresafaris.com', 'api.absoluteadventuresafaris.com'],
+    domains: ['localhost', 'adequatesafaris.com', 'api.adequatesafaris.com'],
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: '**.absoluteadventuresafaris.com',
+        hostname: '**.adequatesafaris.com',
       },
       {
         protocol: 'https',

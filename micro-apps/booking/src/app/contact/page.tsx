@@ -3,7 +3,7 @@ import { Mail, MapPin, MessageCircle, Phone } from 'lucide-react';
 import { ContactForm } from '@/components/ContactForm';
 
 export const metadata: Metadata = {
-  title: 'Contact Us | Absolute Adventure Safaris',
+  title: 'Contact Us | Adequate Safaris',
   description: 'Talk to our safari consultants in Nairobi, Kenya.',
 };
 
@@ -28,8 +28,8 @@ export default function ContactPage() {
             </li>
             <li className="flex items-center gap-3">
               <Mail className="h-5 w-5 text-primary-600" />
-              <a href="mailto:info@absoluteadventuresafaris.com" className="hover:text-primary-600">
-                info@absoluteadventuresafaris.com
+              <a href="mailto:info@example.com" className="hover:text-primary-600">
+                info@example.com
               </a>
             </li>
             <li className="flex items-center gap-3">

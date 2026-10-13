@@ -1,7 +1,7 @@
 import type { MetadataRoute } from 'next';
 import { sampleSafaris } from '@/lib/sample-data';
 
-const base = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.absoluteadventuresafaris.com';
+const base = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.adequatesafaris.com';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();

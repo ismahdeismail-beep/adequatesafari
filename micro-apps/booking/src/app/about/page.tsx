@@ -2,14 +2,14 @@ import type { Metadata } from 'next';
 import { ContentPage } from '@/components/ContentPage';
 
 export const metadata: Metadata = {
-  title: 'About Us | Absolute Adventure Safaris',
+  title: 'About Us | Adequate Safaris',
   description: 'Locally owned and operated, designing unforgettable safari journeys across East Africa.',
 };
 
 export default function AboutPage() {
   return (
     <ContentPage
-      title="About Absolute Adventure Safaris"
+      title="About Adequate Safaris"
       subtitle="Locally owned and operated in Nairobi, Kenya."
     >
       <p>

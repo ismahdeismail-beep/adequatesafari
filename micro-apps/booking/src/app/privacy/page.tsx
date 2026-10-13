@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { ContentPage } from '@/components/ContentPage';
 
 export const metadata: Metadata = {
-  title: 'Privacy Policy | Absolute Adventure Safaris',
+  title: 'Privacy Policy | Adequate Safaris',
 };
 
 export default function PrivacyPage() {

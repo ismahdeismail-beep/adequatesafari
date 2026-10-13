@@ -36,7 +36,7 @@ export function formatDateShort(date: string | Date) {
 export function generateBookingRef(): string {
   const date = new Date().toISOString().slice(0, 10).replace(/-/g, '');
   const random = Math.random().toString(36).substring(2, 8).toUpperCase();
-  return `AAS-${date}-${random}`;
+  return `ADQ-${date}-${random}`;
 }
 
 export function getInitials(firstName: string, lastName: string) {

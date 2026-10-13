@@ -37,12 +37,12 @@ export function Header() {
       <nav className="container-custom" aria-label="Main navigation">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link href="/" className="flex items-center space-x-2" aria-label="Absolute Adventure Safaris Home">
+          <Link href="/" className="flex items-center space-x-2" aria-label="Adequate Safaris Home">
             <div className="w-10 h-10 bg-primary-600 rounded-lg flex items-center justify-center">
               <MapPin className="w-6 h-6 text-white" />
             </div>
             <span className="font-heading text-xl font-bold text-safari-dusk hidden sm:block">
-              Absolute Adventure Safaris
+              Adequate Safaris
             </span>
           </Link>
 

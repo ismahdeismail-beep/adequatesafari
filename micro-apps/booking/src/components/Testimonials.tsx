@@ -29,7 +29,7 @@ export function Testimonials() {
           Loved by travellers worldwide
         </h2>
         <p className="mx-auto mt-2 max-w-2xl text-center text-gray-500">
-          Real stories from guests who travelled with Absolute Adventure Safaris.
+          Real stories from guests who travelled with Adequate Safaris.
         </p>
 
         <div className="mt-12 grid gap-6 md:grid-cols-3">

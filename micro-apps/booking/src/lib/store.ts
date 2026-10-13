@@ -29,7 +29,7 @@ export const useAuthStore = create<AuthState>()(
         })),
     }),
     {
-      name: 'aas-auth',
+      name: 'adq-auth',
       partialize: (state) => ({
         user: state.user,
         accessToken: state.accessToken,
