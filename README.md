@@ -118,7 +118,7 @@ docker compose -f docker/docker-compose.yml up -d
 - Next.js 14 (App Router, `src/`), TypeScript, Tailwind, Zustand, Axios, react-hook-form + Zod.
 - Home page composes `Hero`, `SearchSection`, `FeaturedSafaris`, `WhyChooseUs`, `Testimonials`, `Newsletter`, `Footer`.
 - API client: `src/lib/api.ts` (`NEXT_PUBLIC_API_URL`). Falls back to `src/lib/sample-data.ts` when the API is unreachable, so it renders standalone.
-- Deploy: **Vercel**, Root Directory `micro-apps/booking`, framework preset **Next.js**. `vercel.json` intentionally contains only `{ "framework": "nextjs" }`.
+- Deploy: **Vercel**. The repo-root `vercel.json` builds this app directly through the legacy `builds` API (`{ "src": "micro-apps/booking/package.json", "use": "@vercel/next" }`), so autodeploy needs **no project-side Root Directory setting**. Do **not** delete that file — without it Vercel would build the empty repo root and fail. The app also keeps its own `micro-apps/booking/vercel.json` (`{ "framework": "nextjs" }`) for local/CLI use.
 - The `/api/backend/*` rewrite is only registered when `NEXT_PUBLIC_API_URL` is set.
 
 ## Shared API (`api/`)
@@ -160,7 +160,7 @@ NEXT_PUBLIC_JOOMLA_URL=https://www.adequatesafaris.com
 
 Three surfaces, three hosts:
 
-- **Micro-apps** → **Vercel** (one project per app, Root Directory `micro-apps/<app>`).
+- **Micro-apps** → **Vercel**. The booking app is built from the repo root by `vercel.json` → legacy `builds` (`@vercel/next` on `micro-apps/booking/package.json`), which removes the dependency on a dashboard Root Directory setting. (Setting the project Root Directory to `micro-apps/booking` also works.)
 - **Joomla** → Docker/VPS (PHP + MySQL).
 - **API** → Docker/VPS (or Vercel serverless with a serverless-friendly MySQL).
 
