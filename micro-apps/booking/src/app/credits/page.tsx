@@ -16,11 +16,8 @@ export default function CreditsPage() {
         <code className="mx-1 rounded bg-gray-100 px-1">preview/credits.html</code>.
       </p>
       <p>
-        If you believe an image has been used incorrectly, contact us at
-        <a href="mailto:info@example.com" className="ml-1 text-primary-600 hover:text-primary-700">
-          info@example.com
-        </a>{' '}
-        and we’ll resolve it promptly.
+        If you believe an image has been used incorrectly, get in touch via our contact page and
+        we’ll resolve it promptly.
       </p>
     </ContentPage>
   );

@@ -12,9 +12,9 @@
  * being fixed editions, so nothing ever goes stale between seasons.
  *
  * Credentials for seeded users (unless SEED_PASSWORD is set):
- *   demo@example.com  / CHANGE_ME   (customer)
- *   admin@example.com / CHANGE_ME   (admin)
- *   agent@example.com / CHANGE_ME   (agent)
+ *   demo@example.com  / <set via SEED_PASSWORD>   (customer)
+ *   admin@example.com / <set via SEED_PASSWORD>   (admin)
+ *   agent@example.com / <set via SEED_PASSWORD>   (agent)
  *
  * Image paths point at the Joomla template's card set; swap CDN_URL at runtime
  * to serve them from your CDN. Real photography replaces these after content
@@ -28,7 +28,7 @@ import { ThemeTag, planDepartures } from './dates';
 const prisma = new PrismaClient();
 
 const IMG_BASE = process.env.CDN_URL ?? 'https://www.adequatesafaris.com';
-const PASSWORD = process.env.SEED_PASSWORD ?? 'CHANGE_ME';
+const PASSWORD = process.env.SEED_PASSWORD ?? 'CHANGE_ME_IN_ENV';
 const card = (slug: string, size = 800) => `${IMG_BASE}/templates/adequate/images/cards/${slug}-${size}.jpg`;
 
 interface SeedSafari {

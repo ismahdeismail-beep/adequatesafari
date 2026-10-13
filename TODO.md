@@ -1,16 +1,16 @@
 # Adequate Safaris — Modernization TODO
 
 > **Brand:** **Adequate Safaris** — live domain **https://adequatesafaris.com/**
-> **Repo (GitHub):** `github.com/adequatesafaris` (**rename to `adequatesafaris` pending — see R1**)
+> **Repo (GitHub):** `adequatesafari` — created lowercase (see R1); `origin` set (see R2)
 > **Local clone:** `~/Desktop/adequatesafari` (folder already renamed)
 > **Deploy:** Vercel preview (booking micro-app) — `*.vercel.app` (deployment protection on)
 > **Rule:** before any commit/push → open localhost for review. **Never hard-code secrets/keys.**
 
-*Last updated: Oct 13 2026 — **REBRAND EXECUTED** (option b) to "Adequate Safaris": template `adequate/`, module `mod_adq_hero`, prefix `adq-`, all builds green. Remaining: R1/R2 repo rename (user creating new GitHub repo; also fixes E11).*
+*Last updated: Oct 13 2026 — **REBRAND EXECUTED** (option b) to "Adequate Safaris": template `adequate/`, module `mod_adq_hero`, prefix `adq-`, all builds green. R1/R2 DONE: repo `adequatesafari` created (lowercase), `origin` set, E11 resolved.*
 
-> ⚠️ **Open CI failure (E11):** GitHub Actions docker build fails with
-> `invalid tag "ghcr.io/adequatesafaris/api:latest": repository name must be lowercase`.
-> Root cause: the GitHub repo name contains uppercase (`adequatesafaris`); GHCR requires lowercase image tags. Fix by renaming the repo to `adequatesafari` (R1) **or** lowercasing the image name in the workflow.
+> ~~⚠️ Open CI failure (E11): GitHub Actions docker build failed with
+> `invalid tag "ghcr.io/adequatesafari/api:latest": repository name must be lowercase`.~~
+> **Resolved by R1** — repo created as `adequatesafari` (lowercase), satisfying GHCR's lowercase image-tag requirement.
 
 ---
 
@@ -35,7 +35,7 @@
 | E8 | **`micro-apps/booking/vercel.json` rewrote everything to `/`** — `{ "src": "/(.*)", "dest": "/" }` broke `/safaris`, `/booking`, etc. | ✅ DONE | Reduced to `{ "framework": "nextjs" }` |
 | E9 | **Root has no deploy config / CI deploy workflows** — only `.github/workflows/ci.yml` exists; `deploy-*.yml` pending | ⬜ TODO | Add deploy workflows when VPS/DNS is provisioned (see Deployment & Ops) |
 | E10 | **`next.config.js` rewrite produced `destination: "undefined/api/:path*"`** when `NEXT_PUBLIC_API_URL` was unset → `next build` failed with "Invalid rewrite found" (another Vercel deploy killer) | ✅ DONE | Guard the rewrite: return `[]` when `NEXT_PUBLIC_API_URL` is not set. Build now green. |
-| E11 | **CI docker build fails** — `invalid tag "ghcr.io/adequatesafaris/api:latest": repository name must be lowercase` | ⬜ TODO (fix R1) | GitHub repo name has uppercase. Rename repo → `adequatesafari` (lowercase) and/or hard-code a lowercase image name in the workflow. Note: no `ghcr` reference exists in this checkout — the failing workflow lives on GitHub only. |
+| E11 | **CI docker build fails** — `invalid tag "ghcr.io/adequatesafari/api:latest": repository name must be lowercase` | ✅ DONE | Resolved by R1: repo created as `adequatesafari` (lowercase) satisfies GHCR's lowercase image-tag requirement. No `ghcr` reference exists in this checkout. |
 | E12 | **Image audit** — "we only have safaris of Kenya" | ✅ VERIFIED | 16 card stems, **all complete** (400/800/1280 JPG+WebP): Kenya ×10, Tanzania ×2 (`tanzania-ngorongoro`, `zanzibar-beach`), Uganda ×1 (`bwindi-gorilla`), + `leopard-sighting`, `tented-camp`, `lodge-pool`. `amboseli-kilimanjaro` set **is present** (earlier "0 files" was a path typo, not a real gap). |
 | E13 | **No hard-coded secrets/keys** | ✅ VERIFIED | No secrets committed; credentials live in `.env*` only. Re-check after each change. |
 
@@ -47,8 +47,8 @@
 
 | # | Item | Status | Notes |
 |---|------|--------|-------|
-| R1 | **GitHub repo naming** → lowercase `adequatesafaris` | ⬜ TODO (user is creating a new repo) | Also fixes E11 (ghcr lowercase tag). After create: `git remote set-url origin https://github.com/<new>.git` |
-| R2 | Update local remote URL after new repo created | ⬜ TODO | `git remote set-url origin …` |
+| R1 | **GitHub repo naming** → lowercase repo name | ✅ DONE | Repo created as `adequatesafari` (lowercase) — also fixes E11 (GHCR lowercase tag). |
+| R2 | Update local remote URL after new repo created | ✅ DONE | `origin` → `adequatesafari` (single remote; old `Absoluteadventuresafari` remote removed). |
 | R3 | Rebrand **Joomla template** — folder `absolute/` → `adequate/`; `templateDetails.xml` (`<name>adequate</name>`, author, siteName default), `index.php`, `component.php`, `error.php`, `offline.php`, overrides, menu override | ✅ DONE | Full rename executed (option **b**) — folder now `joomla-site/templates/adequate/` |
 | R4 | Rebrand **language packs** (5 langs) — files `*.tpl_absolute.*` renamed to `tpl_adequate`, keys `TPL_ABSOLUTE_*` → `TPL_ADEQUATE_*` | ✅ DONE | Key parity verified (manifest keys all present in en-GB) |
 | R5 | Rebrand **preview pages** — `index.html`, `listing.html`, `safari.html`, `credits.html` (`<title>`, `adq-brand__name`, hero eyebrow, copyright) | ✅ DONE | Preview renders "Adequate Safaris" (verified via localhost) |

@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Facebook, Instagram, Mail, MapPin, Phone, Twitter } from 'lucide-react';
+import { Facebook, Instagram, MapPin, Phone, Twitter } from 'lucide-react';
 
 const footerLinks = [
   {
@@ -45,12 +45,6 @@ export function Footer() {
               <li className="flex items-center gap-2">
                 <Phone className="h-4 w-4 text-safari-gold" />
                 <span>+254 (0) 700 000 000</span>
-              </li>
-              <li className="flex items-center gap-2">
-                <Mail className="h-4 w-4 text-safari-gold" />
-                <a href="mailto:info@example.com" className="hover:text-white">
-                  info@example.com
-                </a>
               </li>
               <li className="flex items-center gap-2">
                 <MapPin className="h-4 w-4 text-safari-gold" />

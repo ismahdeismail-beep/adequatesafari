@@ -1,6 +1,6 @@
 # Adequate Safaris — Modernized Platform
 
-> **Canonical repository:** `github.com/adequatesafaris`
+> **Canonical repository:** this GitHub repository — `adequatesafari` (one repo, one `main` branch, one remote).
 > **Single source of truth. There is exactly one repo, one `main` branch, one remote (`origin`).**
 > Do **not** create parallel copies/clones or edit from other folders — work here only.
 > Task status & next steps live in [`TODO.md`](TODO.md).
@@ -9,7 +9,7 @@
 
 ## ⚠️ Repo policy (read first)
 
-- **One repo, one branch.** `origin` → `https://github.com/adequatesafaris.git`, branch `main`.
+- **One repo, one branch.** `origin` points to this repository's GitHub remote (`adequatesafari`), branch `main`.
 - **No second working copy.** Older docs referenced `~/Desktop/adequatesafaris` and a separate "shared work dir" — those no longer exist and must not be recreated.
 - **One worktree.** `git worktree list` should show only this checkout.
 - **Commit small and often.** After any change: run a build/verify, then commit. Don't leave `main` dirty for long.

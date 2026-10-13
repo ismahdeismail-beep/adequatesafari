@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Mail, MapPin, MessageCircle, Phone } from 'lucide-react';
+import { MapPin, MessageCircle, Phone } from 'lucide-react';
 import { ContactForm } from '@/components/ContactForm';
 
 export const metadata: Metadata = {
@@ -25,12 +25,6 @@ export default function ContactPage() {
             <li className="flex items-center gap-3">
               <MessageCircle className="h-5 w-5 text-primary-600" />
               <span>WhatsApp: +254 (0) 700 000 000</span>
-            </li>
-            <li className="flex items-center gap-3">
-              <Mail className="h-5 w-5 text-primary-600" />
-              <a href="mailto:info@example.com" className="hover:text-primary-600">
-                info@example.com
-              </a>
             </li>
             <li className="flex items-center gap-3">
               <MapPin className="h-5 w-5 text-primary-600" />
