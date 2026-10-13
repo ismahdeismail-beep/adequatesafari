@@ -174,6 +174,21 @@ export interface SafariCardData {
   featured?: boolean;
 }
 
+export interface SafariDetailData extends SafariCardData {
+  region?: string;
+  accommodationType?: string;
+  safariStyle?: string;
+  groupSizeMin?: number;
+  groupSizeMax?: number;
+  highlights: string[];
+  inclusions: string[];
+  exclusions: string[];
+  itinerary: ItineraryDay[];
+  gallery?: string[];
+  rating?: number;
+  reviewCount?: number;
+}
+
 export interface PaginatedResponse<T> {
   data: T[];
   total: number;

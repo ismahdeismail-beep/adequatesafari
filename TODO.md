@@ -56,6 +56,8 @@
   - **Push:** authenticated via PAT and pushed `main` (`96916919..ad46d0ae`); token to be revoked by user.
   - **README rewritten** — documented the single canonical repo/branch/remote, accurate directory tree, status table, Termux build caveat, and contribution workflow. Confirmed via `git branch -a` / `worktree list` that there is **no duplicate repo** (the "two repos" worry was stale `~/Desktop/...` + "shared work dir" text, now removed).
   - **Next:** E9 deploy workflows; booking sub-pages (`/safaris`, `/safaris/[slug]`, `/auth/*`); then itinerary/agent apps.
+  - **Booking sub-pages built & verified:** `/safaris` (search/country/sort), `/safaris/[slug]` detail (SSG ×11), `/auth/login`, `/auth/register`, `/booking/my-bookings`, custom `not-found`. `next build` → **19 routes green**; `next start` all routes HTTP 200 (404 for unknown). Added `lib/mappers.ts` + `SafariDetailData` + richer `sample-data.ts`.
+  - **Now:** E9 deploy workflows next.
 
 ---
 
@@ -124,21 +126,24 @@
 
 ## ⏳ PENDING
 
-### 1. Booking Micro-app (`micro-apps/booking/`) — home page repaired (E7); **build verification blocked (B1)**
+### 1. Booking Micro-app (`micro-apps/booking/`) — home + listing + detail + auth pages live; **build green (19 routes)**
 - [x] Scaffold Next.js (TS, Tailwind, App Router, src-dir) + `lib/api.ts` client
 - [x] `Header`, auth store, shared utils
 - [x] Home components: `Hero`, `SearchSection`, `FeaturedSafaris`, `SafariCard`, `WhyChooseUs`, `Testimonials`, `Newsletter`, `Footer` (+ `lib/sample-data.ts` fallback)
 - [x] Tailwind tokens for `globals.css` `@apply` (`border`, `background`, `foreground`, `ring`, `muted`, …)
 - [x] Card/hero imagery copied to `public/` so the app renders standalone
-- [ ] **Verify `npm run build` + `npm run dev`** (blocked — B1)
+- [x] **Verify `npm run build`** — green (19 routes) + `next start` HTTP 200 (B1/B2)
+- [x] `/safaris` listing with search + country filter + sort (API w/ sample fallback)
+- [x] `/safaris/[slug]` detail: hero, highlights, itinerary, inclusions/exclusions, sticky booking aside (SSG ×11)
+- [x] `/auth/login` + `/auth/register` (Zustand + JWT), `/booking/my-bookings`, custom `not-found`
 - [ ] Shared UI (shadcn/ui)
-- [ ] Safari search & filter (SSR), detail + availability calendar
-- [ ] Booking flow → payment → confirmation
+- [ ] Booking flow → payment → confirmation (`/booking/new` cart/checkout)
 - [ ] Stripe Checkout + M-Pesa STK Push
 - [ ] Guest + authenticated booking
 - [ ] Voucher PDF, email/SMS/WhatsApp confirmations
 - [ ] i18n (next-intl, 5 langs)
 - [ ] SEO: structured data, sitemap, meta
+- [ ] Static pages for footer/CTA links (`/about`, `/contact`, `/offers`, `/terms`, `/privacy`, `/faq`, `/credits`)
 
 ### 2. Itinerary Builder (`micro-apps/itinerary-builder/`) — *not started (dir absent)*
 - [ ] Drag-drop day planner (@dnd-kit)
