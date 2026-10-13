@@ -1,0 +1,5 @@
+{
+  "framework": "nextjs",
+  "rootDirectory": "micro-apps/booking",
+  "buildCommand": "npm run build"
+}
