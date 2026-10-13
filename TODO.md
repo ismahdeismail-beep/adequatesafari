@@ -4,9 +4,9 @@
 > **Deploy:** Vercel preview (booking micro-app) — `*.vercel.app` (deployment protection on)
 > **Rule:** before any commit/push → open localhost for review.
 
-*Last updated: Oct 13 2026 — booking micro-app build repaired (E7/E8) & committed; **not yet built locally** (npm install blocked — see Session Log).*
+*Last updated: Oct 13 2026 — booking micro-app **build passes** (E7/E8/E10 fixed & committed); local server verified at `localhost:3001`. Remaining: push/deploy (needs GitHub auth) + itinerary/agent apps.*
 
-> ⚠️ **Deployment error:** the Vercel preview fails because `next build` had missing imports/components (E7) — the code fix has now landed on `main`; a fresh deploy is required. Production is **not ready** until the build is verified green locally first (see Blocker B1).
+> ⚠️ **Deployment error:** the Vercel preview failed because `next build` errored (missing components E7 + `undefined` rewrite E10). Both fixed on `main`; a fresh deploy is required once the commit is pushed (blocked: no GitHub credentials). Production is **not ready** until the deploy goes green.
 
 ---
 
@@ -30,6 +30,7 @@
 | E7 | **Booking micro-app build is broken** — `micro-apps/booking/src/app/page.tsx` imports 8 components (`Footer`, `SafariCard`, `Hero`, `SearchSection`, `FeaturedSafaris`, `WhyChooseUs`, `Testimonials`, `Newsletter`) that did not exist; only `components/Header.tsx` was present → `next build` fails (likely cause of the Vercel deploy error) | ✅ CODE FIXED (build unverified) | Created all 8 components + `lib/sample-data.ts`; added missing Tailwind tokens (`border/background/foreground/…`) used by `globals.css`; fixed `layout.tsx` `class`→`className`; replaced `next-auth` `SessionProvider` (not a dependency) with a pass-through. **Build must be verified locally (B1) before calling it done.** |
 | E8 | **`micro-apps/booking/vercel.json` rewrote everything to `/`** — `{ "src": "/(.*)", "dest": "/" }` broke `/safaris`, `/booking`, etc. | ✅ DONE | Reduced to `{ "framework": "nextjs" }` |
 | E9 | **Root has no deploy config / CI deploy workflows** — only `.github/workflows/ci.yml` exists; `deploy-*.yml` pending | ⬜ TODO | Add deploy workflows when VPS/DNS is provisioned (see Deployment & Ops) |
+| E10 | **`next.config.js` rewrite produced `destination: "undefined/api/:path*"`** when `NEXT_PUBLIC_API_URL` was unset → `next build` failed with "Invalid rewrite found" (another Vercel deploy killer) | ✅ DONE | Guard the rewrite: return `[]` when `NEXT_PUBLIC_API_URL` is not set. Build now green. |
 
 ---
 
@@ -37,8 +38,8 @@
 
 | # | Blocker | Status | Notes |
 |---|---------|--------|-------|
-| B1 | **`npm install` fails in this environment (Termux/Android)** — `npm ERR! ENOENT rename …/_cacache/tmp/… → …/content-v2/…` during extraction; also a "tarball … seems to be corrupted" warning. `/root`, `/tmp` and `/mnt/sdcard` are all the same emulated storage. | ⬜ BLOCKED | Worked around locally by keeping `node_modules/` untracked (gitignored). Need one of: (a) a working npm/pnpm install on a real filesystem, (b) build/verify on Vercel CI, or (c) `corepack pnpm`/yarn. **Cannot verify `next build` until resolved.** |
-| B2 | **Visual verification (localhost)** — user needs to review the UI visually against the Joomla preview | ⬜ PENDING | Run `npm run dev` (port 3001) once B1 is solved; then open `http://localhost:3001` and compare with `preview/index.html`. |
+| B1 | **`npm install` fails in this environment (Termux/Android)** — npm cacache `ENOENT rename`; `pnpm` default symlinks `EACCES`; emulated FS (`/mnt/sdcard`,`/tmp`,`/root/.npm`) can't do npm's cache rename/symlinks | ✅ RESOLVED | Built in a copy on the **native f2fs root** (`/root/aas-build`) with `corepack pnpm` → `next build` **green** (4/4 pages). `node_modules/` stays out of the repo. |
+| B2 | **Visual verification (localhost)** — review the UI against the Joomla preview | 🔄 ACTIVE | `next start` running at **http://localhost:3001** (HTTP 200; Hero/Search/Featured/Why-Us/Testimonials render). Review in browser; rebuild copy after each fix. |
 
 ---
 
@@ -49,7 +50,11 @@
   - Diagnosed Vercel deploy failure → E7 (missing components) + E8 (bad `vercel.json` routes).
   - Implemented E7/E8 fixes; copied card imagery (`public/cards/*-800.jpg`) and hero images (`public/hero/slider1.jpg`, `slider5.jpg`) into the booking app.
   - `npm install` **blocked** (B1) → build not yet verified. Committed code anyway so Vercel can attempt a fresh build.
-  - **Next:** solve B1, run `npm run build` + `npm run dev` (B2), then commit/push and retrigger install.
+  - **B1 workarounds tried:** npm (cacache ENOENT rename), `corepack pnpm` direct (symlink EACCES — emulated FS), then **green build via copy on native f2fs** (`/root/aas-build`, `corepack pnpm`, `next build` OK).
+  - Found & fixed **E10** (`next.config.js` rewrite → `undefined/api/...`) which also broke the build.
+  - **`next start` running at http://localhost:3001** (HTTP 200) for visual review (B2).
+  - **Push still blocked:** no GitHub credentials (`gh` not logged in, no `GH_TOKEN`) → cannot redeploy yet.
+  - **Next:** user reviews localhost; commit E10 + TODO; authenticate GitHub to push; retrigger Vercel deploy.
 
 ---
 
