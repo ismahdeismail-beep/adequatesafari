@@ -58,6 +58,7 @@
   - **Next:** E9 deploy workflows; booking sub-pages (`/safaris`, `/safaris/[slug]`, `/auth/*`); then itinerary/agent apps.
   - **Booking sub-pages built & verified:** `/safaris` (search/country/sort), `/safaris/[slug]` detail (SSG ×11), `/auth/login`, `/auth/register`, `/booking/my-bookings`, custom `not-found`. `next build` → **19 routes green**; `next start` all routes HTTP 200 (404 for unknown). Added `lib/mappers.ts` + `SafariDetailData` + richer `sample-data.ts`.
   - **Now:** E9 deploy workflows next.
+  - **Static pages + SEO added:** `/about`, `/contact` (form), `/offers`, `/terms`, `/privacy`, `/faq`, `/credits`; `sitemap.xml`, `robots.txt`, `metadataBase`. `next build` → **28 routes green**; all routes HTTP 200 locally.
 
 ---
 
@@ -142,8 +143,9 @@
 - [ ] Guest + authenticated booking
 - [ ] Voucher PDF, email/SMS/WhatsApp confirmations
 - [ ] i18n (next-intl, 5 langs)
-- [ ] SEO: structured data, sitemap, meta
-- [ ] Static pages for footer/CTA links (`/about`, `/contact`, `/offers`, `/terms`, `/privacy`, `/faq`, `/credits`)
+- [x] SEO basics: `sitemap.xml`, `robots.txt`, `metadataBase` (+ per-page metadata)
+- [ ] SEO advanced: JSON-LD structured data, OG images
+- [x] Static pages for footer/CTA links: `/about`, `/contact` (form), `/offers`, `/terms`, `/privacy`, `/faq`, `/credits`
 
 ### 2. Itinerary Builder (`micro-apps/itinerary-builder/`) — *not started (dir absent)*
 - [ ] Drag-drop day planner (@dnd-kit)
