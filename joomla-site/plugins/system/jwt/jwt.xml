@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension version="5.0" type="plugin" group="system" method="upgrade">
     <name>PLG_SYSTEM_JWT</name>
-    <author>Absolute Adventure Safaris</author>
+    <author>Adequate Safaris</author>
     <creationDate>2026-01-12</creationDate>
-    <copyright>Copyright (C) 2026 Absolute Adventure Safaris</copyright>
+    <copyright>Copyright (C) 2026 Adequate Safaris</copyright>
     <license>Proprietary</license>
-    <authorUrl>https://absoluteadventuresafaris.com</authorUrl>
+    <authorUrl>https://adequatesafaris.com</authorUrl>
     <version>1.0.0</version>
     <description>PLG_SYSTEM_JWT_XML_DESCRIPTION</description>
 
@@ -29,16 +29,16 @@
                     <option value="HS384">HS384</option>
                     <option value="HS512">HS512</option>
                 </field>
-                <field name="issuer" type="text" label="PLG_SYSTEM_JWT_ISSUER" default="absoluteadventuresafaris.com" />
-                <field name="audience" type="text" label="PLG_SYSTEM_JWT_AUDIENCE" default="aas-micro-apps" />
+                <field name="issuer" type="text" label="PLG_SYSTEM_JWT_ISSUER" default="adequatesafaris.com" />
+                <field name="audience" type="text" label="PLG_SYSTEM_JWT_AUDIENCE" default="adq-micro-apps" />
                 <field name="ttl" type="number" label="PLG_SYSTEM_JWT_TTL" default="900"
                        description="PLG_SYSTEM_JWT_TTL_DESC" />
-                <field name="cookie_name" type="text" label="PLG_SYSTEM_JWT_COOKIE" default="aas_token" />
+                <field name="cookie_name" type="text" label="PLG_SYSTEM_JWT_COOKIE" default="adq_token" />
                 <field name="allow_get" type="radio" label="PLG_SYSTEM_JWT_ALLOW_GET" default="0" class="btn-group btn-group-yesno">
                     <option value="1">JYES</option>
                     <option value="0">JNO</option>
                 </field>
-                <field name="cors_origins" type="text" label="PLG_SYSTEM_JWT_CORS_ORIGINS" default="https://book.absoluteadventuresafaris.com,https://plan.absoluteadventuresafaris.com,https://agents.absoluteadventuresafaris.com"
+                <field name="cors_origins" type="text" label="PLG_SYSTEM_JWT_CORS_ORIGINS" default="https://book.adequatesafaris.com,https://plan.adequatesafaris.com,https://agents.adequatesafaris.com"
                        description="PLG_SYSTEM_JWT_CORS_ORIGINS_DESC" size="60" />
             </fieldset>
         </fields>

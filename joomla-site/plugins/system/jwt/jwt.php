@@ -1,6 +1,6 @@
 <?php
 /**
- * @package     Absolute Adventure Safaris
+ * @package     Adequate Safaris
  * @subpackage  plg_system_jwt
  *
  * Issues a short-lived JWT for the currently authenticated Joomla user and
@@ -10,7 +10,7 @@
  * Flow:
  *   1. User logs in to Joomla (native or via the micro-app redirect).
  *   2. On every page render this plugin mints a JWT and sets it as an
- *      HTTP-only cookie (and, optionally, as `window.AAS_CONFIG.token`).
+ *      HTTP-only cookie (and, optionally, as `window.ADQ_CONFIG.token`).
  *   3. Micro-apps read the token from the cookie (same parent domain) or
  *      via a `?token=` hand-off and exchange it for their own session.
  *
@@ -105,8 +105,8 @@ final class PlgSystemJwt extends CMSPlugin implements SubscriberInterface
         $roles = array_values(array_unique($roles));
 
         $claims = [
-            'iss'   => (string) $this->params->get('issuer', 'absoluteadventuresafaris.com'),
-            'aud'   => (string) $this->params->get('audience', 'aas-micro-apps'),
+            'iss'   => (string) $this->params->get('issuer', 'adequatesafaris.com'),
+            'aud'   => (string) $this->params->get('audience', 'adq-micro-apps'),
             'sub'   => (string) $user->id,
             'email' => (string) $user->email,
             'name'  => (string) $user->name,
@@ -135,7 +135,7 @@ final class PlgSystemJwt extends CMSPlugin implements SubscriberInterface
             return;
         }
 
-        $cookieName = (string) $this->params->get('cookie_name', 'aas_token');
+        $cookieName = (string) $this->params->get('cookie_name', 'adq_token');
         $secure     = $app->get('force_ssl') === 2 || str_starts_with((string) Uri::root(), 'https://');
 
         // HTTP-only-ish cookie on the shared parent domain so micro-apps can read it.
@@ -154,7 +154,7 @@ final class PlgSystemJwt extends CMSPlugin implements SubscriberInterface
         $doc = $app->getDocument();
         if (method_exists($doc, 'addScriptDeclaration')) {
             $json = json_encode(['token' => $token], JSON_UNESCAPED_SLASHES);
-            $doc->addScriptDeclaration("window.AAS_CONFIG=Object.assign(window.AAS_CONFIG||{},{$json});");
+            $doc->addScriptDeclaration("window.ADQ_CONFIG=Object.assign(window.ADQ_CONFIG||{},{$json});");
         }
     }
 
@@ -169,7 +169,7 @@ final class PlgSystemJwt extends CMSPlugin implements SubscriberInterface
         if (!$app->isClient('site')) {
             return;
         }
-        $cookieName = (string) $this->params->get('cookie_name', 'aas_token');
+        $cookieName = (string) $this->params->get('cookie_name', 'adq_token');
         setcookie($cookieName, '', ['expires' => time() - 3600, 'path' => '/']);
     }
 }

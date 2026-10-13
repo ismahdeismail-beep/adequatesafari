@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
 #
-# Absolute Adventure Safaris — Joomla 5 setup automation
+# Adequate Safaris — Joomla 5 setup automation
 # Installs/updates the custom template, plugins, module, custom fields and
 # languages against a running (dockerized) Joomla 5 instance.
 #
 # Usage:  bash joomla-site/setup/install.sh
-# Env:    JOOMLA_CONTAINER (default: aas-joomla)
+# Env:    JOOMLA_CONTAINER (default: adq-joomla)
 #
 set -euo pipefail
 
-CONTAINER="${JOOMLA_CONTAINER:-aas-joomla}"
+CONTAINER="${JOOMLA_CONTAINER:-adq-joomla}"
 SITE_ROOT="/var/www/html"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
@@ -28,9 +28,9 @@ jc() { docker exec -u www-data "$CONTAINER" php "$SITE_ROOT/cli/joomla.php" "$@"
 jcp() { docker exec "$CONTAINER" "$@"; }
 
 # ── 1. Template ─────────────────────────────────────────────────────
-info "Installing template: absolute"
-jcp mkdir -p "$SITE_ROOT/templates/absolute"
-docker cp "$REPO_ROOT/joomla-site/templates/absolute/." "$CONTAINER:$SITE_ROOT/templates/absolute/"
+info "Installing template: adequate"
+jcp mkdir -p "$SITE_ROOT/templates/adequate"
+docker cp "$REPO_ROOT/joomla-site/templates/adequate/." "$CONTAINER:$SITE_ROOT/templates/adequate/"
 ok "Template files copied"
 
 # ── 2. Plugins ──────────────────────────────────────────────────────
@@ -60,7 +60,7 @@ jc extension:discover                              2>/dev/null || true
 
 # ── 5. Set the default site template ────────────────────────────────
 info "Setting default template"
-jc template:set --template=absolute --client=site 2>/dev/null || \
+jc template:set --template=adequate --client=site 2>/dev/null || \
     warn "Could not set template automatically — set it in System → Templates."
 
 # ── 6. Custom fields ────────────────────────────────────────────────
@@ -74,8 +74,8 @@ ok "Joomla setup complete."
 echo
 echo "Next steps:"
 echo "  1. Log in to /administrator and confirm no extension warnings."
-echo "  2. System → Templates → absolute → set colours, logo, micro-app URLs."
-echo "  3. System → Plugins → 'System - AAS JWT Bridge' → set signing secret"
+echo "  2. System → Templates → adequate → set colours, logo, micro-app URLs."
+echo "  3. System → Plugins → 'System - ADQ JWT Bridge' → set signing secret"
 echo "     to match JWT_SECRET in .env."
-echo "  4. System → Plugins → 'Content - AAS API Sync' → set API URL + token."
+echo "  4. System → Plugins → 'Content - ADQ API Sync' → set API URL + token."
 echo "  5. Import safari-fields.xml (System → Fields) and create the Safari category."

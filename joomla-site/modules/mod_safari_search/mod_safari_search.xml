@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension version="5.0" type="module" client="site" method="upgrade">
     <name>MOD_SAFARI_SEARCH</name>
-    <author>Absolute Adventure Safaris</author>
+    <author>Adequate Safaris</author>
     <creationDate>2026-01-12</creationDate>
-    <copyright>Copyright (C) 2026 Absolute Adventure Safaris</copyright>
+    <copyright>Copyright (C) 2026 Adequate Safaris</copyright>
     <license>Proprietary</license>
-    <authorUrl>https://absoluteadventuresafaris.com</authorUrl>
+    <authorUrl>https://adequatesafaris.com</authorUrl>
     <version>1.0.0</version>
     <description>MOD_SAFARI_SEARCH_XML_DESCRIPTION</description>
 
@@ -41,7 +41,7 @@
                     <option value="joomla">MOD_SAFARI_SEARCH_REDIRECT_JOOMLA</option>
                 </field>
                 <field name="booking_url" type="url" label="MOD_SAFARI_SEARCH_BOOKING_URL"
-                       default="https://book.absoluteadventuresafaris.com" />
+                       default="https://book.adequatesafaris.com" />
                 <field name="joomla_menuid" type="menuitem" label="MOD_SAFARI_SEARCH_JOOMLA_MENU" />
             </fieldset>
         </fields>

@@ -1,11 +1,11 @@
 <?php
 /**
- * @package     Absolute Adventure Safaris
+ * @package     Adequate Safaris
  * @subpackage  plg_content_api_sync
  *
  * Pushes Joomla content mutations (articles, categories, custom fields) to the
  * shared API so the safaris catalogue stays in sync. Failures are queued to
- * the `#__aas_sync_queue` table and retried by a scheduled CLI task.
+ * the `#__adq_sync_queue` table and retried by a scheduled CLI task.
  */
 
 defined('_JEXEC') or die;
@@ -174,7 +174,7 @@ final class PlgContentApiSync extends CMSPlugin implements SubscriberInterface
             $this->ensureQueueTable($db);
 
             $query = $db->getQuery(true)
-                ->insert($db->quoteName('#__aas_sync_queue'))
+                ->insert($db->quoteName('#__adq_sync_queue'))
                 ->columns($db->quoteName(['entity', 'action', 'entity_id', 'payload', 'attempts', 'created_at']))
                 ->values(':entity, :action, :id, :payload, 0, :now')
                 ->bind(':entity', $entity)
@@ -192,7 +192,7 @@ final class PlgContentApiSync extends CMSPlugin implements SubscriberInterface
     private function ensureQueueTable($db): void
     {
         $db->setQuery(
-            'CREATE TABLE IF NOT EXISTS ' . $db->quoteName('#__aas_sync_queue') . ' ('
+            'CREATE TABLE IF NOT EXISTS ' . $db->quoteName('#__adq_sync_queue') . ' ('
             . 'id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,'
             . 'entity VARCHAR(32) NOT NULL,'
             . 'action VARCHAR(16) NOT NULL,'

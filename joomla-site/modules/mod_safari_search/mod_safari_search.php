@@ -1,6 +1,6 @@
 <?php
 /**
- * @package     Absolute Adventure Safaris
+ * @package     Adequate Safaris
  * @subpackage  mod_safari_search
  *
  * Renders a safari search form. On submit it either redirects into the
@@ -19,7 +19,7 @@ use Joomla\CMS\Uri\Uri;
 $heading     = $params->get('heading', 'Find your perfect safari');
 $subheading   = $params->get('subheading', '');
 $redirectMode = $params->get('redirect_mode', 'booking');
-$bookingUrl   = rtrim((string) $params->get('booking_url', 'https://book.absoluteadventuresafaris.com'), '/');
+$bookingUrl   = rtrim((string) $params->get('booking_url', 'https://book.adequatesafaris.com'), '/');
 $joomlaMenuId = (int) $params->get('joomla_menuid', 0);
 
 $fieldsRaw = $params->get('enabled_fields', []);

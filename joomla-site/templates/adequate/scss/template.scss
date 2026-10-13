@@ -1,0 +1,50 @@
+// Adequate Safaris — SCSS source
+// Compiled output lives in css/template.css.
+// Adjust the variables below to re-skin the shell; the PHP layer injects the
+// live values as CSS custom properties at runtime, so these are defaults only.
+
+$adq-primary:   #1a5f3a;
+$adq-secondary: #d4a843;
+$adq-accent:    #e86c00;
+$adq-dark:      #0d2d1a;
+$adq-light:     #f8f9fa;
+
+$adq-breakpoint-sm: 640px;
+$adq-breakpoint-md: 768px;
+$adq-breakpoint-lg: 992px;
+
+// Motion tokens — mirror css/template.css :root
+$adq-dur-instant:    90ms;
+$adq-dur-fast:      160ms;
+$adq-dur-base:      240ms;
+$adq-dur-slow:      420ms;
+$adq-dur-deliberate: 8s;
+
+$adq-ease-standard:   cubic-bezier(.2, 0, .2, 1);
+$adq-ease-decelerate: cubic-bezier(.16, 1, .3, 1);
+$adq-ease-accelerate: cubic-bezier(.4, 0, 1, 1);
+$adq-ease-spring:     cubic-bezier(.34, 1.56, .64, 1);
+
+@mixin adq-container {
+    width: 100%;
+    max-width: 1200px;
+    margin-inline: auto;
+    padding-inline: 1rem;
+}
+
+@mixin adq-btn($bg, $fg) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: .5rem;
+    padding: .625rem 1.25rem;
+    border-radius: .5rem;
+    font-weight: 600;
+    cursor: pointer;
+    background: $bg;
+    color: $fg;
+    transition: transform .1s ease, background-color .15s ease;
+}
+
+// Note: css/template.css is the hand-authored source of truth for now.
+// This file documents the design tokens for future SCSS compilation.

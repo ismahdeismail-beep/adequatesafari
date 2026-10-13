@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension version="5.0" type="plugin" group="content" method="upgrade">
     <name>PLG_CONTENT_API_SYNC</name>
-    <author>Absolute Adventure Safaris</author>
+    <author>Adequate Safaris</author>
     <creationDate>2026-01-12</creationDate>
-    <copyright>Copyright (C) 2026 Absolute Adventure Safaris</copyright>
+    <copyright>Copyright (C) 2026 Adequate Safaris</copyright>
     <license>Proprietary</license>
-    <authorUrl>https://absoluteadventuresafaris.com</authorUrl>
+    <authorUrl>https://adequatesafaris.com</authorUrl>
     <version>1.0.0</version>
     <description>PLG_CONTENT_API_SYNC_XML_DESCRIPTION</description>
 
@@ -22,7 +22,7 @@
         <fields name="params">
             <fieldset name="basic" label="PLG_CONTENT_API_SYNC_BASIC">
                 <field name="api_url" type="url" label="PLG_CONTENT_API_SYNC_URL"
-                       default="https://api.absoluteadventuresafaris.com/v1/sync"
+                       default="https://api.adequatesafaris.com/v1/sync"
                        description="PLG_CONTENT_API_SYNC_URL_DESC" size="60" />
                 <field name="api_token" type="password" label="PLG_CONTENT_API_SYNC_TOKEN" size="60"
                        description="PLG_CONTENT_API_SYNC_TOKEN_DESC" />
