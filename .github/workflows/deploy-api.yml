@@ -1,8 +1,16 @@
-name: Deploy API
+name: Build API
+
+# The API is hosted off Vercel (Railway: web service + MySQL) for a single
+# Vercel project. Railway auto-deploys from this repo, so this workflow only
+# builds/validates the API on every change. No Docker, no GHCR, no Vercel.
 
 on:
   push:
     branches: [main]
+    paths:
+      - 'api/**'
+      - '.github/workflows/deploy-api.yml'
+  pull_request:
     paths:
       - 'api/**'
       - '.github/workflows/deploy-api.yml'
@@ -36,33 +44,5 @@ jobs:
         run: npx prisma generate
       - name: Build
         run: npm run build
-
-  deploy:
-    name: Deploy API to Vercel (optional)
-    needs: build
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: api
-    steps:
-      - uses: actions/checkout@v4
-      - name: Check for Vercel secrets
-        id: check
-        run: echo "enabled=${{ secrets.VERCEL_TOKEN != '' }}" >> "$GITHUB_OUTPUT"
-
-      - name: Deploy
-        if: steps.check.outputs.enabled == 'true'
-        env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_API }}
-        run: |
-          npm i -g vercel@latest
-          vercel pull --yes --environment=production --token="$VERCEL_TOKEN"
-          vercel build --prod --token="$VERCEL_TOKEN"
-          vercel deploy --prebuilt --prod --token="$VERCEL_TOKEN"
-
-      - name: Skipped notice
-        if: steps.check.outputs.enabled != 'true'
-        run: |
-          echo "::notice::API built OK. Set VERCEL_TOKEN + VERCEL_ORG_ID + VERCEL_PROJECT_ID_API to deploy — Vercel Git integration already auto-deploys on push."
+      - name: Lint
+        run: npx eslint "src/**/*.ts"

@@ -125,7 +125,7 @@ cd micro-apps/booking && npm install && npm run dev  # :3001
 
 - NestJS + Prisma (MySQL). Modules: auth, users, safaris, bookings, payments (Stripe + M-Pesa), agents, sync (Joomla webhooks), webhooks, health.
 - Swagger UI at `/docs`; global response envelope `{ success, data, meta }`.
-- Deploy: **Vercel** (serverless; needs a reachable MySQL) or any Node host. The `api/` root dir is already a live Vercel project.
+- Deploy: **Railway** (Node host + MySQL) — the API runs off Vercel so Vercel stays a **single** project. See [`docs/hosting-api.md`](docs/hosting-api.md).
 
 ## Joomla 5 (`joomla-site/`)
 
@@ -160,9 +160,9 @@ NEXT_PUBLIC_JOOMLA_URL=https://www.adequatesafaris.com
 
 Three surfaces, three hosts:
 
-- **Micro-apps** → **Vercel** (one project per app; project Root Directory set to `micro-apps/booking`).
+- **Booking micro-app** → **Vercel** (single project; Root Directory `micro-apps/booking`).
 - **Joomla** → VPS/shared hosting (PHP 8.3 + MySQL).
-- **API** → **Vercel** (serverless; needs a reachable MySQL) or any Node host.
+- **API** → **Railway** (Node host + MySQL). See [`docs/hosting-api.md`](docs/hosting-api.md).
 
 Full guide — env matrix, Prisma migrate/seed, DNS, TLS, post-deploy checks: [`docs/deployment.md`](docs/deployment.md).
 

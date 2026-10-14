@@ -6,7 +6,7 @@ hosts on purpose.
 | Surface | Path | Recommended host | Notes |
 |---|---|---|---|
 | Joomla 5 (CMS + public site) | `joomla-site/` | VPS / shared hosting (PHP 8.3 + MySQL) | **Cannot run on Vercel** — PHP + MySQL |
-| Shared API (NestJS + Prisma) | `api/` | **Vercel** (serverless) or any Node host (Railway, Render) | Needs a reachable MySQL/MariaDB |
+| Shared API (NestJS + Prisma) | `api/` | **Railway** (Node host + MySQL) | Keeps Vercel to a **single** project |
 | Micro-apps (Next.js) | `micro-apps/*` | **Vercel** | `output: 'standalone'`, App Router |
 
 All secrets/URLs live in `.env` (never committed). Copy `.env.example` and fill
@@ -50,9 +50,13 @@ NEXT_PUBLIC_AGENT_URL=https://agents.adequatesafaris.com
 
 ---
 
-## 2. API → Vercel (or any Node host)
+## 2. API → Railway (off Vercel)
 
-Docker has been removed. Build and run locally with plain `npm`:
+Single-Vercel-project policy: the API does **not** run on Vercel. Recommended
+host is **Railway** (web service + MySQL in one dashboard). Step-by-step:
+[hosting-api.md](hosting-api.md).
+
+Build and run locally with plain `npm` (no Docker):
 
 ```bash
 cd api
@@ -60,14 +64,6 @@ npm ci
 npx prisma generate
 npm run build
 npm run start:prod                  # :4000 (reads DATABASE_URL, JWT_SECRET, …)
-```
-
-Deploy via Vercel: the `api/` root dir is already linked to a Vercel project, so a
-push to `main` auto-deploys. Or deploy manually:
-
-```bash
-npm i -g vercel
-vercel --prod --cwd api
 ```
 
 Database migrations + seed (run once per environment):
@@ -78,6 +74,11 @@ npx prisma migrate deploy          # apply migrations
 npm run db:seed                    # sample safaris + test users (idempotent)
 ```
 
+Railway auto-detects the service from `api/railway.json` (build + start + health
+check `/api/v1/health/live`). Set `DATABASE_URL`, `JWT_SECRET`, `NODE_ENV`,
+`CORS_ORIGINS` (+ optional Stripe/M-Pesa). Then point the booking app's
+`NEXT_PUBLIC_API_URL` at `https://<api-host>/api/v1`.
+
 Requirements:
 
 - `DATABASE_URL` (Prisma reads this exact name). MySQL/MariaDB.
@@ -85,10 +86,8 @@ Requirements:
   Postgres without also changing the datasource provider.
 - `JWT_SECRET`, Stripe and M-Pesa keys as per `.env.example`.
 
-> **Serverless note:** NestJS runs on Vercel but Prisma + MySQL needs a
-> serverless-friendly MySQL (e.g. PlanetScale) and connection pooling. Any Node
-> host (Railway, Render, Fly) works too. For just the API, a persistent Node host
-> is the lower-risk default; keeping it on Vercel keeps everything in one place.
+> Any persistent Node host works (Railway, Render, Fly, a VPS). We keep only the
+> `booking` micro-app on Vercel, so the API lives here.
 
 ---
 
