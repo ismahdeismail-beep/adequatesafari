@@ -1,0 +1,46 @@
+name: Sync content (Joomla → API)
+
+on:
+  schedule:
+    - cron: '0 3 * * *'
+  workflow_dispatch:
+    inputs:
+      full:
+        description: Full re-sync (ignore incremental cursor)
+        type: boolean
+        default: false
+
+concurrency:
+  group: sync-content
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    name: Trigger content sync
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check for sync config
+        id: check
+        run: echo "enabled=${{ vars.API_BASE_URL != '' && secrets.CONTENT_SYNC_TOKEN != '' }}" >> "$GITHUB_OUTPUT"
+
+      - name: Trigger sync endpoint
+        if: steps.check.outputs.enabled == 'true'
+        env:
+          API_BASE_URL: ${{ vars.API_BASE_URL }}
+          CONTENT_SYNC_TOKEN: ${{ secrets.CONTENT_SYNC_TOKEN }}
+          FULL: ${{ github.event.inputs.full || 'false' }}
+        run: |
+          set -e
+          echo "Syncing content: $API_BASE_URL/api/content/sync (full=$FULL)"
+          code=$(curl -sS -o /tmp/sync.json -w '%{http_code}' \
+            -X POST "$API_BASE_URL/api/content/sync" \
+            -H "Authorization: Bearer $CONTENT_SYNC_TOKEN" \
+            -H "Content-Type: application/json" \
+            -d "{\"full\": $FULL}")
+          cat /tmp/sync.json
+          [ "$code" = "200" ] || { echo "::error::Sync failed with HTTP $code"; exit 1; }
+
+      - name: Skipped notice
+        if: steps.check.outputs.enabled != 'true'
+        run: |
+          echo "::notice::Set repo variable API_BASE_URL and secret CONTENT_SYNC_TOKEN to enable content sync."

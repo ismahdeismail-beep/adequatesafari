@@ -1,0 +1,78 @@
+name: Deploy Micro-apps
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'micro-apps/**'
+      - '.github/workflows/deploy-apps.yml'
+  workflow_dispatch:
+    inputs:
+      app:
+        description: App to deploy (folder name under micro-apps/, or "all")
+        default: all
+        type: string
+
+concurrency:
+  group: deploy-apps-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build ${{ matrix.app }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        app: [booking]
+    defaults:
+      run:
+        working-directory: micro-apps/${{ matrix.app }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: micro-apps/${{ matrix.app }}/package-lock.json
+      - name: Install
+        run: npm ci
+      - name: Build
+        run: npm run build
+        env:
+          NEXT_PUBLIC_API_URL: ${{ vars.NEXT_PUBLIC_API_URL }}
+
+  deploy:
+    name: Deploy ${{ matrix.app }} to Vercel (optional)
+    needs: build
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        app: [booking]
+    defaults:
+      run:
+        working-directory: micro-apps/${{ matrix.app }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Check for Vercel secrets
+        id: check
+        run: echo "enabled=${{ secrets.VERCEL_TOKEN != '' }}" >> "$GITHUB_OUTPUT"
+      - name: Deploy
+        if: steps.check.outputs.enabled == 'true'
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_BOOKING }}
+        run: |
+          npm i -g vercel@latest
+          vercel pull --yes --environment=production --token="$VERCEL_TOKEN"
+          vercel build --prod --token="$VERCEL_TOKEN"
+          vercel deploy --prebuilt --prod --token="$VERCEL_TOKEN"
+      - name: Skipped notice
+        if: steps.check.outputs.enabled != 'true'
+        run: |
+          echo "::notice::Build passed. Set VERCEL_TOKEN + VERCEL_ORG_ID + VERCEL_PROJECT_ID_BOOKING to enable Vercel deploys."

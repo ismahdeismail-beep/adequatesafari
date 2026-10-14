@@ -2,11 +2,13 @@
 
 > **Brand:** **Adequate Safaris** — live domain **https://adequatesafaris.com/**
 > **Repo (GitHub):** `adequatesafari` — created lowercase (see R1); `origin` set (see R2)
-> **Local clone:** `~/Desktop/adequatesafari` (folder already renamed)
-> **Deploy:** Vercel preview (booking micro-app) — `*.vercel.app` (deployment protection on)
+> **Local clone:** `/mnt/sdcard/OpenCode/adequatesafari` (the new repo; cloned separately — do **not** mix with `Absoluteadventuresafari`)
+> **Deploy:** Vercel — project **`adequatesafari`**, Root Directory **`micro-apps/booking`**, framework **Next.js** → live at <https://adequatesafari.vercel.app>
 > **Rule:** before any commit/push → open localhost for review. **Never hard-code secrets/keys.**
 
-*Last updated: Oct 13 2026 — **REBRAND EXECUTED** (option b) to "Adequate Safaris": template `adequate/`, module `mod_adq_hero`, prefix `adq-`, all builds green. R1/R2 DONE: repo `adequatesafari` created (lowercase), `origin` set, E11 resolved.*
+> 🆕 **NEW REPO (separate from `Absoluteadventuresafari`):** `adequatesafari` is its own repo and is treated **independently**. The older `Absoluteadventuresafari` repo/clone is **frozen** — all new work happens **here only** (per README "one repo" policy).
+
+*Last updated: Oct 14 2026 — cloned `adequatesafari` standalone; **verified Vercel production is READY** (Root Directory `micro-apps/booking`); site + routes live, E11 resolved.*
 
 > ~~⚠️ Open CI failure (E11): GitHub Actions docker build failed with
 > `invalid tag "ghcr.io/adequatesafari/api:latest": repository name must be lowercase`.~~
@@ -33,9 +35,9 @@
 |---|-------|--------|----------|
 | E7 | **Booking micro-app build is broken** — `micro-apps/booking/src/app/page.tsx` imports 8 components (`Footer`, `SafariCard`, `Hero`, `SearchSection`, `FeaturedSafaris`, `WhyChooseUs`, `Testimonials`, `Newsletter`) that did not exist; only `components/Header.tsx` was present → `next build` fails (likely cause of the Vercel deploy error) | ✅ DONE | All 8 components + `lib/sample-data.ts` created; Tailwind tokens added; `layout.tsx` `class`→`className`; `SessionProvider` pass-through. **`npm run build` green** (28 routes). |
 | E8 | **`micro-apps/booking/vercel.json` rewrote everything to `/`** — `{ "src": "/(.*)", "dest": "/" }` broke `/safaris`, `/booking`, etc. | ✅ DONE | Reduced to `{ "framework": "nextjs" }` |
-| E9 | **Root has no deploy config / CI deploy workflows** — only `.github/workflows/ci.yml` exists; `deploy-*.yml` pending | ⬜ TODO | Add deploy workflows when VPS/DNS is provisioned (see Deployment & Ops) |
+| E9 | **No CI deploy workflows in the new repo** — only `.github/workflows/ci.yml` was ported; `deploy-*.yml` missing (they exist only on the frozen old repo) | ✅ DONE | Ported `deploy-api.yml`, `deploy-apps.yml`, `deploy-joomla.yml`, `sync-content.yml` from the old repo. Joomla paths updated `absolute/`→`adequate/`. All secret-gated → green with no infra. |
 | E10 | **`next.config.js` rewrite produced `destination: "undefined/api/:path*"`** when `NEXT_PUBLIC_API_URL` was unset → `next build` failed with "Invalid rewrite found" (another Vercel deploy killer) | ✅ DONE | Guard the rewrite: return `[]` when `NEXT_PUBLIC_API_URL` is not set. Build now green. |
-| E11 | **CI docker build fails** — `invalid tag "ghcr.io/adequatesafari/api:latest": repository name must be lowercase` | ✅ DONE | Resolved by R1: repo created as `adequatesafari` (lowercase) satisfies GHCR's lowercase image-tag requirement. No `ghcr` reference exists in this checkout. |
+| E11 | **`Deploy API` workflow fails** — `invalid tag "ghcr.io/ismahdeismail-beep/Absoluteadventuresafari/api:latest": repository name must be lowercase` (Docker/GHCR tag built from `${{ github.repository }}`, whose original casing is uppercase) | ✅ DONE | `deploy-api.yml` now lowercases the tag: `IMAGE=ghcr.io/${GITHUB_REPOSITORY,,}/api`. Works regardless of repo casing. (Old repo was also lowercase-fixed by R1.) |
 | E12 | **Image audit** — "we only have safaris of Kenya" | ✅ VERIFIED | 16 card stems, **all complete** (400/800/1280 JPG+WebP): Kenya ×10, Tanzania ×2 (`tanzania-ngorongoro`, `zanzibar-beach`), Uganda ×1 (`bwindi-gorilla`), + `leopard-sighting`, `tented-camp`, `lodge-pool`. `amboseli-kilimanjaro` set **is present** (earlier "0 files" was a path typo, not a real gap). |
 | E13 | **No hard-coded secrets/keys** | ✅ VERIFIED | No secrets committed; credentials live in `.env*` only. Re-check after each change. |
 
@@ -74,6 +76,16 @@
 ---
 
 ## 🧾 SESSION LOG
+
+- **Oct 14 2026**
+  - Cloned the new repo standalone to `/mnt/sdcard/OpenCode/adequatesafari` (separate from `Absoluteadventuresafari`; treated independently). `main` @ `6100d5cd`, tree clean.
+  - **Vercel deploy verified healthy.** Project `adequatesafari` (`prj_qrnYZgya4y6Ytx5WirJPh89E0UMN`), Root Directory `micro-apps/booking`, framework Next.js. Latest production deploy `dpl_5zVWNMVsSD1t7Vfwb6kGYHLHPAwf` = **READY** for commit `6100d5cd`.
+  - **Prior deploy failures explained (now resolved):** `rootDirectory` is not a valid `vercel.json` key (schema error) and the legacy repo-root build exceeded the Hobby plan's 12-Serverless-Function limit. Fix = set **Root Directory** in the project settings (not `vercel.json`), which `6100d5cd` does.
+  - **Live checks:** `https://adequatesafari.vercel.app` → `/`, `/safaris`, `/safaris/[slug]`, `/about`, `/contact`, `/offers`, `/faq`, `/booking/new`, `/auth/login` all HTTP 200; home cards + hero images 200. `www.adequatesafaris.com` → `https://adequatesafaris.com/` (currently the existing WordPress site).
+  - **Next:** resolve the specific outstanding issue raised by the user (see Blockers/Open).
+  - **GitHub log audit:** old repo `Absoluteadventuresafari` → `Deploy API` run **failed**: `invalid tag "ghcr.io/ismahdeismail-beep/Absoluteadventuresafari/api:latest": repository name must be lowercase` (step "Build & push"). Root cause = GHCR tag built from `${{ github.repository }}` (original casing). The new repo only had `ci.yml` — the 4 deploy workflows were never ported.
+  - **Fix:** ported `deploy-api.yml`, `deploy-apps.yml`, `deploy-joomla.yml`, `sync-content.yml` into this repo. `deploy-api.yml` now lowercases the tag via `IMAGE=ghcr.io/${GITHUB_REPOSITORY,,}/api`; Joomla workflow updated `absolute/`→`adequate/`. All secret-gated (green with no infra). **E9 + E11 → DONE.**
+  - **Vercel log audit:** both projects (`adequatesafari` → `micro-apps/booking`; `api` → `api`) latest prod deploy `READY` for `6100d5cd`; older reds (root `vercel.json` `rootDirectory` schema error, legacy root build >12 functions, missing `public` output dir) are superseded. Current config correct: no repo-root `vercel.json`; `micro-apps/booking/vercel.json` = `{ "framework": "nextjs" }`.
 
 - **Oct 13 2026 (latest — rebrand executed)**
   - **Full rebrand to "Adequate Safaris" executed (option b, no commit):**
@@ -159,12 +171,12 @@
 - [x] E10 rewrite guard (build green)
 - [x] E12 image audit — all 16 stems complete
 - [x] E13 no hard-coded secrets verified
-- [ ] E11 CI docker tag lowercase → **fix via repo rename R1**
-- [ ] E9 deploy workflows
+- [x] E11 docker tag lowercased in `deploy-api.yml` (`${GITHUB_REPOSITORY,,}`)
+- [x] E9 deploy workflows ported to this repo
 
 ### Rebrand → "Adequate Safaris" (§ REBRAND)
 - [x] R3–R11 executed — full rename (option b): dirs `absolute/`→`adequate/`, `mod_aas_hero`→`mod_adq_hero`, prefix `aas-`→`adq-`, `AAS`→`ADQ`, brand strings→Adequate Safaris, thumbs regenerated, all builds green
-- [ ] R1/R2 — user creating new lowercase GitHub repo (also fixes E11)
+- [x] R1/R2 — repo `adequatesafari` created (lowercase), `origin` set; E11 fixed in `deploy-api.yml`
 
 ### Joomla 5 remaining
 - [ ] FaLang/Joomfish — 5 languages (content translation; INI packs done)
@@ -210,7 +222,7 @@
 
 ### Deployment & Ops
 - [x] `.github/workflows/ci.yml`
-- [ ] `deploy-api.yml`, `deploy-apps.yml`, `deploy-joomla.yml`, `sync-content.yml`
+- [x] `deploy-api.yml`, `deploy-apps.yml`, `deploy-joomla.yml`, `sync-content.yml` (ported; secret-gated)
 - [ ] VPS (Ubuntu 22.04, Docker, Nginx, Certbot)
 - [ ] DNS: `www`, `api`, `book`, `plan`, `agents`, `cdn`
 - [ ] SSL (Let's Encrypt + auto-renew), DB backups (daily + PITR)

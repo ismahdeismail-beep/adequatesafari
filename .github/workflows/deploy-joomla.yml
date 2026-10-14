@@ -1,0 +1,75 @@
+name: Deploy Joomla
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'joomla-site/**'
+      - 'docker/Dockerfile.joomla'
+      - 'docker/docker-compose.yml'
+      - 'docker/nginx/**'
+      - '.github/workflows/deploy-joomla.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-joomla-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  package:
+    name: Validate & package template
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+      - name: Lint PHP
+        run: find joomla-site -name '*.php' -print0 | xargs -0 -n1 php -l
+      - name: Build installable template zip
+        run: |
+          cd joomla-site/templates
+          zip -r "$GITHUB_WORKSPACE/adequate-template.zip" adequate
+      - uses: actions/upload-artifact@v4
+        with:
+          name: adequate-template
+          path: adequate-template.zip
+          if-no-files-found: error
+
+  deploy:
+    name: Deploy to VPS (optional)
+    needs: package
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check for deploy secrets
+        id: check
+        run: echo "enabled=${{ secrets.JOOMLA_DEPLOY_HOST != '' }}" >> "$GITHUB_OUTPUT"
+
+      - name: Rsync template to server
+        if: steps.check.outputs.enabled == 'true'
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.JOOMLA_DEPLOY_HOST }}
+          username: ${{ secrets.JOOMLA_DEPLOY_USER }}
+          key: ${{ secrets.JOOMLA_DEPLOY_KEY }}
+          source: 'joomla-site/templates/adequate/*'
+          target: ${{ secrets.JOOMLA_DEPLOY_PATH }}
+          strip_components: 3
+          overwrite: true
+
+      - name: Clear Joomla cache
+        if: steps.check.outputs.enabled == 'true'
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.JOOMLA_DEPLOY_HOST }}
+          username: ${{ secrets.JOOMLA_DEPLOY_USER }}
+          key: ${{ secrets.JOOMLA_DEPLOY_KEY }}
+          script: |
+            cd ${{ secrets.JOOMLA_SITE_ROOT }}
+            if [ -f cli/joomla.php ]; then php cli/joomla.php cache:clean; fi
+
+      - name: Skipped notice
+        if: steps.check.outputs.enabled != 'true'
+        run: |
+          echo "::notice::Template packaged as an artifact. Set JOOMLA_DEPLOY_HOST/USER/KEY/PATH (and JOOMLA_SITE_ROOT) to auto-deploy."
