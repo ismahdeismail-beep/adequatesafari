@@ -78,7 +78,6 @@ adequatesafaris/
 │                             #   agents, sync, webhooks, health
 ├── micro-apps/
 │   └── booking/              # Next.js 14 (App Router, Tailwind) public booking app
-├── docker/                   # docker-compose + Dockerfiles (Joomla/API/Next) + nginx
 ├── docs/                     # api-spec, data-model, deployment, analysis, sitemap
 └── preview/                  # static Joomla template preview (serve.py)
 ```
@@ -103,8 +102,9 @@ npm install
 npx prisma generate && npx prisma migrate dev && npm run db:seed
 npm run start:dev                        # http://localhost:4000 (Swagger at /docs)
 
-# 3. Full stack via Docker (Joomla + MariaDB + Redis + Nginx + API)
-docker compose -f docker/docker-compose.yml up -d
+# 3. Full local stack (Dockerless) — run each service in its own terminal
+cd api && npm install && npm run start:dev           # :4000 (needs a MySQL/MariaDB DATABASE_URL)
+cd micro-apps/booking && npm install && npm run dev  # :3001
 ```
 
 > **Note on this environment (Termux/Android):** `npm install` fails here (emulated FS
@@ -125,14 +125,14 @@ docker compose -f docker/docker-compose.yml up -d
 
 - NestJS + Prisma (MySQL). Modules: auth, users, safaris, bookings, payments (Stripe + M-Pesa), agents, sync (Joomla webhooks), webhooks, health.
 - Swagger UI at `/docs`; global response envelope `{ success, data, meta }`.
-- Deploy: Docker/VPS (needs a real MySQL). Not Vercel-friendly as-is.
+- Deploy: **Vercel** (serverless; needs a reachable MySQL) or any Node host. The `api/` root dir is already a live Vercel project.
 
 ## Joomla 5 (`joomla-site/`)
 
 - Custom `templateDetails.xml` params (colors, API URLs, social, contact).
 - Overrides: `html/mod_menu` (recursive menu), `html/com_content/article` (safari detail), `html/com_content/featured` (listing) — all render `<picture>` WebP/JPG cards.
 - `mod_adq_hero` (carousel), `mod_safari_search`, `plg_system_jwt` (SSO bridge), `plg_content_api_sync`.
-- Cannot run on Vercel — deploy via Docker/VPS.
+- Cannot run on Vercel — deploy on a VPS/shared host (PHP 8.3 + MySQL).
 
 ---
 
@@ -161,8 +161,8 @@ NEXT_PUBLIC_JOOMLA_URL=https://www.adequatesafaris.com
 Three surfaces, three hosts:
 
 - **Micro-apps** → **Vercel** (one project per app; project Root Directory set to `micro-apps/booking`).
-- **Joomla** → Docker/VPS (PHP + MySQL).
-- **API** → Docker/VPS (or Vercel serverless with a serverless-friendly MySQL).
+- **Joomla** → VPS/shared hosting (PHP 8.3 + MySQL).
+- **API** → **Vercel** (serverless; needs a reachable MySQL) or any Node host.
 
 Full guide — env matrix, Prisma migrate/seed, DNS, TLS, post-deploy checks: [`docs/deployment.md`](docs/deployment.md).
 
@@ -171,10 +171,9 @@ CI (`.github/workflows/ci.yml`) runs on every push/PR to `main`: PHP lint, JS sy
 ## Commands
 
 ```bash
-# Dev
-docker compose -f docker/docker-compose.yml up -d
-cd micro-apps/booking && npm run dev             # :3001
-cd api && npm run start:dev                       # :4000
+# Dev (Dockerless — run each in its own terminal)
+cd micro-apps/booking && npm install && npm run dev  # :3001
+cd api && npm install && npm run start:dev            # :4000 (needs a MySQL/MariaDB DATABASE_URL)
 
 # Verify (same as CI)
 find joomla-site -name '*.php' -print0 | xargs -0 -n1 php -l

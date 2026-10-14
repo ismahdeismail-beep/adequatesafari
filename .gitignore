@@ -23,6 +23,3 @@ Thumbs.db
 
 # Vercel
 .vercel
-
-# Docker volumes / local data
-docker/db-data/

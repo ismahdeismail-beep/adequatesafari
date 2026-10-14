@@ -50,8 +50,8 @@
             <fieldset name="basic" label="TPL_ADEQUATE_BASIC_SETTINGS">
                 <field name="siteName" type="text" label="TPL_ADEQUATE_SITE_NAME" default="Adequate Safaris" />
                 <field name="siteTagline" type="text" label="TPL_ADEQUATE_SITE_TAGLINE" default="Leading provider of quality leisure and vacation experiences" />
-                <field name="logoFile" type="media" label="TPL_ADEQUATE_LOGO" directory="images" />
-                <field name="faviconFile" type="media" label="TPL_ADEQUATE_FAVICON" directory="images" />
+                <field name="logoFile" type="media" label="TPL_ADEQUATE_LOGO" directory="images" default="images/adequate-logo.png" />
+                <field name="faviconFile" type="media" label="TPL_ADEQUATE_FAVICON" directory="images" default="favicon.ico" />
             </fieldset>
 
             <fieldset name="colors" label="TPL_ADEQUATE_COLOR_SETTINGS">

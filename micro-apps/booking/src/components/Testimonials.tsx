@@ -2,19 +2,19 @@ import { Star } from 'lucide-react';
 
 const testimonials = [
   {
-    name: 'Sarah & Tom Whitfield',
+    name: 'Verified traveller',
     location: 'United Kingdom',
     rating: 5,
     text: 'The Great Migration safari exceeded every expectation. Our guide read the bush like a book — we saw all of the Big Five in three days.',
   },
   {
-    name: 'Daniel Mwangi',
+    name: 'Guest from Kenya',
     location: 'Nairobi, Kenya',
     rating: 5,
     text: 'We booked a private Mount Kenya climb for our team. Flawless logistics, great guides and total peace of mind from start to finish.',
   },
   {
-    name: 'Émilie Laurent',
+    name: 'Guest from France',
     location: 'France',
     rating: 5,
     text: 'Gorilla trekking in Bwindi was the trip of a lifetime. Everything was arranged perfectly, including permits and transfers.',

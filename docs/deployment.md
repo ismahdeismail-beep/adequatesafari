@@ -5,8 +5,8 @@ hosts on purpose.
 
 | Surface | Path | Recommended host | Notes |
 |---|---|---|---|
-| Joomla 5 (CMS + public site) | `joomla-site/` | VPS / Docker (PHP 8.3 + MySQL) | **Cannot run on Vercel** — PHP + MySQL |
-| Shared API (NestJS + Prisma) | `api/` | Docker/VPS, Railway, Render (or Vercel serverless) | Needs a reachable MySQL/MariaDB |
+| Joomla 5 (CMS + public site) | `joomla-site/` | VPS / shared hosting (PHP 8.3 + MySQL) | **Cannot run on Vercel** — PHP + MySQL |
+| Shared API (NestJS + Prisma) | `api/` | **Vercel** (serverless) or any Node host (Railway, Render) | Needs a reachable MySQL/MariaDB |
 | Micro-apps (Next.js) | `micro-apps/*` | **Vercel** | `output: 'standalone'`, App Router |
 
 All secrets/URLs live in `.env` (never committed). Copy `.env.example` and fill
@@ -50,13 +50,24 @@ NEXT_PUBLIC_AGENT_URL=https://agents.adequatesafaris.com
 
 ---
 
-## 2. API → Docker / VPS (or serverless)
+## 2. API → Vercel (or any Node host)
 
-Local / VPS with Docker:
+Docker has been removed. Build and run locally with plain `npm`:
 
 ```bash
-cp .env.example .env               # fill in DATABASE_URL, JWT_SECRET, Stripe, M-Pesa
-docker compose -f docker/docker-compose.yml up -d --build api
+cd api
+npm ci
+npx prisma generate
+npm run build
+npm run start:prod                  # :4000 (reads DATABASE_URL, JWT_SECRET, …)
+```
+
+Deploy via Vercel: the `api/` root dir is already linked to a Vercel project, so a
+push to `main` auto-deploys. Or deploy manually:
+
+```bash
+npm i -g vercel
+vercel --prod --cwd api
 ```
 
 Database migrations + seed (run once per environment):
@@ -74,25 +85,26 @@ Requirements:
   Postgres without also changing the datasource provider.
 - `JWT_SECRET`, Stripe and M-Pesa keys as per `.env.example`.
 
-> **Vercel/serverless note:** NestJS can run on Vercel but Prisma + MySQL needs a
-> serverless-friendly MySQL (e.g. PlanetScale) and connection pooling. If you go
-> this route, deploy the API as its own Vercel project with Root Directory
-> `api/`. Docker/VPS is the lower-risk default.
+> **Serverless note:** NestJS runs on Vercel but Prisma + MySQL needs a
+> serverless-friendly MySQL (e.g. PlanetScale) and connection pooling. Any Node
+> host (Railway, Render, Fly) works too. For just the API, a persistent Node host
+> is the lower-risk default; keeping it on Vercel keeps everything in one place.
 
 ---
 
-## 3. Joomla → Docker / VPS
+## 3. Joomla → VPS / shared hosting (PHP + MySQL)
 
-```bash
-docker compose -f docker/docker-compose.yml up -d db joomla nginx
-```
+Docker has been removed. Run Joomla on any PHP 8.3 + MySQL host (VPS, shared
+hosting, or a LAMP stack):
 
-- Image: `docker/Dockerfile.joomla` (PHP 8.3 + Apache + extensions + opcache).
-- Reverse proxy / TLS: `docker/nginx/` (upstreams, SSL, HSTS, rate limits).
 - Install the template by zipping `joomla-site/templates/adequate/` and uploading
   it via **System → Install → Extensions**, or drop it into the Joomla tree.
-- Template params (contact details, social, micro-app URLs, colours) are set in
-  **System → Site Templates → adequate → Options**.
+- Apply the template + plugins + modules with `joomla-site/setup/install.sh`
+  (set `JOOMLA_SITE_ROOT` to your Joomla webroot — no Docker required).
+- Front with Nginx or Apache; issue TLS with Let's Encrypt (Certbot), or use the
+  hosting provider's auto-SSL.
+- Template params (logo, contact details, social, micro-app URLs, colours) are set
+  in **System → Site Templates → adequate → Options**.
 
 ---
 

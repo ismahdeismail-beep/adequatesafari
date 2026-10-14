@@ -8,11 +8,17 @@
 
 > 🆕 **NEW REPO (separate from `Absoluteadventuresafari`):** `adequatesafari` is its own repo and is treated **independently**. The older `Absoluteadventuresafari` repo/clone is **frozen** — all new work happens **here only** (per README "one repo" policy).
 
-*Last updated: Oct 14 2026 — cloned `adequatesafari` standalone; **verified Vercel production is READY** (Root Directory `micro-apps/booking`); site + routes live, E11 resolved.*
+*Last updated: Oct 14 2026 — cloned `adequatesafari` standalone; **verified Vercel production is READY** (Root Directory `micro-apps/booking`); site + routes live, E11 resolved. Docker has since been removed.*
+
+> 🐳➡️ **Docker removed:** the `docker/` directory (compose + Dockerfiles + nginx) was deleted.
+> Local development is now plain **`npm`** (API NestJS + Next.js booking micro-app); deployment
+> is **Vercel** (micro-apps + API) and **VPS/shared hosting** (Joomla: PHP 8.3 + MySQL). All
+> Docker/GHCR references below are historical.
 
 > ~~⚠️ Open CI failure (E11): GitHub Actions docker build failed with
 > `invalid tag "ghcr.io/adequatesafari/api:latest": repository name must be lowercase`.~~
-> **Resolved by R1** — repo created as `adequatesafari` (lowercase), satisfying GHCR's lowercase image-tag requirement.
+> **Resolved / superseded** — the repo is lowercase (`adequatesafari`); `Deploy API` now builds
+> with **npm** (no Docker, no image push). The GHCR lowercase fix is historical.
 
 ---
 
@@ -37,7 +43,7 @@
 | E8 | **`micro-apps/booking/vercel.json` rewrote everything to `/`** — `{ "src": "/(.*)", "dest": "/" }` broke `/safaris`, `/booking`, etc. | ✅ DONE | Reduced to `{ "framework": "nextjs" }` |
 | E9 | **No CI deploy workflows in the new repo** — only `.github/workflows/ci.yml` was ported; `deploy-*.yml` missing (they exist only on the frozen old repo) | ✅ DONE | Ported `deploy-api.yml`, `deploy-apps.yml`, `deploy-joomla.yml`, `sync-content.yml` from the old repo. Joomla paths updated `absolute/`→`adequate/`. All secret-gated → green with no infra. |
 | E10 | **`next.config.js` rewrite produced `destination: "undefined/api/:path*"`** when `NEXT_PUBLIC_API_URL` was unset → `next build` failed with "Invalid rewrite found" (another Vercel deploy killer) | ✅ DONE | Guard the rewrite: return `[]` when `NEXT_PUBLIC_API_URL` is not set. Build now green. |
-| E11 | **`Deploy API` workflow fails** — `invalid tag "ghcr.io/ismahdeismail-beep/Absoluteadventuresafari/api:latest": repository name must be lowercase` (Docker/GHCR tag built from `${{ github.repository }}`, whose original casing is uppercase) | ✅ DONE | `deploy-api.yml` now lowercases the tag: `IMAGE=ghcr.io/${GITHUB_REPOSITORY,,}/api`. Works regardless of repo casing. (Old repo was also lowercase-fixed by R1.) |
+| E11 | **`Deploy API` workflow fails** — `invalid tag "ghcr.io/ismahdeismail-beep/Absoluteadventuresafari/api:latest": repository name must be lowercase` (Docker/GHCR tag built from `${{ github.repository }}`, whose original casing is uppercase) | ✅ DONE | Historical Docker/GHCR issue. The GHCR tag was lowercased (`IMAGE=ghcr.io/${GITHUB_REPOSITORY,,}/api`); **Docker has since been removed** — `deploy-api.yml` now builds with **npm**, no image push. |
 | E12 | **Image audit** — "we only have safaris of Kenya" | ✅ VERIFIED | 16 card stems, **all complete** (400/800/1280 JPG+WebP): Kenya ×10, Tanzania ×2 (`tanzania-ngorongoro`, `zanzibar-beach`), Uganda ×1 (`bwindi-gorilla`), + `leopard-sighting`, `tented-camp`, `lodge-pool`. `amboseli-kilimanjaro` set **is present** (earlier "0 files" was a path typo, not a real gap). |
 | E13 | **No hard-coded secrets/keys** | ✅ VERIFIED | No secrets committed; credentials live in `.env*` only. Re-check after each change. |
 
@@ -56,7 +62,7 @@
 | R5 | Rebrand **preview pages** — `index.html`, `listing.html`, `safari.html`, `credits.html` (`<title>`, `adq-brand__name`, hero eyebrow, copyright) | ✅ DONE | Preview renders "Adequate Safaris" (verified via localhost) |
 | R6 | Rebrand **booking micro-app** — `layout.tsx`, `Header`/`Footer`/`Hero`/`Testimonials`, all static pages, `sitemap.ts`, `robots.ts`, `next.config.js`, package `adq-booking`, store `adq-auth`, refs `ADQ-…` | ✅ DONE | `npm run build` green (28 routes) |
 | R7 | Rebrand **API** — package `adq-api`, `prisma/seed.ts`, `main.ts`, `config/*.ts`, booking refs `ADQ-…` | ✅ DONE | `nest build` green |
-| R8 | Rebrand **Docker/ops** — `docker-compose.yml` (`adq-*` containers/network), `docker/nginx/conf.d/default.conf`, `.env.example` (`adq-assets`) | ✅ DONE | |
+| R8 | Rebrand **Docker/ops** — `docker-compose.yml` (`adq-*` containers/network), `docker/nginx/conf.d/default.conf`, `.env.example` (`adq-assets`) | ✅ DONE | Docker has since been **REMOVED** entirely; the `.env.example` rebrand (`adq-assets`) stands. |
 | R9 | Rebrand **docs** — `README.md`, `TODO.md`, `docs/*.md`, `export_joomla.py`, `find_images.py`, `set_preview_cards.py`, `rebrand.py` | ✅ DONE | |
 | R10 | Template **thumbnails** regenerated with new brand | ✅ DONE | `templatePreview.png` (800×600) + `templateThumbnail.png` (400×300) rebuilt over hero photo. No `images/social/` OG assets exist in this checkout. `favicon.ico` is a gold "A" (name-agnostic) → kept |
 | R11 | Rebrand **modules/plugins** — `mod_aas_hero` → `mod_adq_hero` (dir + files + keys `MOD_ADQ_HERO_*`), plugins `ADQ` labels, table `#__adq_sync_queue`, cookie `adq_token`, `install.sh` | ✅ DONE | |
@@ -86,6 +92,11 @@
   - **GitHub log audit:** old repo `Absoluteadventuresafari` → `Deploy API` run **failed**: `invalid tag "ghcr.io/ismahdeismail-beep/Absoluteadventuresafari/api:latest": repository name must be lowercase` (step "Build & push"). Root cause = GHCR tag built from `${{ github.repository }}` (original casing). The new repo only had `ci.yml` — the 4 deploy workflows were never ported.
   - **Fix:** ported `deploy-api.yml`, `deploy-apps.yml`, `deploy-joomla.yml`, `sync-content.yml` into this repo. `deploy-api.yml` now lowercases the tag via `IMAGE=ghcr.io/${GITHUB_REPOSITORY,,}/api`; Joomla workflow updated `absolute/`→`adequate/`. All secret-gated (green with no infra). **E9 + E11 → DONE.**
   - **Vercel log audit:** both projects (`adequatesafari` → `micro-apps/booking`; `api` → `api`) latest prod deploy `READY` for `6100d5cd`; older reds (root `vercel.json` `rootDirectory` schema error, legacy root build >12 functions, missing `public` output dir) are superseded. Current config correct: no repo-root `vercel.json`; `micro-apps/booking/vercel.json` = `{ "framework": "nextjs" }`.
+  - **Docker removed entirely.** Deleted `docker/` (compose + 3 Dockerfiles + nginx). Local dev is now plain `npm` (api `npm run start:dev`, booking `npm run dev`). `deploy-api.yml` rewritten to build the API with npm (prisma validate/generate + build) and optionally deploy to Vercel (`VERCEL_PROJECT_ID_API`) — no Docker, no GHCR. `deploy-joomla.yml` docker path triggers removed. `joomla-site/setup/install.sh` rewritten for a local (non-Docker) Joomla install. README/TODO/docs updated.
+  - **Hardcoded contact details removed** from the booking UI → env-driven (`NEXT_PUBLIC_CONTACT_PHONE|WHATSAPP|EMAIL|ADDRESS` via `src/lib/site-config.ts`); Footer + contact page render only what is set. Fake testimonial names replaced with generic attributions. `.env.example` documents the new vars.
+  - **Logo + icons restored** from the live brand assets (`adequate-logo.png`, 604×245): header now shows the real wordmark; `icon.png`/`apple-icon.png`/`favicon.ico` regenerated for the booking app; Joomla template `logoFile`/`faviconFile` defaults point at the bundled logo/favicon.
+  - **External-access inventory completed** (API, micro-app, CI, Joomla bridge): only `DATABASE_URL` + `JWT_SECRET` are required at runtime; Stripe, M-Pesa, Joomla sync, email (SMTP), S3/CloudFront and analytics are all optional/disabled unless configured (email + S3 + analytics are config-only, no code yet). See `docs/deployment.md` and the session notes.
+  - **Open question:** the user wants a **single Vercel project** (two related projects feel hard to trace). Options: (a) fold the API into the Next.js app as route handlers; (b) host the API off Vercel (Render/Railway) so Vercel has one project; (c) keep `booking` + `api` as-is. To be decided.
 
 - **Oct 13 2026 (latest — rebrand executed)**
   - **Full rebrand to "Adequate Safaris" executed (option b, no commit):**
@@ -120,9 +131,9 @@
 - [x] Project structure + git repo
 - [x] `README.md` — rewritten: single source of truth (one repo / one `main` / one remote), accurate directory tree, status table, build notes, contribution workflow
 - [x] **Repo hygiene confirmed** — exactly one clone, one branch (`main`), one remote (`origin`), one worktree; no duplicate repo. Stale `~/Desktop/...` + "shared work dir" references removed.
-- [x] `docker/docker-compose.yml` — Joomla 5, MariaDB, Redis, Nginx, API, 3× Next.js
-- [x] `docker/Dockerfile.joomla`, `Dockerfile.api`, `Dockerfile.nextjs`
-- [x] `docker/nginx/nginx.conf` + `conf.d/default.conf` — upstreams, SSL, HSTS, rate limits
+- [x] ~~`docker/docker-compose.yml` — Joomla 5, MariaDB, Redis, Nginx, API, 3× Next.js~~ **REMOVED** (Docker eliminated)
+- [x] ~~`docker/Dockerfile.joomla`, `Dockerfile.api`, `Dockerfile.nextjs`~~ **REMOVED** (Docker eliminated)
+- [x] ~~`docker/nginx/nginx.conf` + `conf.d/default.conf` — upstreams, SSL, HSTS, rate limits~~ **REMOVED** (Docker eliminated)
 - [x] `.env.example` — all env vars (DB, JWT, Stripe, M-Pesa, SMTP, S3, analytics, `DATABASE_URL`, `CORS_ORIGINS`, `CDN_URL`)
 - [x] `docs/` — `data-model.md`, `api-spec.md`, `export_joomla.py`, `current-site-analysis.md`, `visual-sitemap.md`, `deployment.md`, `micro-interactions.md`
 
@@ -171,7 +182,7 @@
 - [x] E10 rewrite guard (build green)
 - [x] E12 image audit — all 16 stems complete
 - [x] E13 no hard-coded secrets verified
-- [x] E11 docker tag lowercased in `deploy-api.yml` (`${GITHUB_REPOSITORY,,}`)
+- [x] ~~E11 docker tag lowercased in `deploy-api.yml` (`${GITHUB_REPOSITORY,,}`)~~ — historical (Docker since removed; `deploy-api.yml` now builds with npm)
 - [x] E9 deploy workflows ported to this repo
 
 ### Rebrand → "Adequate Safaris" (§ REBRAND)
@@ -223,7 +234,7 @@
 ### Deployment & Ops
 - [x] `.github/workflows/ci.yml`
 - [x] `deploy-api.yml`, `deploy-apps.yml`, `deploy-joomla.yml`, `sync-content.yml` (ported; secret-gated)
-- [ ] VPS (Ubuntu 22.04, Docker, Nginx, Certbot)
+- [ ] VPS (Ubuntu 22.04, Nginx, Certbot) for Joomla (PHP 8.3 + MySQL); API/micro-apps on Vercel
 - [ ] DNS: `www`, `api`, `book`, `plan`, `agents`, `cdn`
 - [ ] SSL (Let's Encrypt + auto-renew), DB backups (daily + PITR)
 - [ ] Monitoring (UptimeRobot, Sentry, Logtail), CDN, Email (SendGrid/Postmark)
@@ -269,11 +280,9 @@
 ## Quick Commands
 
 ```bash
-# Local stack
-docker compose -f docker/docker-compose.yml up -d
-
-# API dev
-cd api && npm run start:dev
+# Local stack (Dockerless — run each service in its own terminal)
+cd api && npm run start:dev                      # :4000 (needs a MySQL/MariaDB DATABASE_URL)
+cd micro-apps/booking && npm run dev             # :3001
 
 # Micro-apps dev
 cd micro-apps/booking && npm run dev           # :3001

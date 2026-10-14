@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { Facebook, Instagram, MapPin, Phone, Twitter } from 'lucide-react';
+import { siteConfig } from '@/lib/site-config';
 
 const footerLinks = [
   {
@@ -41,16 +42,22 @@ export function Footer() {
             <p className="mt-3 max-w-sm text-sm leading-relaxed">
               Leading provider of quality leisure and vacation experiences and services across East Africa.
             </p>
-            <ul className="mt-5 space-y-2 text-sm">
-              <li className="flex items-center gap-2">
-                <Phone className="h-4 w-4 text-safari-gold" />
-                <span>+254 (0) 700 000 000</span>
-              </li>
-              <li className="flex items-center gap-2">
-                <MapPin className="h-4 w-4 text-safari-gold" />
-                <span>Nairobi, Kenya</span>
-              </li>
-            </ul>
+            {(siteConfig.phone || siteConfig.address) && (
+              <ul className="mt-5 space-y-2 text-sm">
+                {siteConfig.phone && (
+                  <li className="flex items-center gap-2">
+                    <Phone className="h-4 w-4 text-safari-gold" />
+                    <span>{siteConfig.phone}</span>
+                  </li>
+                )}
+                {siteConfig.address && (
+                  <li className="flex items-center gap-2">
+                    <MapPin className="h-4 w-4 text-safari-gold" />
+                    <span>{siteConfig.address}</span>
+                  </li>
+                )}
+              </ul>
+            )}
             <div className="mt-5 flex items-center gap-4">
               <a href="#" aria-label="Facebook" className="hover:text-white">
                 <Facebook className="h-5 w-5" />

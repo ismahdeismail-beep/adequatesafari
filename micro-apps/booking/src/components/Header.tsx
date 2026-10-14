@@ -1,8 +1,9 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { useState } from 'react';
-import { Menu, X, ChevronDown, MapPin, User, CreditCard, LogOut } from 'lucide-react';
+import { Menu, X, ChevronDown, User, CreditCard, LogOut } from 'lucide-react';
 import { useAuthStore } from '@/lib/store';
 import { api } from '@/lib/api';
 import { cn } from '@/lib/utils';
@@ -37,13 +38,15 @@ export function Header() {
       <nav className="container-custom" aria-label="Main navigation">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link href="/" className="flex items-center space-x-2" aria-label="Adequate Safaris Home">
-            <div className="w-10 h-10 bg-primary-600 rounded-lg flex items-center justify-center">
-              <MapPin className="w-6 h-6 text-white" />
-            </div>
-            <span className="font-heading text-xl font-bold text-safari-dusk hidden sm:block">
-              Adequate Safaris
-            </span>
+          <Link href="/" className="flex items-center" aria-label="Adequate Safaris Home">
+            <Image
+              src="/adequate-logo.png"
+              alt="Adequate Safaris"
+              width={89}
+              height={36}
+              className="h-9 w-auto"
+              priority
+            />
           </Link>
 
           {/* Desktop Navigation */}
