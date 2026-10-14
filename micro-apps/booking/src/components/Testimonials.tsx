@@ -9,7 +9,7 @@ const testimonials = [
   },
   {
     name: 'Guest from Kenya',
-    location: 'Nairobi, Kenya',
+    location: 'Kenya',
     rating: 5,
     text: 'We booked a private Mount Kenya climb for our team. Flawless logistics, great guides and total peace of mind from start to finish.',
   },

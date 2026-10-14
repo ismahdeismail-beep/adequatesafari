@@ -10,12 +10,12 @@ export default function AboutPage() {
   return (
     <ContentPage
       title="About Adequate Safaris"
-      subtitle="Locally owned and operated in Nairobi, Kenya."
+      subtitle="Locally owned and operated in East Africa."
     >
       <p>
-        We design and operate safari journeys across Kenya, Tanzania and Uganda. From the Great
-        Migration in the Maasai Mara to gorilla trekking in Bwindi, our team handles every detail so
-        you can simply enjoy the wild.
+        We design and operate safari journeys across Kenya, Tanzania, Uganda and Rwanda. From the
+        Great Migration in the Maasai Mara to gorilla trekking in Bwindi, our team handles every
+        detail so you can simply enjoy the wild.
       </p>
       <h2>Why travellers choose us</h2>
       <ul>
