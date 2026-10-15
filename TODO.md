@@ -68,14 +68,22 @@
 - [ ] Review legal pages (terms, privacy) against actual data practices
 - [ ] SEO: titles, meta descriptions, OG images per page
 
-## Services provided but NOT yet built/pushed (from the old Joomla site)
-- [ ] Site search (com_finder equivalent)
-- [ ] Topbar (contact strip: phone / email / hours)
-- [ ] Cookie consent banner
-- [ ] Photo gallery
-- [ ] Testimonials module
+## Services provided but NOT yet built/pushed (from the old Joomla / WordPress site)
+- [x] Topbar (contact strip: phone / email) — in Header, env-driven
+- [x] Cookie consent banner — CookieConsent, localStorage + /privacy link
+- [x] Photo gallery — /gallery with lightbox
+- [x] Breadcrumbs on inner pages — Breadcrumbs, auto-derived + in ContentPage
+- [x] Deal collections — /deals: Diani, Mombasa, Mara daily departures, corporate, themed, non-residents
+- [x] Adequate Specials — /deals/specials (10 KSH-priced short breaks)
+- [x] International — /deals/international (14 destinations, incl. Dubai, Bali, Europe, China, USA)
+- [x] Blog listing — /blog rebuilt as the live 3-column journal (10 camp/lodge write-ups)
+- [ ] Blog article bodies — cards currently link out to WordPress; migrate the text
+- [ ] Site search (com_finder equivalent) — SearchSection searches safaris only
+- [ ] Currency switcher (KSH/USD) — live site prices deals in KSH, app in USD
+- [ ] Guest booking ("Continue as Guest") — live site offers it, app requires sign-in
+- [ ] Deals taxonomy from /adequate-holiday-deals/ (15 destination groups: Mount Kenya, Maasai Mara, Naivasha, Amboseli, Watamu, Diani, Mombasa, South Africa, Seychelles, Mauritius, Maldives, Thailand, Malaysia, Bali, Dubai)
+- [ ] Non-resident landing pages: /kenya-short-stay-safari/, /tanzania-safaris-2/, /uganda-safari-tours/
 - [ ] Multi-language support (template ships en-GB/es-ES/fr-FR/zh-CN strings)
-- [ ] Breadcrumbs on inner pages
 - [ ] Admin area beyond profile (all bookings, safari management) — enforced by RLS
 - [ ] API services not surfaced in the app: payments (M-Pesa/Stripe live), webhooks, agents/partner portal, content sync
 
