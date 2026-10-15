@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { api } from '@/lib/api';
+import { api, isApiConfigured } from '@/lib/api';
 import { sampleSafaris } from '@/lib/sample-data';
 import { extractList, safariToCard } from '@/lib/mappers';
 import type { Safari, SafariCardData } from '@/types';
@@ -12,6 +12,7 @@ export function FeaturedSafaris() {
   const [safaris, setSafaris] = useState<SafariCardData[]>(sampleSafaris.filter((s) => s.featured));
 
   useEffect(() => {
+    if (!isApiConfigured) return;
     let cancelled = false;
     api
       .getFeaturedSafaris(6)

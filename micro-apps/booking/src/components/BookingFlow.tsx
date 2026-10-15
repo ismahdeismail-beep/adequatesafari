@@ -15,7 +15,7 @@ import {
   Users,
 } from 'lucide-react';
 import toast from 'react-hot-toast';
-import { api } from '@/lib/api';
+import { api, isApiConfigured } from '@/lib/api';
 import { safariToDetail } from '@/lib/mappers';
 import { getSampleSafari } from '@/lib/sample-data';
 import { useAuthStore, useBookingStore } from '@/lib/store';
@@ -210,6 +210,17 @@ export function BookingFlow({ initialSlug }: { initialSlug: string }) {
 
   useEffect(() => {
     if (!slug) {
+      setLoading(false);
+      return;
+    }
+    if (!isApiConfigured) {
+      const sample = getSampleSafari(slug);
+      if (!sample) {
+        setLoadError('That safari could not be found.');
+      } else {
+        setDetail(sample);
+        setIsPreview(true);
+      }
       setLoading(false);
       return;
     }

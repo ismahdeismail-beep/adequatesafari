@@ -1,0 +1,184 @@
+{
+  "cards": {
+    "aberdare-range": [
+      400,
+      800,
+      1280
+    ],
+    "accommodation-lodge": [
+      400,
+      800,
+      1280
+    ],
+    "amboseli-kilimanjaro": [
+      400,
+      800,
+      1280
+    ],
+    "bali-island-escape": [
+      400,
+      800
+    ],
+    "bwindi-gorilla": [
+      400,
+      800,
+      1280
+    ],
+    "cape-town-family-vacation": [
+      400,
+      800
+    ],
+    "diani-beach-escape": [
+      400,
+      800
+    ],
+    "dubai-city-escape": [
+      400,
+      800
+    ],
+    "egypt-nile-cruise": [
+      400,
+      800
+    ],
+    "europe-epic-tour": [
+      400,
+      800
+    ],
+    "great-lakes-staycation": [
+      400,
+      800
+    ],
+    "jordan-timeless-treasures": [
+      400,
+      800
+    ],
+    "kilimanjaro-lemosho-climb": [
+      400,
+      800
+    ],
+    "kuala-lumpur-singapore": [
+      400,
+      800
+    ],
+    "lake-nakuru-flamingos": [
+      400,
+      800,
+      1280
+    ],
+    "leopard-sighting": [
+      400,
+      800,
+      1280
+    ],
+    "lodge-pool": [
+      400,
+      800,
+      1280
+    ],
+    "maasai-mara-wildebeest": [
+      400,
+      800,
+      1280
+    ],
+    "maldives-island-escape": [
+      400,
+      800
+    ],
+    "masai-mara-lion": [
+      400,
+      800,
+      1280
+    ],
+    "mauritius-island-escape": [
+      400,
+      800
+    ],
+    "mount-kenya": [
+      400,
+      800,
+      1280
+    ],
+    "mount-kenya-climbers": [
+      400,
+      800,
+      1280
+    ],
+    "nairobi-staycation": [
+      400,
+      800
+    ],
+    "rift-valley-bogoria": [
+      400,
+      800,
+      1280
+    ],
+    "rwanda-gorilla-trekking": [
+      400,
+      800
+    ],
+    "samburu-gerenuk": [
+      400,
+      800,
+      1280
+    ],
+    "seychelles-island-escape": [
+      400,
+      800
+    ],
+    "tanzania-ngorongoro": [
+      400,
+      800,
+      1280
+    ],
+    "tented-camp": [
+      400,
+      800,
+      1280
+    ],
+    "thailand-bangkok-pattaya": [
+      400,
+      800
+    ],
+    "turkey-istanbul-cappadocia": [
+      400,
+      800
+    ],
+    "zanzibar-beach": [
+      400,
+      800,
+      1280
+    ]
+  },
+  "hero": {
+    "parallax": [
+      640,
+      960,
+      1300
+    ],
+    "slider1": [
+      640,
+      960,
+      1300
+    ],
+    "slider2": [
+      640,
+      960,
+      1300
+    ],
+    "slider4": [
+      640,
+      960,
+      1300
+    ],
+    "slider5": [
+      640,
+      960,
+      1300
+    ],
+    "slider7": [
+      640,
+      960,
+      1300
+    ]
+  }
+}

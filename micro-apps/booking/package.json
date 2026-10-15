@@ -4,7 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "next dev -p 3001",
+    "prebuild": "node scripts/generate-image-variants.js",
     "build": "next build",
+    "predev": "node scripts/generate-image-variants.js",
     "start": "next start -p 3001",
     "lint": "next lint",
     "type-check": "tsc --noEmit"

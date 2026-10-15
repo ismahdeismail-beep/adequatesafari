@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
-import { api } from '@/lib/api';
+import { api, isApiConfigured } from '@/lib/api';
 import { useAuthStore } from '@/lib/store';
 
 export default function LoginPage() {
@@ -25,6 +25,10 @@ export default function LoginPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!isApiConfigured) {
+      toast.error('Sign-in is unavailable — the booking API is not configured for this deployment.');
+      return;
+    }
     setLoading(true);
     try {
       const data = await api.login(email, password);

@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { CalendarDays, Check, Clock, MapPin, Minus, Star, X } from 'lucide-react';
-import { api } from '@/lib/api';
+import { api, isApiConfigured } from '@/lib/api';
 import { safariToDetail } from '@/lib/mappers';
 import { getSampleSafari } from '@/lib/sample-data';
 import { formatCurrency, formatDateShort } from '@/lib/utils';
@@ -14,6 +14,11 @@ export function SafariDetail({ slug }: { slug: string }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (!isApiConfigured) {
+      setSafari(getSampleSafari(slug) ?? null);
+      setLoading(false);
+      return;
+    }
     let cancelled = false;
     setLoading(true);
     api

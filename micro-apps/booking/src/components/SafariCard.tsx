@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { Clock, MapPin } from 'lucide-react';
 import type { SafariCardData } from '@/types';
 import { cn, formatCurrency } from '@/lib/utils';
+import { cardSources } from '@/lib/images';
 
 interface SafariCardProps {
   safari: SafariCardData;
@@ -11,6 +12,7 @@ interface SafariCardProps {
 export function SafariCard({ safari, className }: SafariCardProps) {
   const priceLabel =
     typeof safari.price === 'number' ? formatCurrency(safari.price, safari.currency ?? 'USD') : null;
+  const sources = cardSources(safari.image);
 
   return (
     <article className={cn('card group flex flex-col animate-slide-up', className)}>
@@ -18,14 +20,30 @@ export function SafariCard({ safari, className }: SafariCardProps) {
         href={`/safaris/${safari.slug}`}
         className="relative block aspect-[4/3] overflow-hidden bg-safari-sand"
       >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={safari.image}
-          alt={safari.title}
-          loading="lazy"
-          decoding="async"
-          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-        />
+        {sources ? (
+          <picture className="block h-full w-full">
+            <source type="image/webp" srcSet={sources.webpSrcSet} sizes={sources.sizes} />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={sources.fallback}
+              srcSet={sources.imgSrcSet}
+              sizes={sources.sizes}
+              alt={safari.title}
+              loading="lazy"
+              decoding="async"
+              className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+            />
+          </picture>
+        ) : (
+          /* eslint-disable-next-line @next/next/no-img-element */
+          <img
+            src={safari.image}
+            alt={safari.title}
+            loading="lazy"
+            decoding="async"
+            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+          />
+        )}
         {safari.featured && (
           <span className="absolute left-3 top-3 rounded-full bg-safari-gold px-3 py-1 text-xs font-semibold text-safari-dusk">
             Featured

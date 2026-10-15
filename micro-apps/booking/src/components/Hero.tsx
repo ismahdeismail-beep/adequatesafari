@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { heroSources } from '@/lib/images';
 
 const slides = [
   {
@@ -20,9 +21,32 @@ const slides = [
     subtext: 'Wildlife and bird-viewing in the Masai Mara — we will take you there.',
     cta: { label: 'See migration safaris', href: '/safaris?search=migration' },
   },
+  {
+    image: '/hero/slider2.jpg',
+    eyebrow: 'Mount Kenya & Kilimanjaro',
+    heading: 'Climb the roof of Africa',
+    subtext: 'Guided treks on the Sirimon, Naromoru, Machame and Marangu routes.',
+    cta: { label: 'Explore climbs', href: '/safaris?search=climb' },
+  },
+  {
+    image: '/hero/slider4.jpg',
+    eyebrow: 'Tailor-made itineraries',
+    heading: 'Your safari, your way',
+    subtext: 'Build a custom itinerary across Kenya, Tanzania and Uganda.',
+    cta: { label: 'Plan your trip', href: '/contact' },
+  },
+  {
+    image: '/hero/slider7.jpg',
+    eyebrow: 'Beach & bush',
+    heading: 'From the savannah to the Indian Ocean',
+    subtext: 'Combine game drives with the beaches of Lamu and Zanzibar.',
+    cta: { label: 'Beach escapes', href: '/safaris?search=beach' },
+  },
 ];
 
 const AUTOPLAY_MS = 6500;
+
+const slideSources = slides.map((slide) => heroSources(slide.image));
 
 export function Hero() {
   const [active, setActive] = useState(0);
@@ -54,14 +78,30 @@ export function Hero() {
           )}
           aria-hidden={index !== active}
         >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={slide.image}
-            alt={slide.heading}
-            className="h-full w-full object-cover"
-            fetchPriority={index === 0 ? 'high' : 'auto'}
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent" />
+          {slideSources[index] ? (
+            <picture className="block h-full w-full">
+              <source
+                type="image/webp"
+                srcSet={slideSources[index]!.webpSrcSet}
+                sizes={slideSources[index]!.sizes}
+              />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={slide.image}
+                alt={slide.heading}
+                className="h-full w-full object-cover"
+                fetchPriority={index === 0 ? 'high' : 'auto'}
+              />
+            </picture>
+          ) : (
+            /* eslint-disable-next-line @next/next/no-img-element */
+            <img
+              src={slide.image}
+              alt={slide.heading}
+              className="h-full w-full object-cover"
+              fetchPriority={index === 0 ? 'high' : 'auto'}
+            />
+          )}          <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent" />
           <div className="container-custom absolute inset-0 flex flex-col justify-center">
             <div className="max-w-2xl animate-slide-up text-white">
               <p className="text-sm font-semibold uppercase tracking-[0.2em] text-safari-gold">

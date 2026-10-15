@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { SlidersHorizontal } from 'lucide-react';
-import { api } from '@/lib/api';
+import { api, isApiConfigured } from '@/lib/api';
 import { sampleSafaris } from '@/lib/sample-data';
 import { extractList, safariToCard } from '@/lib/mappers';
 import type { Safari, SafariCardData } from '@/types';
@@ -43,6 +43,11 @@ export function SafariListing({ initialSearch = '', initialCountry = '' }: Safar
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (!isApiConfigured) {
+      setRemote(null);
+      setLoading(false);
+      return;
+    }
     let cancelled = false;
     setLoading(true);
     api

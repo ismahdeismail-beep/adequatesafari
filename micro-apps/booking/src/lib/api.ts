@@ -1,6 +1,12 @@
 import axios, { AxiosInstance, InternalAxiosRequestConfig, AxiosError } from 'axios';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api';
+// The booking API is optional. The app ships with a complete sample-data set and
+// renders standalone, so we only call the API when it has been explicitly
+// configured via NEXT_PUBLIC_API_URL. Without it we skip the request entirely,
+// which avoids failed requests to a non-existent backend (and the browser
+// console errors they produce) in deployments that do not run the NestJS API.
+export const API_URL = process.env.NEXT_PUBLIC_API_URL || '';
+export const isApiConfigured = API_URL.length > 0;
 
 class ApiClient {
   private client: AxiosInstance;
@@ -100,7 +106,7 @@ class ApiClient {
   }
 
   async logout() {
-    if (this.refreshToken) {
+    if (isApiConfigured && this.refreshToken) {
       await this.client.post('/auth/logout', { refreshToken: this.refreshToken });
     }
     this.clearTokens();
