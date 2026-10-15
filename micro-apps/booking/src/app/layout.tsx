@@ -21,12 +21,21 @@ export const metadata: Metadata = {
   title: 'Book Your Safari | Adequate Safaris',
   description: 'Book unforgettable safari adventures in Kenya, Tanzania, and Uganda. Secure online booking with M-Pesa and Stripe.',
   keywords: ['safari booking', 'Kenya safari', 'Tanzania safari', 'Uganda gorilla trekking', 'African safari'],
+  icons: {
+    icon: [
+      { url: '/adequate-logo.png', sizes: '32x32', type: 'image/png' },
+      { url: '/adequate-logo.png', sizes: '192x192', type: 'image/png' },
+      { url: '/favicon.ico' }
+    ],
+    apple: { url: '/adequate-logo.png', sizes: '180x180', type: 'image/png' },
+  },
   openGraph: {
     title: 'Book Your Safari | Adequate Safaris',
     description: 'Book unforgettable safari adventures in Kenya, Tanzania, and Uganda.',
     type: 'website',
     locale: 'en_US',
     siteName: 'Adequate Safaris',
+    images: [{ url: '/adequate-logo.png', width: 1200, height: 630, alt: 'Adequate Safaris' }],
   },
 };
 
