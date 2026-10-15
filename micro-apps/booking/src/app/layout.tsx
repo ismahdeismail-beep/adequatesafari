@@ -21,14 +21,8 @@ export const metadata: Metadata = {
   title: 'Book Your Safari | Adequate Safaris',
   description: 'Book unforgettable safari adventures in Kenya, Tanzania, and Uganda. Secure online booking with M-Pesa and Stripe.',
   keywords: ['safari booking', 'Kenya safari', 'Tanzania safari', 'Uganda gorilla trekking', 'African safari'],
-  icons: {
-    icon: [
-      { url: '/adequate-logo.png', sizes: '32x32', type: 'image/png' },
-      { url: '/adequate-logo.png', sizes: '192x192', type: 'image/png' },
-      { url: '/favicon.ico' }
-    ],
-    apple: { url: '/adequate-logo.png', sizes: '180x180', type: 'image/png' },
-  },
+  // App icons are provided by the file conventions in src/app:
+  //   icon.png (192x192), apple-icon.png (180x180), favicon.ico — all the brand logo.
   openGraph: {
     title: 'Book Your Safari | Adequate Safaris',
     description: 'Book unforgettable safari adventures in Kenya, Tanzania, and Uganda.',
