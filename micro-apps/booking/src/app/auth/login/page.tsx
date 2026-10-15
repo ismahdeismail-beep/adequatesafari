@@ -1,43 +1,40 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState, Suspense } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
+import { createClient } from '@/lib/supabase/client';
 import toast from 'react-hot-toast';
-import { api, isApiConfigured } from '@/lib/api';
-import { useAuthStore } from '@/lib/store';
 
-export default function LoginPage() {
-  const router = useRouter();
-  const setAuth = useAuthStore((s) => s.setAuth);
+function LoginForm() {
+  const params = useSearchParams();
+  const next = params.get('next') || '/account/profile';
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [next, setNext] = useState('/booking/my-bookings');
   const [loading, setLoading] = useState(false);
+  const [sent, setSent] = useState(false);
 
-  // Read ?next= after mount (client-side) so this static page doesn't need a Suspense boundary.
-  useEffect(() => {
-    const n = new URLSearchParams(window.location.search).get('next');
-    if (n && n.startsWith('/') && !n.startsWith('//')) {
-      setNext(n);
-    }
-  }, []);
+  const configured = Boolean(
+    process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  );
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!isApiConfigured) {
-      toast.error('Sign-in is unavailable — the booking API is not configured for this deployment.');
+    if (!configured) {
+      toast.error('Sign-in is not configured for this deployment yet.');
       return;
     }
     setLoading(true);
     try {
-      const data = await api.login(email, password);
-      const payload = data?.data ?? data;
-      setAuth(payload.user, payload.accessToken, payload.refreshToken);
-      toast.success('Welcome back!');
-      router.push(next);
-    } catch {
-      toast.error('Invalid email or password.');
+      const supabase = createClient();
+      const redirectTo = `${window.location.origin}/auth/callback?next=${encodeURIComponent(next)}`;
+      const { error } = await supabase.auth.signInWithOtp({
+        email,
+        options: { shouldCreateUser: true, emailRedirectTo: redirectTo },
+      });
+      if (error) throw error;
+      setSent(true);
+    } catch (err: any) {
+      toast.error(err?.message || 'Could not send the sign-in link. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -46,58 +43,74 @@ export default function LoginPage() {
   return (
     <section className="pb-20 pt-32">
       <div className="container-custom max-w-md">
-        <h1 className="text-center font-heading text-3xl font-bold text-safari-dusk">Welcome back</h1>
-        <p className="mt-2 text-center text-gray-500">Sign in to manage your bookings.</p>
+        <h1 className="text-center font-heading text-3xl font-bold text-safari-dusk">Sign in</h1>
+        <p className="mt-2 text-center text-gray-500">
+          Enter your email and we&rsquo;ll send you a one-time sign-in link.
+        </p>
 
-        <form onSubmit={handleSubmit} className="mt-8 space-y-4 rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
-          <div>
-            <label htmlFor="email" className="mb-1 block text-sm font-medium text-gray-700">
-              Email
-            </label>
-            <input
-              id="email"
-              type="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="input-field"
-              autoComplete="email"
-            />
+        {sent ? (
+          <div className="mt-8 rounded-2xl border border-gray-100 bg-white p-6 text-center shadow-sm">
+            <p className="text-gray-700">
+              Check <strong>{email}</strong> for your sign-in link.
+            </p>
+            <p className="mt-2 text-sm text-gray-500">
+              The link works once and expires shortly. You can close this tab.
+            </p>
+            <button
+              type="button"
+              onClick={() => setSent(false)}
+              className="mt-4 text-sm font-medium text-primary-600 hover:text-primary-700"
+            >
+              Use a different email
+            </button>
           </div>
-          <div>
-            <label htmlFor="password" className="mb-1 block text-sm font-medium text-gray-700">
-              Password
-            </label>
-            <input
-              id="password"
-              type="password"
-              required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="input-field"
-              autoComplete="current-password"
-            />
-          </div>
-          <button type="submit" disabled={loading} className="btn-primary w-full">
-            {loading ? 'Signing in…' : 'Sign in'}
-          </button>
-        </form>
+        ) : (
+          <form
+            onSubmit={handleSubmit}
+            className="mt-8 space-y-4 rounded-2xl border border-gray-100 bg-white p-6 shadow-sm"
+          >
+            <div>
+              <label htmlFor="email" className="mb-1 block text-sm font-medium text-gray-700">
+                Email
+              </label>
+              <input
+                id="email"
+                type="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="input-field"
+                autoComplete="email"
+                inputMode="email"
+                placeholder="you@example.com"
+              />
+            </div>
+            <button type="submit" disabled={loading} className="btn-primary w-full">
+              {loading ? 'Sending link…' : 'Send sign-in link'}
+            </button>
+            <p className="text-center text-xs text-gray-400">
+              No password needed. New here? This creates your account automatically.
+            </p>
+          </form>
+        )}
 
         <div className="mt-6 space-y-2 text-center">
           <p className="text-sm text-gray-500">
-            Don’t have an account?{' '}
+            Prefer a password?{' '}
             <Link href="/auth/register" className="font-medium text-primary-600 hover:text-primary-700">
-              Create one
-            </Link>
-          </p>
-          <p className="text-sm text-gray-500">
-            Prefer no password?{' '}
-            <Link href="/auth/login/otp" className="font-medium text-primary-600 hover:text-primary-700">
-              Sign in with Magic Link
+              Create an account
             </Link>
           </p>
         </div>
       </div>
     </section>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={null}>
+      <LoginForm />
+    </Suspense>
   );
 }

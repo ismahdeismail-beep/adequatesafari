@@ -30,10 +30,11 @@ export const useAuthStore = create<AuthState>()(
     }),
     {
       name: 'adq-auth',
+      // Tokens are intentionally NOT persisted to localStorage. When Supabase is
+      // configured the session lives in httpOnly cookies; this store is only a
+      // fallback for sample-data mode and keeps the user profile only.
       partialize: (state) => ({
         user: state.user,
-        accessToken: state.accessToken,
-        refreshToken: state.refreshToken,
         isAuthenticated: state.isAuthenticated,
       }),
     }

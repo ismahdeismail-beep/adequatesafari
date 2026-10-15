@@ -43,3 +43,43 @@
 - [ ] Remove password-based login entirely (keep magic link only) - user choice pending
 - [ ] Add passwordless registration flow
 - [ ] Improve error messages and loading states
+
+## Auth / Signup (email-only + minimal data)
+- [ ] Review signup page fields (limit PII). Currently requires: firstName, lastName, email, password, phone. With magic link approach, prefer email-only signup; move name/phone to booking if needed.
+- [ ] Add "Sign up with Magic Link" alternative on register page
+- [ ] Remove password requirement if moving to OTP-only
+- [ ] Enforce minimal data: collect only what's necessary
+- [ ] Validate phone/email properly; don't require phone if not essential
+- [ ] Consider guest booking without account
+
+## Communication & Business Email
+- [ ] Design a single "business inbox" address that all site communication funnels through (e.g. bookings@ / hello@) — decide the address and provider
+- [ ] Send transactional email: booking confirmation, magic-link delivery, contact-form acknowledgement, newsletter welcome
+- [ ] Wire Supabase Auth SMTP (custom SMTP so magic links come from the business domain, not Supabase)
+- [ ] Reply-to / from alignment (SPF, DKIM, DMARC) for the business domain
+- [ ] Route contact submissions + booking notifications to the shared inbox
+- [ ] Templates: confirmation, reminder, cancellation, enquiry auto-reply
+
+## Content (information) — separate workstream
+- [ ] Audit real content vs placeholder copy: safaris, destinations, about, FAQ, offers, blog, policies
+- [ ] Source and enter real tour descriptions, itineraries, inclusions/exclusions, pricing
+- [ ] Replace placeholder testimonial/blog text
+- [ ] Confirm contact details, office address, phone, opening hours
+- [ ] Review legal pages (terms, privacy) against actual data practices
+- [ ] SEO: titles, meta descriptions, OG images per page
+
+## Services provided but NOT yet built/pushed (from the old Joomla site)
+- [ ] Site search (com_finder equivalent)
+- [ ] Topbar (contact strip: phone / email / hours)
+- [ ] Cookie consent banner
+- [ ] Photo gallery
+- [ ] Testimonials module
+- [ ] Multi-language support (template ships en-GB/es-ES/fr-FR/zh-CN strings)
+- [ ] Breadcrumbs on inner pages
+- [ ] Admin area beyond profile (all bookings, safari management) — enforced by RLS
+- [ ] API services not surfaced in the app: payments (M-Pesa/Stripe live), webhooks, agents/partner portal, content sync
+
+## Config / Env to set before deploy
+- [ ] Vercel (booking app): NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY, NEXT_PUBLIC_SITE_URL
+- [ ] Supabase Auth: Site URL + Redirect URLs include /auth/callback
+- [ ] Supabase: expose `safari` schema in API settings (confirm saved)

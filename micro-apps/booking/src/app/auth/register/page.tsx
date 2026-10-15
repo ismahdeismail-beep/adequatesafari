@@ -2,41 +2,46 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { createClient } from '@/lib/supabase/client';
 import toast from 'react-hot-toast';
-import { api, isApiConfigured } from '@/lib/api';
-import { useAuthStore } from '@/lib/store';
 
+/**
+ * Minimal-data sign-up.
+ *
+ * We deliberately collect ONE field: the email address. Creating the account and
+ * signing in are the same action (a magic link), so there is no password to
+ * store or leak. Name and phone are only requested later, at booking time, and
+ * only where a trip actually requires them.
+ */
 export default function RegisterPage() {
-  const router = useRouter();
-  const setAuth = useAuthStore((s) => s.setAuth);
-  const [form, setForm] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: '',
-    password: '',
-  });
+  const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
+  const [sent, setSent] = useState(false);
 
-  const update = (key: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement>) =>
-    setForm((f) => ({ ...f, [key]: e.target.value }));
+  const configured = Boolean(
+    process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  );
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!isApiConfigured) {
-      toast.error('Registration is unavailable — the booking API is not configured for this deployment.');
+    if (!configured) {
+      toast.error('Sign-up is not configured for this deployment yet.');
       return;
     }
     setLoading(true);
     try {
-      const data = await api.register(form);
-      const payload = data?.data ?? data;
-      setAuth(payload.user, payload.accessToken, payload.refreshToken);
-      toast.success('Account created!');
-      router.push('/booking/my-bookings');
-    } catch {
-      toast.error('Could not create your account. Please try again.');
+      const supabase = createClient();
+      const { error } = await supabase.auth.signInWithOtp({
+        email,
+        options: {
+          shouldCreateUser: true,
+          emailRedirectTo: `${window.location.origin}/auth/callback`,
+        },
+      });
+      if (error) throw error;
+      setSent(true);
+    } catch (err: any) {
+      toast.error(err?.message || 'Could not send the sign-up link. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -45,55 +50,69 @@ export default function RegisterPage() {
   return (
     <section className="pb-20 pt-32">
       <div className="container-custom max-w-md">
-        <h1 className="text-center font-heading text-3xl font-bold text-safari-dusk">Create your account</h1>
-        <p className="mt-2 text-center text-gray-500">Book faster and keep all your trips in one place.</p>
+        <h1 className="text-center font-heading text-3xl font-bold text-safari-dusk">
+          Create your account
+        </h1>
+        <p className="mt-2 text-center text-gray-500">
+          We only need your email. No password, no forms to fill.
+        </p>
 
-        <form onSubmit={handleSubmit} className="mt-8 space-y-4 rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
-          <div className="grid gap-4 sm:grid-cols-2">
+        {sent ? (
+          <div className="mt-8 rounded-2xl border border-gray-100 bg-white p-6 text-center shadow-sm">
+            <p className="text-gray-700">
+              We sent a sign-in link to <strong>{email}</strong>
+            </p>
+            <p className="mt-2 text-sm text-gray-500">
+              Open it on this device to finish creating your account. Your name and
+              any trip details are only asked when you book.
+            </p>
+            <button
+              type="button"
+              onClick={() => setSent(false)}
+              className="mt-4 text-sm font-medium text-primary-600 hover:text-primary-700"
+            >
+              Use a different email
+            </button>
+          </div>
+        ) : (
+          <form
+            onSubmit={handleSubmit}
+            className="mt-8 space-y-4 rounded-2xl border border-gray-100 bg-white p-6 shadow-sm"
+          >
             <div>
-              <label htmlFor="firstName" className="mb-1 block text-sm font-medium text-gray-700">
-                First name
+              <label htmlFor="email" className="mb-1 block text-sm font-medium text-gray-700">
+                Email
               </label>
-              <input id="firstName" required value={form.firstName} onChange={update('firstName')} className="input-field" />
+              <input
+                id="email"
+                type="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="input-field"
+                autoComplete="email"
+                inputMode="email"
+                placeholder="you@example.com"
+              />
             </div>
-            <div>
-              <label htmlFor="lastName" className="mb-1 block text-sm font-medium text-gray-700">
-                Last name
-              </label>
-              <input id="lastName" required value={form.lastName} onChange={update('lastName')} className="input-field" />
-            </div>
-          </div>
-          <div>
-            <label htmlFor="email" className="mb-1 block text-sm font-medium text-gray-700">
-              Email
-            </label>
-            <input id="email" type="email" required value={form.email} onChange={update('email')} className="input-field" autoComplete="email" />
-          </div>
-          <div>
-            <label htmlFor="phone" className="mb-1 block text-sm font-medium text-gray-700">
-              Phone (optional)
-            </label>
-            <input id="phone" value={form.phone} onChange={update('phone')} className="input-field" autoComplete="tel" />
-          </div>
-          <div>
-            <label htmlFor="password" className="mb-1 block text-sm font-medium text-gray-700">
-              Password
-            </label>
-            <input
-              id="password"
-              type="password"
-              required
-              minLength={8}
-              value={form.password}
-              onChange={update('password')}
-              className="input-field"
-              autoComplete="new-password"
-            />
-          </div>
-          <button type="submit" disabled={loading} className="btn-primary w-full">
-            {loading ? 'Creating account…' : 'Create account'}
-          </button>
-        </form>
+
+            <button type="submit" disabled={loading} className="btn-primary w-full">
+              {loading ? 'Sending link…' : 'Continue with email'}
+            </button>
+
+            <p className="text-center text-xs text-gray-400">
+              By continuing you agree to our{' '}
+              <Link href="/terms" className="underline hover:text-gray-600">
+                Terms
+              </Link>{' '}
+              and{' '}
+              <Link href="/privacy" className="underline hover:text-gray-600">
+                Privacy Policy
+              </Link>
+              . We store your email to run your account — nothing else at sign-up.
+            </p>
+          </form>
+        )}
 
         <p className="mt-6 text-center text-sm text-gray-500">
           Already have an account?{' '}

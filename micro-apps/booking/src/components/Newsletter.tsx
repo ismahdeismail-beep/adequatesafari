@@ -2,16 +2,27 @@
 
 import { useState } from 'react';
 import { Mail } from 'lucide-react';
+import toast from 'react-hot-toast';
+import { subscribeNewsletter } from '@/lib/supabase/data';
 
 export function Newsletter() {
   const [email, setEmail] = useState('');
   const [done, setDone] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email) return;
-    setDone(true);
-    setEmail('');
+    setLoading(true);
+    try {
+      await subscribeNewsletter(email);
+      setDone(true);
+      setEmail('');
+    } catch {
+      toast.error('Could not subscribe right now. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -42,8 +53,8 @@ export function Newsletter() {
                 placeholder="you@example.com"
                 className="flex-1 rounded-lg border border-white/20 bg-white/10 px-4 py-3 text-white placeholder:text-white/60 focus:outline-none focus:ring-2 focus:ring-safari-gold"
               />
-              <button type="submit" className="btn-primary">
-                Subscribe
+              <button type="submit" disabled={loading} className="btn-primary">
+                {loading ? 'Subscribing…' : 'Subscribe'}
               </button>
             </form>
           )}

@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import toast from 'react-hot-toast';
+import { submitContact } from '@/lib/supabase/data';
 
 export function ContactForm() {
   const [form, setForm] = useState({ name: '', email: '', message: '' });
@@ -10,14 +11,18 @@ export function ContactForm() {
   const update = (key: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
     setForm((f) => ({ ...f, [key]: e.target.value }));
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
+    try {
+      await submitContact({ name: form.name, email: form.email, message: form.message });
       toast.success('Thanks — we’ll be in touch shortly.');
       setForm({ name: '', email: '', message: '' });
-    }, 600);
+    } catch {
+      toast.error('Sorry, we could not send that. Please try again or email us directly.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (

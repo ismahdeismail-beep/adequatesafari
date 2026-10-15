@@ -3,13 +3,14 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { api } from '@/lib/api';
-import { useAuthStore } from '@/lib/store';
+import { useCurrentUser } from '@/lib/auth';
 import { extractList } from '@/lib/mappers';
 import { formatCurrency, formatDate } from '@/lib/utils';
 import type { Booking } from '@/types';
 
 export default function MyBookingsPage() {
-  const { isAuthenticated } = useAuthStore();
+  const { user } = useCurrentUser();
+  const isAuthenticated = Boolean(user);
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(true);
 

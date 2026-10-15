@@ -4,8 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useState } from 'react';
 import { Menu, X, ChevronDown, User, CreditCard, LogOut } from 'lucide-react';
-import { useAuthStore } from '@/lib/store';
-import { api } from '@/lib/api';
+import { useCurrentUser, signOut } from '@/lib/auth';
 import { cn } from '@/lib/utils';
 
 const navItems = [
@@ -25,12 +24,16 @@ const userMenuItems = [
 export function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
-  const { isAuthenticated, user, clearAuth } = useAuthStore();
+  const { user } = useCurrentUser();
+  const isAuthenticated = Boolean(user);
+
+  const initial = (user?.firstName?.charAt(0) || user?.email?.charAt(0) || '?').toUpperCase();
+  const displayName = user?.firstName || user?.email || '';
 
   const handleLogout = async () => {
-    await api.logout();
-    clearAuth();
+    await signOut();
     setIsUserMenuOpen(false);
+    setIsMobileMenuOpen(false);
   };
 
   return (
@@ -72,18 +75,20 @@ export function Header() {
                   >
                     <div className="w-8 h-8 bg-primary-100 rounded-full flex items-center justify-center">
                       <span className="text-primary-700 font-medium text-sm">
-                        {user?.firstName?.charAt(0)}{user?.lastName?.charAt(0)}
+                        {initial}
                       </span>
                     </div>
-                    <span className="hidden sm:block">{user?.firstName}</span>
+                    <span className="hidden sm:block max-w-[10rem] truncate">{displayName}</span>
                     <ChevronDown className="w-4 h-4" />
                   </button>
 
                   {isUserMenuOpen && (
-                    <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-100 py-2">
+                    <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-100 py-2 z-50">
                       <div className="px-4 py-2 border-b border-gray-100">
-                        <p className="font-medium text-safari-dusk">{user?.firstName} {user?.lastName}</p>
-                        <p className="text-sm text-gray-500">{user?.email}</p>
+                        <p className="font-medium text-safari-dusk truncate">
+                          {`${user?.firstName ?? ''} ${user?.lastName ?? ''}`.trim() || 'Your account'}
+                        </p>
+                        <p className="text-sm text-gray-500 truncate">{user?.email}</p>
                       </div>
                       {userMenuItems.map((item) => (
                         <button
@@ -177,14 +182,21 @@ export function Header() {
                   <>
                     <Link
                       href="/auth/login"
-                      className="px-2 py-2 text-safari-dusk hover:text-primary-600 font-medium"
+                      className="px-4 py-3 text-safari-dusk hover:text-primary-600 font-medium min-h-[44px] flex items-center justify-center"
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
                       Login
                     </Link>
                     <Link
+                      href="/auth/login/otp"
+                      className="px-4 py-3 text-primary-600 hover:text-primary-700 font-medium border border-primary-600 rounded-lg min-h-[44px] flex items-center justify-center"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      Magic Link
+                    </Link>
+                    <Link
                       href="/auth/register"
-                      className="btn-primary text-center"
+                      className="btn-primary text-center px-4 py-3 min-h-[44px] flex items-center justify-center"
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
                       Sign Up

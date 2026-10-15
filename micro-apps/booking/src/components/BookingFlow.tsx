@@ -18,7 +18,8 @@ import toast from 'react-hot-toast';
 import { api, isApiConfigured } from '@/lib/api';
 import { safariToDetail } from '@/lib/mappers';
 import { getSampleSafari } from '@/lib/sample-data';
-import { useAuthStore, useBookingStore } from '@/lib/store';
+import { useBookingStore } from '@/lib/store';
+import { useCurrentUser } from '@/lib/auth';
 import { siteConfig } from '@/lib/site-config';
 import { cn, formatCurrency, generateBookingRef } from '@/lib/utils';
 import type { Booking, PassengerFormData, Safari, SafariDate, SafariDetailData } from '@/types';
@@ -184,7 +185,8 @@ function PassengerForm({
 
 export function BookingFlow({ initialSlug }: { initialSlug: string }) {
   const router = useRouter();
-  const { isAuthenticated, user } = useAuthStore();
+  const { user } = useCurrentUser();
+  const isAuthenticated = Boolean(user);
   const {
     selectedSafariDate,
     passengers,
