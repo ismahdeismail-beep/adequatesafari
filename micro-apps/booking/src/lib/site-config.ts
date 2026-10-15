@@ -4,6 +4,8 @@ export interface SiteConfig {
   whatsapp: string;
   email: string;
   address: string;
+  paybill: string;
+  paybillAccount: string;
 }
 
 export function whatsappLink(value: string): string {
@@ -18,4 +20,6 @@ export const siteConfig: SiteConfig = {
   whatsapp: process.env.NEXT_PUBLIC_CONTACT_WHATSAPP ?? '',
   email: process.env.NEXT_PUBLIC_CONTACT_EMAIL ?? '',
   address: process.env.NEXT_PUBLIC_CONTACT_ADDRESS ?? '',
+  paybill: process.env.NEXT_PUBLIC_PAYBILL ?? '',
+  paybillAccount: process.env.NEXT_PUBLIC_PAYBILL_ACCOUNT ?? '',
 };

@@ -11,6 +11,7 @@ import {
   Minus,
   Plus,
   ShieldCheck,
+  Smartphone,
   Users,
 } from 'lucide-react';
 import toast from 'react-hot-toast';
@@ -18,6 +19,7 @@ import { api } from '@/lib/api';
 import { safariToDetail } from '@/lib/mappers';
 import { getSampleSafari } from '@/lib/sample-data';
 import { useAuthStore, useBookingStore } from '@/lib/store';
+import { siteConfig } from '@/lib/site-config';
 import { cn, formatCurrency, generateBookingRef } from '@/lib/utils';
 import type { Booking, PassengerFormData, Safari, SafariDate, SafariDetailData } from '@/types';
 
@@ -806,6 +808,32 @@ export function BookingFlow({ initialSlug }: { initialSlug: string }) {
                     <li>● Your booking is confirmed once the deposit is received.</li>
                   </ul>
                 </div>
+
+                {siteConfig.paybill && (
+                  <div className="mx-auto mt-6 max-w-sm rounded-xl border border-primary-100 bg-primary-50/60 p-4 text-left">
+                    <p className="flex items-center gap-2 text-sm font-semibold text-safari-dusk">
+                      <Smartphone className="h-4 w-4 text-primary-600" />
+                      Pay your deposit via M-Pesa
+                    </p>
+                    <dl className="mt-3 space-y-1.5 text-sm">
+                      <div className="flex items-center justify-between">
+                        <dt className="text-gray-500">Paybill number</dt>
+                        <dd className="font-mono font-semibold text-safari-dusk">{siteConfig.paybill}</dd>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <dt className="text-gray-500">Account number</dt>
+                        <dd className="font-mono font-semibold text-safari-dusk">
+                          {siteConfig.paybillAccount || currentBooking.bookingRef}
+                        </dd>
+                      </div>
+                    </dl>
+                    <p className="mt-2 text-xs text-gray-500">
+                      In M-Pesa: Lipa na M-Pesa → Pay Bill → enter the paybill above, then use your
+                      reference <span className="font-mono">{currentBooking.bookingRef}</span> as the
+                      account number. Share the confirmation message with us to lock in your dates.
+                    </p>
+                  </div>
+                )}
 
                 <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
                   <Link
