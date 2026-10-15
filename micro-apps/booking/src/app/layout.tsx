@@ -3,6 +3,9 @@ import { Inter, Playfair_Display } from 'next/font/google';
 import './globals.css';
 import { Toaster } from 'react-hot-toast';
 import { Providers } from './providers';
+import { Header } from '@/components/Header';
+import { Footer } from '@/components/Footer';
+import { CookieConsent } from '@/components/CookieConsent';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -40,9 +43,20 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${inter.variable} ${playfair.variable}`}>
-      <body className="min-h-screen bg-white">
+      <body className="flex min-h-screen flex-col bg-white">
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[80] focus:rounded-lg focus:bg-white focus:px-4 focus:py-2 focus:shadow"
+        >
+          Skip to content
+        </a>
         <Providers>
-          {children}
+          <Header />
+          <main id="main-content" className="flex-1">
+            {children}
+          </main>
+          <Footer />
+          <CookieConsent />
           <Toaster
             position="top-right"
             toastOptions={{

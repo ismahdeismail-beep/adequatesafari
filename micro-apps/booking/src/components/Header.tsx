@@ -3,14 +3,16 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useState } from 'react';
-import { Menu, X, ChevronDown, User, CreditCard, LogOut } from 'lucide-react';
+import { Menu, X, ChevronDown, User, CreditCard, LogOut, Phone, Mail } from 'lucide-react';
 import { useCurrentUser, signOut } from '@/lib/auth';
+import { siteConfig } from '@/lib/site-config';
 import { cn } from '@/lib/utils';
 
 const navItems = [
   { label: 'Safaris', href: '/safaris' },
   { label: 'Destinations', href: '/destinations' },
-  { label: 'Special Offers', href: '/offers' },
+  { label: 'Deals', href: '/deals' },
+  { label: 'Gallery', href: '/gallery' },
   { label: 'About Us', href: '/about' },
   { label: 'Contact', href: '/contact' },
 ];
@@ -38,6 +40,27 @@ export function Header() {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-100">
+      {(siteConfig.phone || siteConfig.email) && (
+        <div className="hidden bg-safari-dusk text-white md:block">
+          <div className="container-custom flex items-center justify-between py-1.5 text-xs">
+            <div className="flex items-center gap-5">
+              {siteConfig.phone && (
+                <a href={`tel:${siteConfig.phone.replace(/\s/g, '')}`} className="inline-flex items-center gap-1.5 hover:text-safari-gold">
+                  <Phone className="h-3.5 w-3.5" aria-hidden />
+                  {siteConfig.phone}
+                </a>
+              )}
+              {siteConfig.email && (
+                <a href={`mailto:${siteConfig.email}`} className="inline-flex items-center gap-1.5 hover:text-safari-gold">
+                  <Mail className="h-3.5 w-3.5" aria-hidden />
+                  {siteConfig.email}
+                </a>
+              )}
+            </div>
+            <span className="text-white/70">Tailor-made safaris across East Africa</span>
+          </div>
+        </div>
+      )}
       <nav className="container-custom" aria-label="Main navigation">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
