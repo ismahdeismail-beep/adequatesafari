@@ -83,12 +83,20 @@ export default function LoginPage() {
           </button>
         </form>
 
-        <p className="mt-6 text-center text-sm text-gray-500">
-          Don’t have an account?{' '}
-          <Link href="/auth/register" className="font-medium text-primary-600 hover:text-primary-700">
-            Create one
-          </Link>
-        </p>
+        <div className="mt-6 space-y-2 text-center">
+          <p className="text-sm text-gray-500">
+            Don’t have an account?{' '}
+            <Link href="/auth/register" className="font-medium text-primary-600 hover:text-primary-700">
+              Create one
+            </Link>
+          </p>
+          <p className="text-sm text-gray-500">
+            Prefer no password?{' '}
+            <Link href="/auth/login/otp" className="font-medium text-primary-600 hover:text-primary-700">
+              Sign in with Magic Link
+            </Link>
+          </p>
+        </div>
       </div>
     </section>
   );
