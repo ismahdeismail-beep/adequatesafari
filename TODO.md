@@ -34,6 +34,7 @@
 - [x] Contact form integration with Supabase (safari.contact_submissions)
 - [x] Newsletter subscription (safari.newsletter_subscribers)
 - [x] Guest booking flow with minimal PII — no account needed; only a contact email (+ optional phone)
+- [x] Privacy-first traveller form — no ID/passport collected at booking (only names, optional DOB/nationality); inputs smoothed (autocomplete/inputMode/autocapitalize)
 - [ ] Booking management UI improvements
 - [ ] Remaining old-site gaps: non-resident landing pages (/kenya-short-stay-safari, /tanzania-safaris, /uganda-safari-tours), blog article bodies migrated, site-wide search, multi-language
 
