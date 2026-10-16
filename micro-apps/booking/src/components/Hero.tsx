@@ -118,12 +118,15 @@ export function Hero() {
               </h1>
               <p className="mt-4 max-w-xl text-lg text-white/90">{slide.subtext}</p>
               <div className="mt-8 flex flex-wrap gap-3">
-                <Link href={slide.cta.href} className="btn-primary text-base">
+                <Link
+                  href={slide.cta.href}
+                  className="btn-primary min-h-[44px] text-base"
+                >
                   {slide.cta.label}
                 </Link>
                 <Link
                   href="/safaris"
-                  className="rounded-lg border border-white/40 px-6 py-3 font-medium text-white transition-colors hover:bg-white/10"
+                  className="inline-flex min-h-[44px] items-center rounded-lg border border-white/40 px-6 py-3 font-medium text-white transition-colors hover:bg-white/10"
                 >
                   Explore all safaris
                 </Link>

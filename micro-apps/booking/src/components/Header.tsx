@@ -154,7 +154,7 @@ export function Header() {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="p-2 text-safari-dusk hover:text-primary-600 lg:hidden"
+            className="flex h-11 w-11 items-center justify-center rounded-lg text-safari-dusk hover:text-primary-600 lg:hidden"
             aria-expanded={isMobileMenuOpen}
             aria-controls="mobile-menu"
             aria-label="Toggle menu"
