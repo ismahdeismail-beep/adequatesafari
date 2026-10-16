@@ -175,26 +175,11 @@ function PassengerForm({
             placeholder="e.g. 34"
           />
         </div>
-        <div>
-          <label className="mb-1 block text-xs font-medium text-gray-500">
-            Nationality <span className="text-gray-400">(optional)</span>
-          </label>
-          <input
-            value={passenger.nationality ?? ''}
-            onChange={(e) => onChange({ nationality: e.target.value })}
-            autoCapitalize="words"
-            autoCorrect="off"
-            autoComplete="off"
-            className="input-field"
-            placeholder="e.g. Kenyan"
-          />
-        </div>
       </div>
       <p className="mt-3 flex items-start gap-2 rounded-lg border border-safari-sand bg-safari-sand/40 px-3 py-2 text-xs text-gray-600">
         <ShieldCheck className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary-700" />
-        We only ask for a name and an (optional) age — no ID, passport or document details. Want a
-        birthday, anniversary or special treat? Just mention it in the Special requests on the next
-        step.
+        We only need a name and (optionally) an age — no IDs, passport, or documents. Special
+        occasion? Mention it in the next step.
       </p>
     </div>
   );
@@ -364,7 +349,6 @@ export function BookingFlow({ initialSlug }: { initialSlug: string }) {
           passengers: passengers.map((p) => ({
             firstName: p.firstName,
             lastName: p.lastName,
-            nationality: p.nationality,
             specialNeeds: p.age ? `Age ${p.age}${p.specialNeeds ? ` — ${p.specialNeeds}` : ''}` : p.specialNeeds,
           })),
         });
@@ -395,7 +379,6 @@ export function BookingFlow({ initialSlug }: { initialSlug: string }) {
             bookingId: `preview-${Date.now()}`,
             firstName: p.firstName,
             lastName: p.lastName,
-            nationality: p.nationality,
             specialNeeds: p.age ? `Age ${p.age}${p.specialNeeds ? ` — ${p.specialNeeds}` : ''}` : p.specialNeeds,
             isLead: i === 0,
           })),
@@ -410,7 +393,6 @@ export function BookingFlow({ initialSlug }: { initialSlug: string }) {
           passengers: passengers.map((p, i) => ({
             firstName: p.firstName,
             lastName: p.lastName,
-            nationality: p.nationality,
             specialNeeds: p.age ? `Age ${p.age}${p.specialNeeds ? ` — ${p.specialNeeds}` : ''}` : p.specialNeeds,
             isLead: i === 0,
           })),
@@ -776,7 +758,6 @@ export function BookingFlow({ initialSlug }: { initialSlug: string }) {
                       <li key={i} className="flex items-center gap-2">
                         <Check className="h-4 w-4 shrink-0 text-emerald-500" />
                         {p.firstName} {p.lastName}
-                        {p.nationality && <span className="text-gray-400">· {p.nationality}</span>}
                         {i === 0 && <span className="text-xs text-gray-400">(lead)</span>}
                       </li>
                     ))}
