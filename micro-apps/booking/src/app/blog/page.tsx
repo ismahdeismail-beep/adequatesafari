@@ -26,10 +26,8 @@ export default function BlogPage() {
         <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {articles.map((article) => (
             <article key={article.slug} className="card group flex flex-col overflow-hidden">
-              <a
-                href={article.href}
-                target="_blank"
-                rel="noopener noreferrer"
+              <Link
+                href={`/blog/${article.slug}`}
                 className="relative block aspect-[4/3] overflow-hidden bg-safari-sand"
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -40,32 +38,28 @@ export default function BlogPage() {
                   decoding="async"
                   className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                 />
-              </a>
+              </Link>
               <div className="flex flex-1 flex-col p-5">
                 <p className="flex items-center gap-1.5 text-xs font-medium uppercase tracking-wide text-gray-400">
                   <CalendarDays className="h-3.5 w-3.5" aria-hidden />
                   {article.date} {article.year}
                 </p>
                 <h2 className="mt-2 font-heading text-lg font-bold text-safari-dusk">
-                  <a
-                    href={article.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                  <Link
+                    href={`/blog/${article.slug}`}
                     className="hover:text-primary-600"
                   >
                     {article.title}
-                  </a>
+                  </Link>
                 </h2>
                 <p className="mt-3 text-sm leading-relaxed text-gray-600">{article.excerpt}</p>
-                <a
-                  href={article.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <Link
+                  href={`/blog/${article.slug}`}
                   className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-primary-600 hover:text-primary-700"
                 >
                   Read the full write-up
                   <ArrowUpRight className="h-4 w-4" aria-hidden />
-                </a>
+                </Link>
               </div>
             </article>
           ))}
