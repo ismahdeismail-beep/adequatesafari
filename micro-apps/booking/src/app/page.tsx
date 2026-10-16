@@ -9,6 +9,7 @@ import { Newsletter } from '@/components/Newsletter';
 import { DealsMarquee, type MarqueeDeal } from '@/components/DealsMarquee';
 import { FaqAccordion } from '@/components/FaqAccordion';
 import { dealGroups, getDealGroup, type DealCategory } from '@/lib/deals';
+import { services } from '@/lib/services';
 import { articles } from '@/lib/blog';
 import { faqs } from '@/lib/faqs';
 
@@ -90,6 +91,48 @@ export default function HomePage() {
       />
 
       <FeaturedSafaris />
+
+      {/* What we do — the services the app surfaces beyond the safari itself. */}
+      <section className="py-12">
+        <div className="container-custom">
+          <div className="flex flex-wrap items-end justify-between gap-4">
+            <div>
+              <h2 className="font-heading text-2xl font-bold text-safari-dusk sm:text-3xl">
+                More than safari
+              </h2>
+              <p className="mt-2 text-gray-500">
+                Beaches, mountains, celebrations and the practical bits — all arranged for you
+              </p>
+            </div>
+            <Link
+              href="/services"
+              className="text-sm font-medium text-primary-600 hover:text-primary-700"
+            >
+              All our services →
+            </Link>
+          </div>
+
+          <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {services.slice(0, 6).map((service) => (
+              <Link
+                key={service.slug}
+                href={service.href ?? '/services'}
+                className="card group flex flex-col p-6"
+              >
+                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary-100">
+                  <service.icon className="h-6 w-6 text-primary-700" />
+                </div>
+                <h3 className="mt-4 font-heading text-lg font-semibold text-safari-dusk group-hover:text-primary-600">
+                  {service.title}
+                </h3>
+                <p className="mt-2 flex-1 text-sm leading-relaxed text-gray-600">
+                  {service.description}
+                </p>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
 
       <DealsMarquee
         title="Adequate Non-Residents Specials"

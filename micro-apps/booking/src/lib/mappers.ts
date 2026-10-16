@@ -43,6 +43,7 @@ export function safariToCard(safari: Safari): SafariCardData {
       ? safari.country.charAt(0) + safari.country.slice(1).toLowerCase()
       : undefined,
     featured: safari.isFeatured,
+    safariStyle: safari.safariStyle,
   };
 }
 

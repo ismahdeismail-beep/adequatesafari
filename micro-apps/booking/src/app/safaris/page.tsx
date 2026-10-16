@@ -12,5 +12,5 @@ export default function SafarisPage({
   searchParams: { [key: string]: string | string[] | undefined };
 }) {
   const first = (v: string | string[] | undefined) => (Array.isArray(v) ? v[0] : v) ?? '';
-  return <SafariListing initialSearch={first(searchParams.search)} initialCountry={first(searchParams.country)} />;
+  return <SafariListing initialSearch={first(searchParams.search)} initialCountry={first(searchParams.country)} initialStyle={first(searchParams.style)} />;
 }

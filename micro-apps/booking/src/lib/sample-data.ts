@@ -1,6 +1,6 @@
 import type { SafariCardData, SafariDetailData } from '@/types';
 
-export const sampleSafaris: SafariCardData[] = [
+const sampleSafariCards: SafariCardData[] = [
   {
     slug: 'great-migration-special',
     title: 'Great Migration Special',
@@ -350,6 +350,50 @@ export const sampleSafaris: SafariCardData[] = [
     country: 'Kenya',
   },
 ];
+
+/**
+ * Safari style per sample itinerary, used by the listing's style filter and to
+ * keep "Flying safaris", "Mountain climbing" etc. from the old site reachable.
+ */
+const STYLE_BY_SLUG: Record<string, string> = {
+  'great-migration-special': 'LODGE_SAFARI',
+  'mount-kenya-sirimon-route': 'MOUNTAIN_CLIMB',
+  'tented-camp-safari': 'LODGE_SAFARI',
+  'lodge-tented-camp-collection': 'LODGE_SAFARI',
+  'bwindi-gorilla-trekking': 'WALKING_TREKKING',
+  'leopard-photographic-safari': 'LODGE_SAFARI',
+  'amboseli-kilimanjaro-views': 'LODGE_SAFARI',
+  'lake-nakuru-flamingos': 'SHORT_EXCURSION',
+  'samburu-gerenuk-special': 'LODGE_SAFARI',
+  'ngorongoro-crater-serengeti': 'LODGE_SAFARI',
+  'zanzibar-beach-extension': 'FLYING_SAFARI',
+  'christmas-bush-holiday': 'LODGE_SAFARI',
+  'diani-beach-escape': 'FLYING_SAFARI',
+  'nairobi-staycation': 'SHORT_EXCURSION',
+  'great-lakes-staycation': 'SHORT_EXCURSION',
+  'masai-mara-group-joining': 'CAMPING_SAFARI',
+  'serengeti-classic-safari': 'LODGE_SAFARI',
+  'kilimanjaro-lemosho-climb': 'MOUNTAIN_CLIMB',
+  'rwanda-gorilla-trekking': 'WALKING_TREKKING',
+  'mauritius-island-escape': 'LODGE_SAFARI',
+  'maldives-island-escape': 'LODGE_SAFARI',
+  'seychelles-island-escape': 'LODGE_SAFARI',
+  'bali-island-escape': 'CULTURAL',
+  'dubai-city-escape': 'SHORT_EXCURSION',
+  'europe-epic-tour': 'CULTURAL',
+  'turkey-istanbul-cappadocia': 'CULTURAL',
+  'thailand-bangkok-pattaya': 'CULTURAL',
+  'kuala-lumpur-singapore': 'CULTURAL',
+  'cape-town-family-vacation': 'CULTURAL',
+  'jordan-timeless-treasures': 'CULTURAL',
+  'egypt-nile-cruise': 'CULTURAL',
+  'corporate-team-retreat': 'LODGE_SAFARI',
+};
+
+export const sampleSafaris: SafariCardData[] = sampleSafariCards.map((safari) => ({
+  ...safari,
+  safariStyle: STYLE_BY_SLUG[safari.slug] ?? 'LODGE_SAFARI',
+}));
 
 const defaultItinerary = (days: number): SafariDetailData['itinerary'] =>
   Array.from({ length: days }).map((_, i) => ({

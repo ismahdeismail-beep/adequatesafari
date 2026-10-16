@@ -11,6 +11,7 @@ import { SafariCard } from './SafariCard';
 interface SafariListingProps {
   initialSearch?: string;
   initialCountry?: string;
+  initialStyle?: string;
 }
 
 const countries = [
@@ -35,9 +36,25 @@ const countries = [
 
 type SortKey = 'featured' | 'price-asc' | 'price-desc' | 'duration';
 
-export function SafariListing({ initialSearch = '', initialCountry = '' }: SafariListingProps) {
+const styles = [
+  { value: '', label: 'All styles' },
+  { value: 'LODGE_SAFARI', label: 'Lodge safari' },
+  { value: 'CAMPING_SAFARI', label: 'Camping safari' },
+  { value: 'FLYING_SAFARI', label: 'Flying safari' },
+  { value: 'WALKING_TREKKING', label: 'Walking / trekking' },
+  { value: 'MOUNTAIN_CLIMB', label: 'Mountain climbing' },
+  { value: 'SHORT_EXCURSION', label: 'Short excursion' },
+  { value: 'CULTURAL', label: 'Cultural' },
+];
+
+export function SafariListing({
+  initialSearch = '',
+  initialCountry = '',
+  initialStyle = '',
+}: SafariListingProps) {
   const [search, setSearch] = useState(initialSearch);
   const [country, setCountry] = useState(initialCountry.toUpperCase());
+  const [style, setStyle] = useState(initialStyle.toUpperCase());
   const [sort, setSort] = useState<SortKey>('featured');
   const [remote, setRemote] = useState<SafariCardData[] | null>(null);
   const [loading, setLoading] = useState(true);
@@ -72,19 +89,20 @@ export function SafariListing({ initialSearch = '', initialCountry = '' }: Safar
     const term = search.trim().toLowerCase();
     const filtered = base.filter((s) => {
       const matchesCountry = !country || (s.country ?? '').toUpperCase() === country;
+      const matchesStyle = !style || (s.safariStyle ?? '').toUpperCase() === style;
       const matchesTerm =
         !term ||
         s.title.toLowerCase().includes(term) ||
         s.excerpt.toLowerCase().includes(term) ||
         (s.country ?? '').toLowerCase().includes(term);
-      return matchesCountry && matchesTerm;
+      return matchesCountry && matchesStyle && matchesTerm;
     });
     const sorted = [...filtered];
     if (sort === 'price-asc') sorted.sort((a, b) => (a.price ?? 0) - (b.price ?? 0));
     if (sort === 'price-desc') sorted.sort((a, b) => (b.price ?? 0) - (a.price ?? 0));
     if (sort === 'duration') sorted.sort((a, b) => (a.durationDays ?? 0) - (b.durationDays ?? 0));
     return sorted;
-  }, [remote, search, country, sort]);
+  }, [remote, search, country, style, sort]);
 
   return (
     <section className="pb-16 pt-28">
@@ -116,6 +134,18 @@ export function SafariListing({ initialSearch = '', initialCountry = '' }: Safar
               {countries.map((c) => (
                 <option key={c.value} value={c.value}>
                   {c.label}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="sm:w-52">
+            <label htmlFor="style" className="mb-1 block text-sm font-medium text-gray-700">
+              Style
+            </label>
+            <select id="style" value={style} onChange={(e) => setStyle(e.target.value)} className="input-field">
+              {styles.map((s) => (
+                <option key={s.value} value={s.value}>
+                  {s.label}
                 </option>
               ))}
             </select>

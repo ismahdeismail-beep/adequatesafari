@@ -13,6 +13,7 @@ const navItems = [
   { label: 'Safaris', href: '/safaris' },
   { label: 'Destinations', href: '/destinations' },
   { label: 'Deals', href: '/deals' },
+  { label: 'Services', href: '/services' },
   { label: 'Gallery', href: '/gallery' },
   { label: 'About Us', href: '/about' },
   { label: 'Contact', href: '/contact' },
@@ -77,7 +78,7 @@ export function Header() {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
+          <div className="hidden items-center space-x-6 lg:flex">
             {navItems.map((item) => (
               <Link
                 key={item.href}
@@ -153,7 +154,7 @@ export function Header() {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden p-2 text-safari-dusk hover:text-primary-600"
+            className="p-2 text-safari-dusk hover:text-primary-600 lg:hidden"
             aria-expanded={isMobileMenuOpen}
             aria-controls="mobile-menu"
             aria-label="Toggle menu"
@@ -164,7 +165,7 @@ export function Header() {
 
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
-          <div id="mobile-menu" className="md:hidden py-4 border-t border-gray-100 animate-slide-in-right">
+          <div id="mobile-menu" className="py-4 border-t border-gray-100 animate-slide-in-right lg:hidden">
             <div className="flex flex-col space-y-4">
               {navItems.map((item) => (
                 <Link
@@ -215,13 +216,6 @@ export function Header() {
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
                       Login
-                    </Link>
-                    <Link
-                      href="/auth/login/otp"
-                      className="px-4 py-3 text-primary-600 hover:text-primary-700 font-medium border border-primary-600 rounded-lg min-h-[44px] flex items-center justify-center"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                    >
-                      Magic Link
                     </Link>
                     <Link
                       href="/auth/register"

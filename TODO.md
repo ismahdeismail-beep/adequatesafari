@@ -26,11 +26,16 @@
 - [x] Auth flow verified end-to-end — email+password signup and sign-in both return a session (magic-link rate limit no longer blocks signup)
 
 ## Services/Features from Old Site
-- [ ] Compare and restore missing services/features from Joomla site
-- [ ] Contact form integration with Supabase (safari.contact_submissions)
-- [ ] Newsletter subscription (safari.newsletter_subscribers)
+- [x] Compare the old site's menu/services against the app and close the gaps (see below)
+- [x] Dedicated `/services` page — tailor-made planning, beach & coastal, fly-in safaris, mountain trekking, themed holidays, corporate & group travel, excursions, gorilla trekking, international holidays, transfers & hotel booking, car hire, visa/documents
+- [x] `/offers` rebuilt to surface every live offer collection (residents, non-residents, themed, corporate, international) with KSH+USD prices
+- [x] Safari **style** filter (Lodge, Camping, Flying, Trekking, Mountain climbing, Excursion, Cultural) — footer/deal `?style=` links now actually filter
+- [x] "More than safari" services strip on the home page; Services added to header nav + footer
+- [x] Contact form integration with Supabase (safari.contact_submissions)
+- [x] Newsletter subscription (safari.newsletter_subscribers)
 - [x] Guest booking flow with minimal PII — no account needed; only a contact email (+ optional phone)
 - [ ] Booking management UI improvements
+- [ ] Remaining old-site gaps: non-resident landing pages (/kenya-short-stay-safari, /tanzania-safaris, /uganda-safari-tours), blog article bodies migrated, site-wide search, multi-language
 
 ## Supabase Integration
 - [x] Schema created: profiles, bookings, passengers, contact_submissions, newsletter_subscribers
@@ -48,8 +53,7 @@
 - [ ] Update Vercel env vars if needed (NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY)
 
 ## Low Priority
-- [ ] Remove password-based login entirely (keep magic link only) - user choice pending
-- [ ] Add passwordless registration flow
+- [ ] Optional: passwordless sign-in (magic link / email OTP) as an alternative to email + password
 - [ ] Improve error messages and loading states
 
 ## Auth / Signup (email + password)
@@ -89,6 +93,9 @@
 - [ ] Site search (com_finder equivalent) — SearchSection searches safaris only
 - [x] Currency switcher (KSH/USD) — header switcher (desktop + mobile), prices rendered in both currencies
 - [x] Home page — popular destinations, "Adequate Residents Deals" + "Adequate Non-Residents Specials" moving carousels, international packages, journal, FAQ accordion
+- [x] Services — `/services` page (12 services) + "More than safari" strip on home + header/footer links
+- [x] Offers — `/offers` now surfaces every live collection (residents, non-residents, themed, corporate, international) with prices
+- [x] Safari style filter — Lodge/Camping/Flying/Trekking/Mountain climbing/Excursion/Cultural; `?style=` links now filter
 - [x] App identity — web manifest + icon set generated from the old website's own files
 - [ ] Deal prices — full KSH/USD table for every safari (specials carry the live pair; other safaris derive KSH at the fixed rate)
 - [x] Guest booking ("Continue as Guest") — app now allows it: guests book + pay via paybill; sign-in optional (saves details, unlocks "My bookings")

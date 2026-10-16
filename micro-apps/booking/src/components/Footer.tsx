@@ -16,6 +16,7 @@ const footerLinks = [
     title: 'Company',
     links: [
       { label: 'About Us', href: '/about' },
+      { label: 'Our Services', href: '/services' },
       { label: 'Destinations', href: '/destinations' },
       { label: 'Holiday Deals', href: '/deals' },
       { label: 'Themed Holidays', href: '/deals/themed' },

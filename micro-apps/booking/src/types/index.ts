@@ -172,6 +172,8 @@ export interface SafariCardData {
   durationDays?: number;
   country?: string;
   featured?: boolean;
+  /** Safari style code (see `Safari['safariStyle']`) used by the listing filter. */
+  safariStyle?: string;
 }
 
 export interface SafariDetailData extends SafariCardData {
