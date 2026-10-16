@@ -2,21 +2,23 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 import toast from 'react-hot-toast';
 
 /**
- * Minimal-data sign-up.
+ * Email + password sign-up.
  *
- * We deliberately collect ONE field: the email address. Creating the account and
- * signing in are the same action (a magic link), so there is no password to
- * store or leak. Name and phone are only requested later, at booking time, and
- * only where a trip actually requires them.
+ * Supabase has autoconfirm enabled, so creating the account and signing in
+ * happen in one step — no confirmation email is required. Name and phone are
+ * only requested later, at booking time, and only where a trip needs them.
  */
 export default function RegisterPage() {
+  const router = useRouter();
   const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirm, setConfirm] = useState('');
   const [loading, setLoading] = useState(false);
-  const [sent, setSent] = useState(false);
 
   const configured = Boolean(
     process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
@@ -28,20 +30,30 @@ export default function RegisterPage() {
       toast.error('Sign-up is not configured for this deployment yet.');
       return;
     }
+    if (password.length < 6) {
+      toast.error('Password must be at least 6 characters.');
+      return;
+    }
+    if (password !== confirm) {
+      toast.error('Passwords do not match.');
+      return;
+    }
     setLoading(true);
     try {
       const supabase = createClient();
-      const { error } = await supabase.auth.signInWithOtp({
-        email,
-        options: {
-          shouldCreateUser: true,
-          emailRedirectTo: `${window.location.origin}/auth/callback`,
-        },
-      });
+      const { data, error } = await supabase.auth.signUp({ email, password });
       if (error) throw error;
-      setSent(true);
+      // Autoconfirm is on, so signUp returns a session immediately.
+      if (data.session) {
+        toast.success('Account created — you are signed in.');
+        router.push('/account/profile');
+        router.refresh();
+      } else {
+        toast.success('Account created. You can sign in now.');
+        router.push('/auth/login');
+      }
     } catch (err: any) {
-      toast.error(err?.message || 'Could not send the sign-up link. Please try again.');
+      toast.error(err?.message || 'Could not create your account. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -54,65 +66,80 @@ export default function RegisterPage() {
           Create your account
         </h1>
         <p className="mt-2 text-center text-gray-500">
-          We only need your email. No password, no forms to fill.
+          Set an email and password to track your bookings.
         </p>
 
-        {sent ? (
-          <div className="mt-8 rounded-2xl border border-gray-100 bg-white p-6 text-center shadow-sm">
-            <p className="text-gray-700">
-              We sent a sign-in link to <strong>{email}</strong>
-            </p>
-            <p className="mt-2 text-sm text-gray-500">
-              Open it on this device to finish creating your account. Your name and
-              any trip details are only asked when you book.
-            </p>
-            <button
-              type="button"
-              onClick={() => setSent(false)}
-              className="mt-4 text-sm font-medium text-primary-600 hover:text-primary-700"
-            >
-              Use a different email
-            </button>
+        <form
+          onSubmit={handleSubmit}
+          className="mt-8 space-y-4 rounded-2xl border border-gray-100 bg-white p-6 shadow-sm"
+        >
+          <div>
+            <label htmlFor="email" className="mb-1 block text-sm font-medium text-gray-700">
+              Email
+            </label>
+            <input
+              id="email"
+              type="email"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="input-field"
+              autoComplete="email"
+              inputMode="email"
+              placeholder="you@example.com"
+            />
           </div>
-        ) : (
-          <form
-            onSubmit={handleSubmit}
-            className="mt-8 space-y-4 rounded-2xl border border-gray-100 bg-white p-6 shadow-sm"
-          >
-            <div>
-              <label htmlFor="email" className="mb-1 block text-sm font-medium text-gray-700">
-                Email
-              </label>
-              <input
-                id="email"
-                type="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="input-field"
-                autoComplete="email"
-                inputMode="email"
-                placeholder="you@example.com"
-              />
-            </div>
 
-            <button type="submit" disabled={loading} className="btn-primary w-full">
-              {loading ? 'Sending link…' : 'Continue with email'}
-            </button>
+          <div>
+            <label htmlFor="password" className="mb-1 block text-sm font-medium text-gray-700">
+              Password
+            </label>
+            <input
+              id="password"
+              type="password"
+              required
+              minLength={6}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="input-field"
+              autoComplete="new-password"
+              placeholder="At least 6 characters"
+            />
+          </div>
 
-            <p className="text-center text-xs text-gray-400">
-              By continuing you agree to our{' '}
-              <Link href="/terms" className="underline hover:text-gray-600">
-                Terms
-              </Link>{' '}
-              and{' '}
-              <Link href="/privacy" className="underline hover:text-gray-600">
-                Privacy Policy
-              </Link>
-              . We store your email to run your account — nothing else at sign-up.
-            </p>
-          </form>
-        )}
+          <div>
+            <label htmlFor="confirm" className="mb-1 block text-sm font-medium text-gray-700">
+              Confirm password
+            </label>
+            <input
+              id="confirm"
+              type="password"
+              required
+              minLength={6}
+              value={confirm}
+              onChange={(e) => setConfirm(e.target.value)}
+              className="input-field"
+              autoComplete="new-password"
+              placeholder="Repeat your password"
+            />
+          </div>
+
+          <button type="submit" disabled={loading} className="btn-primary w-full">
+            {loading ? 'Creating account…' : 'Create account'}
+          </button>
+
+          <p className="text-center text-xs text-gray-400">
+            By continuing you agree to our{' '}
+            <Link href="/terms" className="underline hover:text-gray-600">
+              Terms
+            </Link>{' '}
+            and{' '}
+            <Link href="/privacy" className="underline hover:text-gray-600">
+              Privacy Policy
+            </Link>
+            . We store your email to run your account — nothing else at sign-up.
+          </p>
+        </form>
 
         <p className="mt-6 text-center text-sm text-gray-500">
           Already have an account?{' '}
