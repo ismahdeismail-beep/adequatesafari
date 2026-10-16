@@ -48,7 +48,7 @@ export default function RegisterPage() {
         router.push('/auth/login');
       }
     } catch (err: any) {
-      toast.error(err?.message || 'Could not create your account. Please try again.');
+      toast.error(err?.message || 'Could not create your account — please check the details and try again.');
     } finally {
       setLoading(false);
     }
@@ -85,7 +85,7 @@ export default function RegisterPage() {
                 type="email"
                 required
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => setEmail(e.target.value.trim())}
                 autoComplete="email"
                 inputMode="email"
                 placeholder="you@example.com"

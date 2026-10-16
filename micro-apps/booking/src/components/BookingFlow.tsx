@@ -403,8 +403,8 @@ export function BookingFlow({ initialSlug }: { initialSlug: string }) {
       setBookingStep('confirmation');
       window.scrollTo({ top: 0, behavior: 'smooth' });
       toast.success('Booking received — pay your deposit to confirm your place.');
-    } catch {
-      toast.error('We could not create the booking. Please try again.');
+    } catch (err: any) {
+      toast.error(err?.message || 'We could not create your booking — please check your connection and try again.');
     } finally {
       setIsSubmitting(false);
     }

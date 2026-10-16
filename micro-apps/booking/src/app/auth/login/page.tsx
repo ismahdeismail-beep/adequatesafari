@@ -35,7 +35,7 @@ function LoginForm() {
       router.push(next);
       router.refresh();
     } catch (err: any) {
-      toast.error(err?.message || 'Could not sign in. Check your email and password.');
+      toast.error(err?.message || 'Could not sign in — please check your email and password.');
     } finally {
       setLoading(false);
     }
@@ -74,7 +74,7 @@ function LoginForm() {
                 type="email"
                 required
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => setEmail(e.target.value.trim())}
                 autoComplete="email"
                 inputMode="email"
                 placeholder="you@example.com"
