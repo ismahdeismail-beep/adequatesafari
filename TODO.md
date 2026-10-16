@@ -21,7 +21,7 @@
 ## In Progress
 - [x] Mobile quick actions: Call / WhatsApp / Book bar on phones (`MobileActionBar`)
 - [x] Currency switcher in header (desktop + mobile menu) — KSH/USD
-- [ ] Improve mobile UX: login/register buttons sizing for phones
+- [x] Improve mobile UX: login/register buttons sizing for phones
 - [ ] Fix overlaying issues (z-index, modals, mobile nav, hero CTAs)
 - [ ] Verify mobile menu works properly across devices
 - [x] Auth flow verified end-to-end — email+password signup and sign-in both return a session (magic-link rate limit no longer blocks signup)
@@ -37,14 +37,14 @@
 - [x] Guest booking flow with minimal PII — no account needed; only a contact email (+ optional phone)
 - [x] Privacy-first traveller form — no ID/passport collected at booking (only names, optional DOB/nationality); inputs smoothed (autocomplete/inputMode/autocapitalize)
 - [ ] Booking management UI improvements
-- [ ] Remaining old-site gaps: non-resident landing pages (/kenya-short-stay-safari, /tanzania-safaris, /uganda-safari-tours), blog article bodies migrated, site-wide search, multi-language
+- [ ] Remaining old-site gaps: blog article bodies migrated, site-wide search (now /search), multi-language (partial: new routes created; content depth still open)
 
 ## Supabase Integration
 - [x] Schema created: profiles, bookings, passengers, contact_submissions, newsletter_subscribers
 - [x] RLS policies configured
 - [x] Wire booking submission to Supabase (`.schema('safari')`) — bookings + passengers saved on confirm; client-generated id so guests can book
-- [ ] Wire contact form to Supabase
-- [ ] Wire newsletter to Supabase
+- [x] Wire contact form to Supabase (safari.contact_submissions)
+- [x] Wire newsletter to Supabase (safari.newsletter_subscribers)
 - [x] Guest + signed-in booking both supported: guests can book (anon INSERT grants + `passengers_insert_guest` policy added); signed-in users get saved details + "My bookings"(RLS by `auth.uid()`/`auth.email()`)
 - [ ] Anonymous inserts are open (spam risk) — add rate-limit / captcha or move creation to a server route with the service role
 
@@ -52,7 +52,7 @@
 - [ ] Test on mobile devices (iOS/Android)
 - [ ] Verify all pages load without console errors
 - [ ] Type check/build verification
-- [ ] Update Vercel env vars if needed (NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY)
+- [x] Update Vercel env vars if needed (NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY, +NEXT_PUBLIC_DEPOSIT_PERCENT)
 
 ## Low Priority
 - [ ] Optional: passwordless sign-in (magic link / email OTP) as an alternative to email + password
@@ -92,7 +92,7 @@
 - [x] International — /deals/international (14 destinations, incl. Dubai, Bali, Europe, China, USA)
 - [x] Blog listing — /blog rebuilt as the live 3-column journal (10 camp/lodge write-ups)
 - [ ] Blog article bodies — cards currently link out to WordPress; migrate the text
-- [ ] Site search (com_finder equivalent) — SearchSection searches safaris only
+- [x] Site search (com_finder equivalent) — /search indexes safaris + deals + services; SearchSection on /safaris still safaris-only
 - [x] Currency switcher (KSH/USD) — header switcher (desktop + mobile), prices rendered in both currencies
 - [x] Home page — popular destinations, "Adequate Residents Deals" + "Adequate Non-Residents Specials" moving carousels, international packages, journal, FAQ accordion
 - [x] Services — `/services` page (12 services) + "More than safari" strip on home + header/footer links
@@ -102,7 +102,7 @@
 - [ ] Deal prices — full KSH/USD table for every safari (specials carry the live pair; other safaris derive KSH at the fixed rate)
 - [x] Guest booking ("Continue as Guest") — app now allows it: guests book + pay via paybill; sign-in optional (saves details, unlocks "My bookings")
 - [ ] Deals taxonomy from /adequate-holiday-deals/ (15 destination groups: Mount Kenya, Maasai Mara, Naivasha, Amboseli, Watamu, Diani, Mombasa, South Africa, Seychelles, Mauritius, Maldives, Thailand, Malaysia, Bali, Dubai)
-- [ ] Non-resident landing pages: /kenya-short-stay-safari/, /tanzania-safaris-2/, /uganda-safari-tours/
+- [x] Non-resident landing pages: /kenya-short-stay-safari/, /tanzania-safaris-2/, /uganda-safari-tours/
 - [ ] Multi-language support (template ships en-GB/es-ES/fr-FR/zh-CN strings)
 - [ ] Admin area beyond profile (all bookings, safari management) — enforced by RLS
 - [ ] API services not surfaced in the app: payments (M-Pesa/Stripe live), webhooks, agents/partner portal, content sync
