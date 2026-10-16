@@ -3,11 +3,22 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { api } from '@/lib/api';
-import { useCurrentUser } from '@/lib/auth';
+import { isSupabaseConfigured, useCurrentUser } from '@/lib/auth';
+import { getMyBookings as getSupabaseBookings } from '@/lib/supabase/bookings';
+import { getSampleSafari } from '@/lib/sample-data';
 import { extractList } from '@/lib/mappers';
 import { formatDate } from '@/lib/utils';
 import { formatAmount as formatCurrency } from '@/lib/currency';
 import type { Booking } from '@/types';
+
+/** Attach the catalogue title to a stored booking (the catalog itself is static). */
+function withSafariTitle(booking: Booking): Booking {
+  if (booking.safari?.title) return booking;
+  const sample = booking.safariId ? getSampleSafari(booking.safariId) : undefined;
+  return sample
+    ? { ...booking, safari: { title: sample.title } as unknown as Booking['safari'] }
+    : booking;
+}
 
 export default function MyBookingsPage() {
   const { user } = useCurrentUser();
@@ -21,10 +32,13 @@ export default function MyBookingsPage() {
       return;
     }
     let cancelled = false;
-    api
-      .getMyBookings()
-      .then((res) => {
-        if (!cancelled) setBookings(extractList<Booking>(res));
+    const request = isSupabaseConfigured
+      ? getSupabaseBookings()
+      : api.getMyBookings().then((res) => extractList<Booking>(res));
+
+    request
+      .then((rows) => {
+        if (!cancelled) setBookings(rows.map(withSafariTitle));
       })
       .catch(() => undefined)
       .finally(() => {

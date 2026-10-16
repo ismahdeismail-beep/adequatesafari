@@ -29,16 +29,17 @@
 - [ ] Compare and restore missing services/features from Joomla site
 - [ ] Contact form integration with Supabase (safari.contact_submissions)
 - [ ] Newsletter subscription (safari.newsletter_subscribers)
-- [ ] Guest booking flow with minimal PII
+- [x] Guest booking flow with minimal PII — no account needed; only a contact email (+ optional phone)
 - [ ] Booking management UI improvements
 
 ## Supabase Integration
 - [x] Schema created: profiles, bookings, passengers, contact_submissions, newsletter_subscribers
 - [x] RLS policies configured
-- [ ] Wire booking submission to Supabase (use .schema('safari'))
+- [x] Wire booking submission to Supabase (`.schema('safari')`) — bookings + passengers saved on confirm; client-generated id so guests can book
 - [ ] Wire contact form to Supabase
 - [ ] Wire newsletter to Supabase
-- [ ] Test authenticated vs guest booking flows
+- [x] Guest + signed-in booking both supported: guests can book (anon INSERT grants + `passengers_insert_guest` policy added); signed-in users get saved details + "My bookings"(RLS by `auth.uid()`/`auth.email()`)
+- [ ] Anonymous inserts are open (spam risk) — add rate-limit / captcha or move creation to a server route with the service role
 
 ## Deployment & Testing
 - [ ] Test on mobile devices (iOS/Android)
@@ -57,7 +58,7 @@
 - [x] No magic-link dependency (avoids Supabase shared-email rate limit / spam-folder failure)
 - [ ] Password reset ("forgot password") — needs SMTP configured (recovery email)
 - [ ] Validate phone/email properly; don't require phone if not essential (booking-time)
-- [ ] Consider guest booking without account
+- [x] Guest booking enabled without sign-in; account optional for tracking (bookings matched by email)
 
 ## Communication & Business Email
 - [ ] Design a single "business inbox" address that all site communication funnels through (e.g. bookings@ / hello@) — decide the address and provider
@@ -90,7 +91,7 @@
 - [x] Home page — popular destinations, "Adequate Residents Deals" + "Adequate Non-Residents Specials" moving carousels, international packages, journal, FAQ accordion
 - [x] App identity — web manifest + icon set generated from the old website's own files
 - [ ] Deal prices — full KSH/USD table for every safari (specials carry the live pair; other safaris derive KSH at the fixed rate)
-- [ ] Guest booking ("Continue as Guest") — live site offers it, app requires sign-in
+- [x] Guest booking ("Continue as Guest") — app now allows it: guests book + pay via paybill; sign-in optional (saves details, unlocks "My bookings")
 - [ ] Deals taxonomy from /adequate-holiday-deals/ (15 destination groups: Mount Kenya, Maasai Mara, Naivasha, Amboseli, Watamu, Diani, Mombasa, South Africa, Seychelles, Mauritius, Maldives, Thailand, Malaysia, Bali, Dubai)
 - [ ] Non-resident landing pages: /kenya-short-stay-safari/, /tanzania-safaris-2/, /uganda-safari-tours/
 - [ ] Multi-language support (template ships en-GB/es-ES/fr-FR/zh-CN strings)

@@ -19,7 +19,8 @@ import { api, isApiConfigured } from '@/lib/api';
 import { safariToDetail } from '@/lib/mappers';
 import { getSampleSafari } from '@/lib/sample-data';
 import { useBookingStore } from '@/lib/store';
-import { useCurrentUser } from '@/lib/auth';
+import { useCurrentUser, isSupabaseConfigured } from '@/lib/auth';
+import { createBooking as createSupabaseBooking } from '@/lib/supabase/bookings';
 import { siteConfig } from '@/lib/site-config';
 import { cn, generateBookingRef } from '@/lib/utils';
 import { formatAmount as formatCurrency } from '@/lib/currency';
@@ -209,7 +210,16 @@ export function BookingFlow({ initialSlug }: { initialSlug: string }) {
   const [adults, setAdults] = useState(2);
   const [children, setChildren] = useState(0);
   const [specialRequests, setSpecialRequests] = useState('');
+  const [contactEmail, setContactEmail] = useState('');
+  const [contactPhone, setContactPhone] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Seed the contact email from the signed-in user when there is one, so
+  // returning customers don't retype it. Guests just fill it in.
+  useEffect(() => {
+    const email = user?.email;
+    if (email) setContactEmail((v) => v || email);
+  }, [user?.email]);
 
   useEffect(() => {
     if (!slug) {
@@ -310,16 +320,43 @@ export function BookingFlow({ initialSlug }: { initialSlug: string }) {
     e.preventDefault();
     if (!detail || !selectedSafariDate) return;
 
-    if (!isPreview && !isAuthenticated) {
-      const next = encodeURIComponent(`/booking/new?safari=${detail.slug}`);
-      router.push(`/auth/login?next=${next}`);
+    // Booking is open to everyone — guests included. An account is optional and
+    // only adds saved details and a "My bookings" list.
+    const email = contactEmail.trim();
+    if (!email) {
+      toast.error('Please add an email so we can send your booking reference.');
       return;
     }
 
     setIsSubmitting(true);
     try {
       let booking: Booking;
-      if (isPreview) {
+      if (isSupabaseConfigured) {
+        const saved = await createSupabaseBooking({
+          safariId: detail.slug,
+          startDate: selectedSafariDate.startDate,
+          endDate: selectedSafariDate.endDate,
+          guests: travellers,
+          totalAmount: total,
+          currency,
+          specialRequests: specialRequests || undefined,
+          email,
+          firstName: passengers[0]?.firstName || user?.firstName || '',
+          lastName: passengers[0]?.lastName || user?.lastName || '',
+          phone: contactPhone.trim() || undefined,
+          passengers: passengers.map((p) => ({
+            firstName: p.firstName,
+            lastName: p.lastName,
+            dateOfBirth: p.dateOfBirth,
+            passportNumber: p.passportNumber,
+            nationality: p.nationality,
+            specialNeeds: p.specialNeeds,
+          })),
+        });
+        // Keep the exact adult/child split for the confirmation summary — the
+        // table stores a single guest count.
+        booking = { ...saved, adults, children };
+      } else if (isPreview) {
         const now = new Date().toISOString();
         booking = {
           id: `preview-${Date.now()}`,
@@ -726,6 +763,59 @@ export function BookingFlow({ initialSlug }: { initialSlug: string }) {
                 </div>
 
                 <div className="rounded-xl border border-gray-100 bg-white p-5 shadow-sm">
+                  <p className="mb-3 text-sm font-semibold text-safari-dusk">Contact details</p>
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    <div>
+                      <label htmlFor="contactEmail" className="mb-1 block text-xs font-medium text-gray-600">
+                        Email
+                      </label>
+                      <input
+                        id="contactEmail"
+                        type="email"
+                        required
+                        value={contactEmail}
+                        onChange={(e) => setContactEmail(e.target.value)}
+                        autoComplete="email"
+                        inputMode="email"
+                        className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+                        placeholder="you@example.com"
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="contactPhone" className="mb-1 block text-xs font-medium text-gray-600">
+                        Phone / WhatsApp{' '}
+                        <span className="font-normal text-gray-400">(optional)</span>
+                      </label>
+                      <input
+                        id="contactPhone"
+                        type="tel"
+                        value={contactPhone}
+                        onChange={(e) => setContactPhone(e.target.value)}
+                        autoComplete="tel"
+                        inputMode="tel"
+                        className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+                        placeholder="+254 7…"
+                      />
+                    </div>
+                  </div>
+                  <p className="mt-2 text-xs text-gray-400">
+                    We use this only to confirm your booking and send payment details.
+                    {!isAuthenticated && isSupabaseConfigured && (
+                      <>
+                        {' '}
+                        <Link
+                          href={`/auth/login?next=${encodeURIComponent(`/booking/new?safari=${slug}`)}`}
+                          className="underline hover:text-gray-600"
+                        >
+                          Sign in
+                        </Link>{' '}
+                        to save your details and track bookings.
+                      </>
+                    )}
+                  </p>
+                </div>
+
+                <div className="rounded-xl border border-gray-100 bg-white p-5 shadow-sm">
                   <label htmlFor="specialRequests" className="mb-1 block text-sm font-semibold text-safari-dusk">
                     Special requests <span className="font-normal text-gray-400">(optional)</span>
                   </label>
@@ -739,11 +829,11 @@ export function BookingFlow({ initialSlug }: { initialSlug: string }) {
                   />
                 </div>
 
-                {isPreview && (
+                {isPreview && !isSupabaseConfigured && (
                   <p className="flex items-start gap-2 rounded-xl bg-amber-50 px-4 py-3 text-sm text-amber-800">
                     <InfoIcon />
-                    You’re on the demo catalog. Create an account to save real bookings — your price is
-                    still shown here in full.
+                    Preview mode — this booking won’t be saved yet. Your price is still shown here in
+                    full.
                   </p>
                 )}
 
@@ -780,7 +870,7 @@ export function BookingFlow({ initialSlug }: { initialSlug: string }) {
                 <p className="mt-1 text-sm text-gray-500">
                   Reference{' '}
                   <span className="font-mono font-semibold text-safari-dusk">{currentBooking.bookingRef}</span>
-                  {isPreview && (
+                  {isPreview && !isSupabaseConfigured && (
                     <span className="ml-2 rounded bg-amber-50 px-2 py-0.5 text-xs font-medium text-amber-700">
                       preview
                     </span>
@@ -854,7 +944,7 @@ export function BookingFlow({ initialSlug }: { initialSlug: string }) {
                     href={isAuthenticated ? '/booking/my-bookings' : '/auth/register'}
                     className="btn-primary"
                   >
-                    {isAuthenticated ? 'View my bookings' : 'Create an account to save this booking'}
+                    {isAuthenticated ? 'View my bookings' : 'Create an account to track bookings'}
                   </Link>
                   <button type="button" onClick={startNewBooking} className="btn-secondary">
                     Book another safari
