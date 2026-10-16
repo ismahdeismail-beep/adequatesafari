@@ -21,7 +21,8 @@ import { getSampleSafari } from '@/lib/sample-data';
 import { useBookingStore } from '@/lib/store';
 import { useCurrentUser } from '@/lib/auth';
 import { siteConfig } from '@/lib/site-config';
-import { cn, formatCurrency, generateBookingRef } from '@/lib/utils';
+import { cn, generateBookingRef } from '@/lib/utils';
+import { formatAmount as formatCurrency } from '@/lib/currency';
 import type { Booking, PassengerFormData, Safari, SafariDate, SafariDetailData } from '@/types';
 
 const STEPS = [

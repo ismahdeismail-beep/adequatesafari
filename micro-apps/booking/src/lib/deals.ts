@@ -22,7 +22,10 @@ export interface DealCategory {
   slug: string;
   title: string;
   /** Live-site tour count, kept as a label (e.g. "14 tours"). */
-  tourLabel: string;
+  tourLabel?: string;
+  /** Price published on the live site, kept verbatim in both currencies. */
+  priceKsh?: number;
+  priceUsd?: number;
   image: string;
   blurb: string;
   /** Slugs in `sample-data.ts` this category links to. */
@@ -305,7 +308,9 @@ export const dealGroups: DealGroup[] = [
       {
         slug: '5-days-mombasa-flying',
         title: '5 Days Mombasa Flying',
-        tourLabel: 'From KSH.37,500',
+        priceKsh: 37500,
+
+        priceUsd: 289,
         image: '/deals/5-days-mombasa-flying.webp',
         blurb: 'Fly-in Mombasa break with transfers and four beach nights — the longest of the running specials.',
         safariSlugs: COASTAL,
@@ -313,7 +318,9 @@ export const dealGroups: DealGroup[] = [
       {
         slug: '3-days-masai-mara-easter-deals',
         title: '3 Days Masai Mara August Deals',
-        tourLabel: 'From KSH.18,000',
+        priceKsh: 18000,
+
+        priceUsd: 139,
         image: '/deals/3-days-masai-mara-easter-deals.jpg',
         blurb: 'The cheapest way into the Mara: a fixed-date group departure over three days.',
         safariSlugs: ['masai-mara-group-joining', 'tented-camp-safari'],
@@ -321,7 +328,9 @@ export const dealGroups: DealGroup[] = [
       {
         slug: '3-days-mombasa-package',
         title: '3 Days Mombasa SGR Package',
-        tourLabel: 'From KSH.16,500',
+        priceKsh: 16500,
+
+        priceUsd: 127,
         image: '/deals/3-days-mombasa-package.webp',
         blurb: 'Coast by Standard Gauge Railway — the scenic overnight run from Nairobi to Mombasa.',
         safariSlugs: COASTAL,
@@ -329,7 +338,9 @@ export const dealGroups: DealGroup[] = [
       {
         slug: '3-days-mombasa-all-inclusive-deals',
         title: '3 Days Mombasa Flying Deals',
-        tourLabel: 'From KSH.27,500',
+        priceKsh: 27500,
+
+        priceUsd: 212,
         image: '/deals/3-days-mombasa-all-inclusive-deals.jpg',
         blurb: 'A short fly-in beach weekend with no road time at all.',
         safariSlugs: COASTAL,
@@ -337,7 +348,9 @@ export const dealGroups: DealGroup[] = [
       {
         slug: '3-days-diani-flying-package',
         title: '3 Days Diani Flying Package',
-        tourLabel: 'From KSH.37,999',
+        priceKsh: 37999,
+
+        priceUsd: 293,
         image: '/deals/3-days-diani-flying-package.jpg',
         blurb: 'Fly to Ukunda and be on the sand the same morning.',
         safariSlugs: COASTAL,
@@ -345,7 +358,9 @@ export const dealGroups: DealGroup[] = [
       {
         slug: '3-days-amboseli-deals',
         title: '3 Days Amboseli Deals',
-        tourLabel: 'From KSH.14,000',
+        priceKsh: 14000,
+
+        priceUsd: 108,
         image: '/deals/3-days-amboseli-deals.jpg',
         blurb: 'Elephants beneath Kilimanjaro — the classic three-day southern-circuit safari.',
         safariSlugs: ['amboseli-kilimanjaro-views'],
@@ -353,7 +368,9 @@ export const dealGroups: DealGroup[] = [
       {
         slug: '3-days-diani-sgr-deals',
         title: '3 Days Diani SGR Deals',
-        tourLabel: 'From KSH.24,500',
+        priceKsh: 24500,
+
+        priceUsd: 189,
         image: '/deals/3-days-diani-sgr-deals.jpg',
         blurb: 'Rail to the coast, then straight onto Diani beach.',
         safariSlugs: COASTAL,
@@ -361,7 +378,9 @@ export const dealGroups: DealGroup[] = [
       {
         slug: '5-days-diani-sgr-deals',
         title: '5 Days Diani SGR Deals',
-        tourLabel: 'From KSH.47,700',
+        priceKsh: 47700,
+
+        priceUsd: 367,
         image: '/deals/5-days-diani-sgr-deals.jpg',
         blurb: 'A longer beach stay with the rail transfer built in.',
         safariSlugs: COASTAL,
@@ -369,7 +388,9 @@ export const dealGroups: DealGroup[] = [
       {
         slug: '3-days-watamu-flying-deals',
         title: '3 Days Watamu / Malindi / Kilifi SGR Deals',
-        tourLabel: 'From KSH.53,100',
+        priceKsh: 53100,
+
+        priceUsd: 409,
         image: '/deals/3-days-watamu-flying-deals.webp',
         blurb: 'The quieter north coast — pick between Watamu, Malindi and Kilifi.',
         safariSlugs: COASTAL,
@@ -377,7 +398,9 @@ export const dealGroups: DealGroup[] = [
       {
         slug: '2-days-laikipia-nanyuki-self-drive-deals',
         title: '2 Days Laikipia / Nanyuki Self-Drive Deals',
-        tourLabel: 'From KSH.5,900',
+        priceKsh: 5900,
+
+        priceUsd: 45,
         image: '/deals/2-days-laikipia-nanyuki-self-drive-deals.jpg',
         blurb: 'Take your own vehicle upcountry for a weekend in Laikipia and around Nanyuki.',
         safariSlugs: ['mount-kenya-sirimon-route'],

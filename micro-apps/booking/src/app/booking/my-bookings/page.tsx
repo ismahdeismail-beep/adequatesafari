@@ -5,7 +5,8 @@ import Link from 'next/link';
 import { api } from '@/lib/api';
 import { useCurrentUser } from '@/lib/auth';
 import { extractList } from '@/lib/mappers';
-import { formatCurrency, formatDate } from '@/lib/utils';
+import { formatDate } from '@/lib/utils';
+import { formatAmount as formatCurrency } from '@/lib/currency';
 import type { Booking } from '@/types';
 
 export default function MyBookingsPage() {

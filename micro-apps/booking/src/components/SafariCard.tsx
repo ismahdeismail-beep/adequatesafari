@@ -1,8 +1,9 @@
 import Link from 'next/link';
 import { Clock, MapPin } from 'lucide-react';
 import type { SafariCardData } from '@/types';
-import { cn, formatCurrency } from '@/lib/utils';
+import { cn } from '@/lib/utils';
 import { cardSources } from '@/lib/images';
+import { Price } from '@/components/Price';
 
 interface SafariCardProps {
   safari: SafariCardData;
@@ -10,8 +11,7 @@ interface SafariCardProps {
 }
 
 export function SafariCard({ safari, className }: SafariCardProps) {
-  const priceLabel =
-    typeof safari.price === 'number' ? formatCurrency(safari.price, safari.currency ?? 'USD') : null;
+  const hasPrice = typeof safari.price === 'number';
   const sources = cardSources(safari.image);
 
   return (
@@ -49,9 +49,21 @@ export function SafariCard({ safari, className }: SafariCardProps) {
             Featured
           </span>
         )}
-        {priceLabel && (
-          <span className="absolute bottom-3 left-3 rounded-full bg-white/95 px-3 py-1 text-sm font-semibold text-primary-700 shadow-sm">
-            From {priceLabel} / person
+        {hasPrice && (
+          <span className="absolute bottom-3 left-3 flex flex-col rounded-lg bg-white/95 px-3 py-1.5 leading-tight shadow-sm">
+            <Price
+              usd={safari.price as number}
+              prefix="From "
+              withSecondary={false}
+              className="text-sm font-semibold text-primary-700"
+            />
+            <Price
+              usd={safari.price as number}
+              withSecondary={false}
+              useOther
+              className="text-[11px] font-medium text-gray-500"
+            />
+            <span className="sr-only">per person</span>
           </span>
         )}
       </Link>

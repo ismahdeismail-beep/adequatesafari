@@ -89,7 +89,10 @@ export function Hero() {
               <img
                 src={slide.image}
                 alt={slide.heading}
-                className="h-full w-full object-cover"
+                className={cn(
+                  'h-full w-full object-cover',
+                  index === active && 'animate-ken-burns'
+                )}
                 fetchPriority={index === 0 ? 'high' : 'auto'}
               />
             </picture>
@@ -98,7 +101,10 @@ export function Hero() {
             <img
               src={slide.image}
               alt={slide.heading}
-              className="h-full w-full object-cover"
+              className={cn(
+                'h-full w-full object-cover',
+                index === active && 'animate-ken-burns'
+              )}
               fetchPriority={index === 0 ? 'high' : 'auto'}
             />
           )}          <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent" />

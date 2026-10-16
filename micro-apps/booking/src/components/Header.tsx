@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { Menu, X, ChevronDown, User, CreditCard, LogOut, Phone, Mail } from 'lucide-react';
 import { useCurrentUser, signOut } from '@/lib/auth';
 import { siteConfig } from '@/lib/site-config';
+import { CurrencySwitcher } from '@/components/CurrencySwitcher';
 import { cn } from '@/lib/utils';
 
 const navItems = [
@@ -145,6 +146,7 @@ export function Header() {
                   </Link>
                 </div>
               )}
+              <CurrencySwitcher />
             </div>
           </div>
 
@@ -174,6 +176,10 @@ export function Header() {
                   {item.label}
                 </Link>
               ))}
+              <div className="flex items-center justify-between border-t border-gray-100 pt-4">
+                <span className="px-2 text-sm font-medium text-safari-dusk">Show prices in</span>
+                <CurrencySwitcher />
+              </div>
               <div className="pt-4 border-t border-gray-100 flex flex-col space-y-3">
                 {isAuthenticated ? (
                   <>

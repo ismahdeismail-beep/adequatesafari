@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { MessageCircle } from 'lucide-react';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { SafariCard } from '@/components/SafariCard';
+import { DealPrice } from '@/components/DealPrice';
 import { dealGroups, getDealCategory, getDealGroup, safarisForCategory } from '@/lib/deals';
 import { sampleSafaris } from '@/lib/sample-data';
 import { siteConfig, whatsappLink } from '@/lib/site-config';
@@ -61,7 +62,12 @@ export default function DealCategoryPage({
               {category.title}
             </h1>
             <p className="mt-1 text-xs font-medium uppercase tracking-wide text-gray-400">
-              {category.tourLabel}
+              <DealPrice
+                tourLabel={category.tourLabel}
+                priceKsh={category.priceKsh}
+                priceUsd={category.priceUsd}
+                className="normal-case tracking-normal"
+              />
             </p>
             <p className="mt-4 leading-relaxed text-gray-600">{category.blurb}</p>
             <p className="mt-2 leading-relaxed text-gray-600">{group.description}</p>

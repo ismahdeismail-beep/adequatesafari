@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { dealGroups, getDealGroup } from '@/lib/deals';
+import { DealPrice } from '@/components/DealPrice';
 
 export function generateStaticParams() {
   return dealGroups.map((group) => ({ group: group.slug }));
@@ -51,7 +52,12 @@ export default function DealGroupPage({ params }: { params: { group: string } })
                   {category.title}
                 </h2>
                 <p className="mt-1 text-xs font-medium uppercase tracking-wide text-gray-400">
-                  {category.tourLabel}
+                  <DealPrice
+                    tourLabel={category.tourLabel}
+                    priceKsh={category.priceKsh}
+                    priceUsd={category.priceUsd}
+                    className="normal-case tracking-normal"
+                  />
                 </p>
                 <p className="mt-3 text-sm leading-relaxed text-gray-600">{category.blurb}</p>
                 <span className="mt-4 text-sm font-medium text-primary-600">View trips →</span>

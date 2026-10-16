@@ -11,8 +11,15 @@
 - [x] Set app icon to Adequate Safaris logo (favicon + manifest icons)
 - [x] Add Supabase SSR clients, magic-link login (OTP), auth callback
 - [x] Magic-link login flow integrated
+- [x] App icon set generated from the old website's own icon files (icon/apple-icon/favicon + web manifest)
+- [x] App name / identification fixed — was showing "Book Your Safari", now "Adequate Safaris"
+- [x] KSH/USD currency switcher; every price shown consistently in both currencies
+- [x] Home page rebuilt: popular destinations, moving deal carousels, international packages, journal, FAQ accordion
+- [x] Mobile quick-action bar (Call / WhatsApp / Book) on phones
 
 ## In Progress
+- [x] Mobile quick actions: Call / WhatsApp / Book bar on phones (`MobileActionBar`)
+- [x] Currency switcher in header (desktop + mobile menu) — KSH/USD
 - [ ] Improve mobile UX: login/register buttons sizing for phones
 - [ ] Fix overlaying issues (z-index, modals, mobile nav, hero CTAs)
 - [ ] Verify mobile menu works properly across devices
@@ -79,7 +86,10 @@
 - [x] Blog listing — /blog rebuilt as the live 3-column journal (10 camp/lodge write-ups)
 - [ ] Blog article bodies — cards currently link out to WordPress; migrate the text
 - [ ] Site search (com_finder equivalent) — SearchSection searches safaris only
-- [ ] Currency switcher (KSH/USD) — live site prices deals in KSH, app in USD
+- [x] Currency switcher (KSH/USD) — header switcher (desktop + mobile), prices rendered in both currencies
+- [x] Home page — popular destinations, "Adequate Residents Deals" + "Adequate Non-Residents Specials" moving carousels, international packages, journal, FAQ accordion
+- [x] App identity — web manifest + icon set generated from the old website's own files
+- [ ] Deal prices — full KSH/USD table for every safari (specials carry the live pair; other safaris derive KSH at the fixed rate)
 - [ ] Guest booking ("Continue as Guest") — live site offers it, app requires sign-in
 - [ ] Deals taxonomy from /adequate-holiday-deals/ (15 destination groups: Mount Kenya, Maasai Mara, Naivasha, Amboseli, Watamu, Diani, Mombasa, South Africa, Seychelles, Mauritius, Maldives, Thailand, Malaysia, Bali, Dubai)
 - [ ] Non-resident landing pages: /kenya-short-stay-safari/, /tanzania-safaris-2/, /uganda-safari-tours/

@@ -6,7 +6,9 @@ import { CalendarDays, Check, Clock, MapPin, Minus, Star, X } from 'lucide-react
 import { api, isApiConfigured } from '@/lib/api';
 import { safariToDetail } from '@/lib/mappers';
 import { getSampleSafari } from '@/lib/sample-data';
-import { formatCurrency, formatDateShort } from '@/lib/utils';
+import { formatDateShort } from '@/lib/utils';
+import { formatAmount } from '@/lib/currency';
+import { Price } from '@/components/Price';
 import type { Safari, SafariDetailData } from '@/types';
 
 export function SafariDetail({ slug }: { slug: string }) {
@@ -58,12 +60,9 @@ export function SafariDetail({ slug }: { slug: string }) {
     );
   }
 
-  const priceLabel =
-    typeof safari.price === 'number' ? formatCurrency(safari.price, safari.currency ?? 'USD') : null;
-  const rangeLabel =
-    typeof safari.maxPrice === 'number' && safari.maxPrice > (safari.price ?? 0)
-      ? `${priceLabel} – ${formatCurrency(safari.maxPrice, safari.currency ?? 'USD')}`
-      : priceLabel;
+  const hasPrice = typeof safari.price === 'number';
+  const hasRange =
+    typeof safari.maxPrice === 'number' && safari.maxPrice > (safari.price ?? 0);
 
   const upcoming = (safari.dates ?? [])
     .filter((d) => d.status === 'OPEN' || d.status === 'GUARANTEED')
@@ -175,10 +174,31 @@ export function SafariDetail({ slug }: { slug: string }) {
 
         <aside className="lg:col-span-1">
           <div className="sticky top-24 rounded-2xl border border-gray-100 bg-white p-6 shadow-md">
-            {rangeLabel && (
+            {hasPrice && (
               <p className="text-gray-500">
-                From <span className="font-heading text-3xl font-bold text-safari-dusk">{rangeLabel}</span>{' '}
+                From{' '}
+                <span className="font-heading text-3xl font-bold text-safari-dusk">
+                  <Price usd={safari.price as number} withSecondary={false} />
+                  {hasRange && (
+                    <>
+                      {' – '}
+                      <Price usd={safari.maxPrice as number} withSecondary={false} />
+                    </>
+                  )}
+                </span>{' '}
                 <span className="text-sm">per person</span>
+              </p>
+            )}
+            {hasPrice && (
+              <p className="mt-1 text-sm text-gray-400">
+                Shown in KSH and USD: also{' '}
+                <Price usd={safari.price as number} withSecondary={false} useOther />
+                {hasRange && (
+                  <>
+                    {' – '}
+                    <Price usd={safari.maxPrice as number} withSecondary={false} useOther />
+                  </>
+                )}
               </p>
             )}
             {safari.groupSizeMin && safari.groupSizeMax && (
@@ -197,7 +217,7 @@ export function SafariDetail({ slug }: { slug: string }) {
                     <li key={d.id} className="flex items-center justify-between text-sm">
                       <span className="text-gray-600">{formatDateShort(d.startDate)}</span>
                       <span className="font-semibold text-safari-dusk">
-                        {formatCurrency(d.price, d.currency ?? safari.currency ?? 'USD')}
+                        {formatAmount(d.price, d.currency ?? safari.currency ?? 'USD')}
                       </span>
                     </li>
                   ))}

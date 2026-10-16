@@ -51,4 +51,25 @@
   .card {
     @apply bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow;
   }
+  /* Softly fade the edges of the deals carousels. */
+  .marquee-mask {
+    -webkit-mask-image: linear-gradient(to right, transparent, black 6%, black 94%, transparent);
+    mask-image: linear-gradient(to right, transparent, black 6%, black 94%, transparent);
+  }
+  .pause-on-hover:hover,
+  .pause-on-hover:focus-within {
+    animation-play-state: paused;
+  }
+}
+
+/* Respect the visitor's motion preference: no drifting carousels or zooming. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
 }

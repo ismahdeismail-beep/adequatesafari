@@ -46,6 +46,7 @@ const config: Config = {
           sand: '#f5f0e1',
           dusk: '#8b6f47',
           gold: '#d4a843',
+          'gold-dark': '#9a7420',
           green: '#2d5a27',
           sky: '#4a90d9',
         },
@@ -58,6 +59,10 @@ const config: Config = {
         'fade-in': 'fadeIn 0.5s ease-out',
         'slide-up': 'slideUp 0.5s ease-out',
         'slide-in-right': 'slideInRight 0.3s ease-out',
+        marquee: 'marquee 55s linear infinite',
+        'marquee-slow': 'marquee 75s linear infinite',
+        'marquee-reverse': 'marqueeReverse 70s linear infinite',
+        'ken-burns': 'kenBurns 20s ease-out forwards',
       },
       keyframes: {
         fadeIn: {
@@ -71,6 +76,19 @@ const config: Config = {
         slideInRight: {
           '0%': { opacity: '0', transform: 'translateX(20px)' },
           '100%': { opacity: '1', transform: 'translateX(0)' },
+        },
+        // Deals slide steadily from one side to the other on the home page.
+        marquee: {
+          '0%': { transform: 'translateX(0)' },
+          '100%': { transform: 'translateX(-50%)' },
+        },
+        marqueeReverse: {
+          '0%': { transform: 'translateX(-50%)' },
+          '100%': { transform: 'translateX(0)' },
+        },
+        kenBurns: {
+          '0%': { transform: 'scale(1)' },
+          '100%': { transform: 'scale(1.12)' },
         },
       },
     },

@@ -6,6 +6,7 @@ import { Providers } from './providers';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { CookieConsent } from '@/components/CookieConsent';
+import { MobileActionBar } from '@/components/MobileActionBar';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -21,14 +22,22 @@ const playfair = Playfair_Display({
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://www.adequatesafaris.com'),
-  title: 'Book Your Safari | Adequate Safaris',
-  description: 'Book unforgettable safari adventures in Kenya, Tanzania, and Uganda. Secure online booking with M-Pesa and Stripe.',
+  title: 'Adequate Safaris',
+  applicationName: 'Adequate Safaris',
+  description:
+    'Adequate Safaris — safaris, beach holidays and international packages across Kenya, Tanzania and Uganda. Secure online booking with M-Pesa and Stripe.',
   keywords: ['safari booking', 'Kenya safari', 'Tanzania safari', 'Uganda gorilla trekking', 'African safari'],
-  // App icons are provided by the file conventions in src/app:
-  //   icon.png (192x192), apple-icon.png (180x180), favicon.ico — all the brand logo.
+  // App icons come from the file conventions in src/app (icon.png, apple-icon.png,
+  // favicon.ico) and are generated from the existing adequatesafaris.com website's
+  // own icon files — see images/brand/ and src/app/manifest.ts.
+  appleWebApp: {
+    capable: true,
+    title: 'Adequate Safaris',
+    statusBarStyle: 'default',
+  },
   openGraph: {
-    title: 'Book Your Safari | Adequate Safaris',
-    description: 'Book unforgettable safari adventures in Kenya, Tanzania, and Uganda.',
+    title: 'Adequate Safaris',
+    description: 'Book safari adventures in Kenya, Tanzania, and Uganda.',
     type: 'website',
     locale: 'en_US',
     siteName: 'Adequate Safaris',
@@ -56,6 +65,9 @@ export default function RootLayout({
             {children}
           </main>
           <Footer />
+          {/* Space for the phone-only quick action bar. */}
+          <div className="h-16 md:hidden" aria-hidden />
+          <MobileActionBar />
           <CookieConsent />
           <Toaster
             position="top-right"
