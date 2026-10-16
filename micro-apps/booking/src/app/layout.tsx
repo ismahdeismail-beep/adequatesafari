@@ -27,9 +27,18 @@ export const metadata: Metadata = {
   description:
     'Adequate Safaris — safaris, beach holidays and international packages across Kenya, Tanzania and Uganda. Secure online booking with M-Pesa and Stripe.',
   keywords: ['safari booking', 'Kenya safari', 'Tanzania safari', 'Uganda gorilla trekking', 'African safari'],
-  // App icons come from the file conventions in src/app (icon.png, apple-icon.png,
-  // favicon.ico) and are generated from the existing adequatesafaris.com website's
-  // own icon files — see images/brand/ and src/app/manifest.ts.
+  // App icons are the Adequate Safaris logo, taken from the existing
+  // adequatesafaris.com site's own icon files and served from /brand/ (never
+  // cached at the edge — see images/brand/ for provenance and manifest.ts).
+  icons: {
+    icon: [
+      { url: '/brand/favicon.ico', type: 'image/x-icon', sizes: '48x48' },
+      { url: '/brand/icon-192.png', type: 'image/png', sizes: '192x192' },
+      { url: '/brand/icon-512.png', type: 'image/png', sizes: '512x512' },
+    ],
+    apple: [{ url: '/brand/apple-touch-icon.png', type: 'image/png', sizes: '180x180' }],
+    shortcut: [{ url: '/brand/favicon.ico', type: 'image/x-icon' }],
+  },
   appleWebApp: {
     capable: true,
     title: 'Adequate Safaris',
