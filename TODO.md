@@ -11,6 +11,7 @@
 - [x] Set app icon to Adequate Safaris logo (favicon + manifest icons)
 - [x] Add Supabase SSR clients, magic-link login (OTP), auth callback
 - [x] Magic-link login flow integrated
+- [x] Auth login/register templates refreshed: simpler, professional layout (icons, show/hide password, marketing copy with booking-as-guest note)
 - [x] App icon set generated from the old website's own icon files (icon/apple-icon/favicon + web manifest)
 - [x] App name / identification fixed — was showing "Book Your Safari", now "Adequate Safaris"
 - [x] KSH/USD currency switcher; every price shown consistently in both currencies
