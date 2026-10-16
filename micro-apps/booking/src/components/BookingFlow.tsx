@@ -296,6 +296,8 @@ export function BookingFlow({ initialSlug }: { initialSlug: string }) {
   const rate = selectedSafariDate?.price ?? 0;
   const currency = selectedSafariDate?.currency ?? detail?.currency ?? 'USD';
   const total = rate * travellers;
+  const depositPercent = siteConfig.depositPercent;
+  const depositFor = (amount: number) => Math.round((amount * depositPercent) / 100);
 
   const passengersValid =
     passengers.length === travellers &&
@@ -324,7 +326,7 @@ export function BookingFlow({ initialSlug }: { initialSlug: string }) {
     // only adds saved details and a "My bookings" list.
     const email = contactEmail.trim();
     if (!email) {
-      toast.error('Please add an email so we can send your booking reference.');
+      toast.error('Please add an email so we can complete your booking.');
       return;
     }
 
@@ -409,7 +411,7 @@ export function BookingFlow({ initialSlug }: { initialSlug: string }) {
       setCurrentBooking(booking);
       setBookingStep('confirmation');
       window.scrollTo({ top: 0, behavior: 'smooth' });
-      toast.success('Booking received — we’ll confirm availability shortly.');
+      toast.success('Booking received — pay your deposit to confirm your place.');
     } catch {
       toast.error('We could not create the booking. Please try again.');
     } finally {
@@ -741,10 +743,20 @@ export function BookingFlow({ initialSlug }: { initialSlug: string }) {
                         {formatCurrency(total, currency)}
                       </dd>
                     </div>
+                    <div className="flex items-center justify-between py-3 text-sm">
+                      <dt className="text-gray-600">
+                        Deposit to reserve{' '}
+                        <span className="text-gray-400">({depositPercent}% now)</span>
+                      </dt>
+                      <dd className="font-semibold text-safari-dusk">
+                        {formatCurrency(depositFor(total), currency)}
+                      </dd>
+                    </div>
                   </dl>
                   <p className="border-t border-gray-100 px-5 py-3 text-xs text-gray-400">
-                    Rates are per person for all travellers. Family or child discounts are applied on
-                    request at confirmation. Payment is taken only after we confirm availability.
+                    A {depositPercent}% deposit reserves your place. Rates are per person for all
+                    travellers — you can pay the deposit or the full amount now, then settle any
+                    balance when you arrive.
                   </p>
                 </div>
 
@@ -799,7 +811,7 @@ export function BookingFlow({ initialSlug }: { initialSlug: string }) {
                     </div>
                   </div>
                   <p className="mt-2 text-xs text-gray-400">
-                    We use this only to confirm your booking and send payment details.
+                    We only use this for your booking record — no marketing emails.
                     {!isAuthenticated && isSupabaseConfigured && (
                       <>
                         {' '}
@@ -847,11 +859,11 @@ export function BookingFlow({ initialSlug }: { initialSlug: string }) {
                   </button>
                   <button type="submit" disabled={isSubmitting} className="btn-primary">
                     {isSubmitting ? (
-                      'Creating booking…'
+                      'Reserving your place…'
                     ) : (
                       <>
                         <Lock className="mr-1 inline h-4 w-4" />
-                        Confirm booking — {formatCurrency(total, currency)}
+                        Reserve my place — {formatCurrency(depositFor(total), currency)} deposit
                       </>
                     )}
                   </button>
@@ -905,11 +917,40 @@ export function BookingFlow({ initialSlug }: { initialSlug: string }) {
                 </dl>
 
                 <div className="mx-auto mt-6 max-w-sm text-left">
-                  <p className="text-sm font-semibold text-safari-dusk">What happens next</p>
-                  <ul className="mt-2 space-y-1.5 text-sm text-gray-500">
-                    <li>● We confirm availability within 24 hours.</li>
-                    <li>● You’ll receive an invoice with M-Pesa, card and bank-transfer options.</li>
-                    <li>● Your booking is confirmed once the deposit is received.</li>
+                  <p className="text-sm font-semibold text-safari-dusk">Pay to confirm your booking</p>
+                  <p className="mt-1 text-sm text-gray-500">
+                    A {depositPercent}% deposit reserves your place. Pay now, or pay during your visit
+                    — your choice.
+                  </p>
+                  <div className="mt-3 space-y-2">
+                    <div className="flex items-center justify-between rounded-xl bg-primary-50/70 px-4 py-3 text-sm">
+                      <div>
+                        <p className="font-semibold text-safari-dusk">
+                          Deposit now ({depositPercent}%)
+                        </p>
+                        <p className="text-xs text-gray-500">Reserves your dates · balance on arrival</p>
+                      </div>
+                      <p className="font-heading text-base font-bold text-safari-dusk">
+                        {formatCurrency(
+                          depositFor(currentBooking.totalAmount),
+                          currentBooking.currency ?? currency
+                        )}
+                      </p>
+                    </div>
+                    <div className="flex items-center justify-between rounded-xl bg-gray-50 px-4 py-3 text-sm">
+                      <div>
+                        <p className="font-semibold text-safari-dusk">Pay in full now</p>
+                        <p className="text-xs text-gray-500">Nothing more to pay on arrival</p>
+                      </div>
+                      <p className="font-heading text-base font-bold text-safari-dusk">
+                        {formatCurrency(currentBooking.totalAmount, currentBooking.currency ?? currency)}
+                      </p>
+                    </div>
+                  </div>
+                  <ul className="mt-3 space-y-1.5 text-sm text-gray-500">
+                    <li>● Pay the deposit to hold your place — settle the rest now or when you arrive.</li>
+                    <li>● We confirm your booking as soon as your payment comes through.</li>
+                    <li>● Keep your M-PESA confirmation message — it is your receipt.</li>
                   </ul>
                 </div>
 
@@ -917,7 +958,7 @@ export function BookingFlow({ initialSlug }: { initialSlug: string }) {
                   <div className="mx-auto mt-6 max-w-sm rounded-xl border border-primary-100 bg-primary-50/60 p-4 text-left">
                     <p className="flex items-center gap-2 text-sm font-semibold text-safari-dusk">
                       <Smartphone className="h-4 w-4 text-primary-600" />
-                      Pay your deposit via M-Pesa
+                      How to pay via M-PESA
                     </p>
                     <dl className="mt-3 space-y-1.5 text-sm">
                       <div className="flex items-center justify-between">
@@ -927,14 +968,35 @@ export function BookingFlow({ initialSlug }: { initialSlug: string }) {
                       <div className="flex items-center justify-between">
                         <dt className="text-gray-500">Account number</dt>
                         <dd className="font-mono font-semibold text-safari-dusk">
-                          {siteConfig.paybillAccount || currentBooking.bookingRef}
+                          {siteConfig.paybillAccount}
+                        </dd>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <dt className="text-gray-500">Your reference</dt>
+                        <dd className="font-mono font-semibold text-safari-dusk">
+                          {currentBooking.bookingRef}
                         </dd>
                       </div>
                     </dl>
+                    <ol className="mt-3 list-decimal space-y-1 pl-5 text-xs text-gray-600">
+                      <li>Go to M-PESA on your phone</li>
+                      <li>Select Lipa na M-PESA → Pay Bill</li>
+                      <li>
+                        Enter Paybill <span className="font-mono">{siteConfig.paybill}</span> and Account
+                        Number <span className="font-mono">{siteConfig.paybillAccount}</span>
+                      </li>
+                      <li>Enter the amount, your M-PESA PIN, then confirm</li>
+                    </ol>
                     <p className="mt-2 text-xs text-gray-500">
-                      In M-Pesa: Lipa na M-Pesa → Pay Bill → enter the paybill above, then use your
-                      reference <span className="font-mono">{currentBooking.bookingRef}</span> as the
-                      account number. Share the confirmation message with us to lock in your dates.
+                      After paying, send us the M-PESA confirmation message quoting your reference{' '}
+                      <span className="font-mono">{currentBooking.bookingRef}</span> so we can match your
+                      payment and confirm your booking
+                      {siteConfig.email && (
+                        <>
+                          {' '}(<a className="underline" href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a>)
+                        </>
+                      )}
+                      . Payments are processed instantly.
                     </p>
                   </div>
                 )}

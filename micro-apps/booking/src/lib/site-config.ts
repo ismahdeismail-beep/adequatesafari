@@ -6,6 +6,8 @@ export interface SiteConfig {
   address: string;
   paybill: string;
   paybillAccount: string;
+  /** Share of the total price required up-front to reserve a place (%). */
+  depositPercent: number;
 }
 
 export function whatsappLink(value: string): string {
@@ -22,4 +24,5 @@ export const siteConfig: SiteConfig = {
   address: process.env.NEXT_PUBLIC_CONTACT_ADDRESS ?? '',
   paybill: process.env.NEXT_PUBLIC_PAYBILL ?? '',
   paybillAccount: process.env.NEXT_PUBLIC_PAYBILL_ACCOUNT ?? '',
+  depositPercent: Math.min(100, Math.max(0, Number(process.env.NEXT_PUBLIC_DEPOSIT_PERCENT ?? 50) || 50)),
 };

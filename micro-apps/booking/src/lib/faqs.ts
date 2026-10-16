@@ -1,3 +1,5 @@
+import { siteConfig } from '@/lib/site-config';
+
 /**
  * Frequently asked questions, shared by the /faq page and the home page
  * accordion. Answers are our own copy.
@@ -18,7 +20,7 @@ export const faqs: Faq[] = [
   },
   {
     q: 'When do I actually pay?',
-    a: 'Nothing is charged when you book. We confirm availability first, then send you an invoice with M-Pesa, card and bank-transfer options. Your price is fixed at the moment you book.',
+    a: `A ${siteConfig.depositPercent}% deposit reserves your place — pay it by M-PESA Paybill, or pay the full amount, whichever you prefer. Any balance can be settled before or during your visit. Nothing is charged on this site; your price is fixed the moment you book.`,
   },
   {
     q: 'When is the best time to go on safari?',
