@@ -243,6 +243,8 @@ export interface PassengerFormData {
   firstName: string;
   lastName: string;
   dateOfBirth?: string;
+  /** Optional age — simpler, privacy-friendly alternative to an exact date of birth. */
+  age?: string;
   passportNumber?: string;
   nationality?: string;
   specialNeeds?: string;

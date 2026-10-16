@@ -162,14 +162,17 @@ function PassengerForm({
         </div>
         <div>
           <label className="mb-1 block text-xs font-medium text-gray-500">
-            Date of birth <span className="text-gray-400">(optional)</span>
+            Age <span className="text-gray-400">(optional)</span>
           </label>
           <input
-            type="date"
-            value={passenger.dateOfBirth ?? ''}
-            onChange={(e) => onChange({ dateOfBirth: e.target.value || undefined })}
+            type="number"
+            inputMode="numeric"
+            min={1}
+            max={120}
+            value={passenger.age ?? ''}
+            onChange={(e) => onChange({ age: e.target.value || undefined })}
             className="input-field"
-            max={new Date().toISOString().slice(0, 10)}
+            placeholder="e.g. 34"
           />
         </div>
         <div>
@@ -189,8 +192,9 @@ function PassengerForm({
       </div>
       <p className="mt-3 flex items-start gap-2 rounded-lg border border-safari-sand bg-safari-sand/40 px-3 py-2 text-xs text-gray-600">
         <ShieldCheck className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary-700" />
-        We only ask for names here — no ID, passport or document details. We never collect identity
-        documents during booking; you can present them at check-in if required.
+        We only ask for a name and an (optional) age — no ID, passport or document details. Want a
+        birthday, anniversary or special treat? Just mention it in the Special requests on the next
+        step.
       </p>
     </div>
   );
@@ -360,9 +364,8 @@ export function BookingFlow({ initialSlug }: { initialSlug: string }) {
           passengers: passengers.map((p) => ({
             firstName: p.firstName,
             lastName: p.lastName,
-            dateOfBirth: p.dateOfBirth,
             nationality: p.nationality,
-            specialNeeds: p.specialNeeds,
+            specialNeeds: p.age ? `Age ${p.age}${p.specialNeeds ? ` — ${p.specialNeeds}` : ''}` : p.specialNeeds,
           })),
         });
         // Keep the exact adult/child split for the confirmation summary — the
@@ -392,9 +395,8 @@ export function BookingFlow({ initialSlug }: { initialSlug: string }) {
             bookingId: `preview-${Date.now()}`,
             firstName: p.firstName,
             lastName: p.lastName,
-            dateOfBirth: p.dateOfBirth,
             nationality: p.nationality,
-            specialNeeds: p.specialNeeds,
+            specialNeeds: p.age ? `Age ${p.age}${p.specialNeeds ? ` — ${p.specialNeeds}` : ''}` : p.specialNeeds,
             isLead: i === 0,
           })),
         };
@@ -408,9 +410,8 @@ export function BookingFlow({ initialSlug }: { initialSlug: string }) {
           passengers: passengers.map((p, i) => ({
             firstName: p.firstName,
             lastName: p.lastName,
-            dateOfBirth: p.dateOfBirth,
             nationality: p.nationality,
-            specialNeeds: p.specialNeeds,
+            specialNeeds: p.age ? `Age ${p.age}${p.specialNeeds ? ` — ${p.specialNeeds}` : ''}` : p.specialNeeds,
             isLead: i === 0,
           })),
         });
