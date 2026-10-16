@@ -23,7 +23,7 @@
 - [ ] Improve mobile UX: login/register buttons sizing for phones
 - [ ] Fix overlaying issues (z-index, modals, mobile nav, hero CTAs)
 - [ ] Verify mobile menu works properly across devices
-- [x] Test OTP flow end-to-end with Supabase — endpoint reachable and env live; signup email rate-limited by Supabase (~3-4/hour), needs custom SMTP for launch
+- [x] Auth flow verified end-to-end — email+password signup and sign-in both return a session (magic-link rate limit no longer blocks signup)
 
 ## Services/Features from Old Site
 - [ ] Compare and restore missing services/features from Joomla site
@@ -51,10 +51,11 @@
 - [ ] Add passwordless registration flow
 - [ ] Improve error messages and loading states
 
-## Auth / Signup (email-only + minimal data)
-- [x] Signup page fields reviewed — register is EMAIL-ONLY magic link (`signInWithOtp`, `create_user`): no password, no name/phone at sign-up; name/phone collected at booking time only
-- [x] Magic-link signup on register page (no separate password flow)
-- [x] Minimal data enforced: email only at sign-up
+## Auth / Signup (email + password)
+- [x] Standard sign-up: email + password + confirm (`signUp`); Supabase `mailer_autoconfirm = true` so the account is usable immediately with no confirmation email
+- [x] Standard sign-in: email + password (`signInWithPassword`), honours `?next=`
+- [x] No magic-link dependency (avoids Supabase shared-email rate limit / spam-folder failure)
+- [ ] Password reset ("forgot password") — needs SMTP configured (recovery email)
 - [ ] Validate phone/email properly; don't require phone if not essential (booking-time)
 - [ ] Consider guest booking without account
 
@@ -100,4 +101,4 @@
 - [x] Vercel (booking app): NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY, NEXT_PUBLIC_SITE_URL set and deployed (commit 1c12d493)
 - [x] Supabase Auth: Site URL = https://adequatesafari.vercel.app; redirect allowlist permissive so /auth/callback works
 - [x] Supabase: `safari` schema exposed in API settings
-- [ ] Supabase SMTP: built-in email rate limit (~3-4 sends/hour) blocks magic-link signup at volume — configure custom SMTP before launch
+- [ ] Supabase SMTP: still needed for password-reset emails and transactional booking confirmation (signup/sign-in no longer send email)
