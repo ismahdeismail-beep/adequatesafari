@@ -23,7 +23,7 @@
 - [ ] Improve mobile UX: login/register buttons sizing for phones
 - [ ] Fix overlaying issues (z-index, modals, mobile nav, hero CTAs)
 - [ ] Verify mobile menu works properly across devices
-- [ ] Test OTP flow end-to-end with Supabase
+- [x] Test OTP flow end-to-end with Supabase — endpoint reachable and env live; signup email rate-limited by Supabase (~3-4/hour), needs custom SMTP for launch
 
 ## Services/Features from Old Site
 - [ ] Compare and restore missing services/features from Joomla site
@@ -52,11 +52,10 @@
 - [ ] Improve error messages and loading states
 
 ## Auth / Signup (email-only + minimal data)
-- [ ] Review signup page fields (limit PII). Currently requires: firstName, lastName, email, password, phone. With magic link approach, prefer email-only signup; move name/phone to booking if needed.
-- [ ] Add "Sign up with Magic Link" alternative on register page
-- [ ] Remove password requirement if moving to OTP-only
-- [ ] Enforce minimal data: collect only what's necessary
-- [ ] Validate phone/email properly; don't require phone if not essential
+- [x] Signup page fields reviewed — register is EMAIL-ONLY magic link (`signInWithOtp`, `create_user`): no password, no name/phone at sign-up; name/phone collected at booking time only
+- [x] Magic-link signup on register page (no separate password flow)
+- [x] Minimal data enforced: email only at sign-up
+- [ ] Validate phone/email properly; don't require phone if not essential (booking-time)
 - [ ] Consider guest booking without account
 
 ## Communication & Business Email
@@ -98,6 +97,7 @@
 - [ ] API services not surfaced in the app: payments (M-Pesa/Stripe live), webhooks, agents/partner portal, content sync
 
 ## Config / Env to set before deploy
-- [ ] Vercel (booking app): NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY, NEXT_PUBLIC_SITE_URL
-- [ ] Supabase Auth: Site URL + Redirect URLs include /auth/callback
-- [ ] Supabase: expose `safari` schema in API settings (confirm saved)
+- [x] Vercel (booking app): NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY, NEXT_PUBLIC_SITE_URL set and deployed (commit 1c12d493)
+- [x] Supabase Auth: Site URL = https://adequatesafari.vercel.app; redirect allowlist permissive so /auth/callback works
+- [x] Supabase: `safari` schema exposed in API settings
+- [ ] Supabase SMTP: built-in email rate limit (~3-4 sends/hour) blocks magic-link signup at volume — configure custom SMTP before launch
