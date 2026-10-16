@@ -140,6 +140,10 @@ function PassengerForm({
             className="input-field"
             placeholder="First name"
             autoComplete={index === 0 ? 'given-name' : 'off'}
+            autoCapitalize="words"
+            autoCorrect="off"
+            spellCheck={false}
+            inputMode="text"
           />
         </div>
         <div>
@@ -151,36 +155,43 @@ function PassengerForm({
             className="input-field"
             placeholder="Last name"
             autoComplete={index === 0 ? 'family-name' : 'off'}
+            autoCapitalize="words"
+            autoCorrect="off"
+            spellCheck={false}
           />
         </div>
         <div>
-          <label className="mb-1 block text-xs font-medium text-gray-500">Date of birth</label>
+          <label className="mb-1 block text-xs font-medium text-gray-500">
+            Date of birth <span className="text-gray-400">(optional)</span>
+          </label>
           <input
             type="date"
             value={passenger.dateOfBirth ?? ''}
             onChange={(e) => onChange({ dateOfBirth: e.target.value || undefined })}
             className="input-field"
+            max={new Date().toISOString().slice(0, 10)}
           />
         </div>
         <div>
-          <label className="mb-1 block text-xs font-medium text-gray-500">Nationality</label>
+          <label className="mb-1 block text-xs font-medium text-gray-500">
+            Nationality <span className="text-gray-400">(optional)</span>
+          </label>
           <input
             value={passenger.nationality ?? ''}
             onChange={(e) => onChange({ nationality: e.target.value })}
+            autoCapitalize="words"
+            autoCorrect="off"
+            autoComplete="off"
             className="input-field"
             placeholder="e.g. Kenyan"
           />
         </div>
-        <div className="sm:col-span-2">
-          <label className="mb-1 block text-xs font-medium text-gray-500">Passport number</label>
-          <input
-            value={passenger.passportNumber ?? ''}
-            onChange={(e) => onChange({ passportNumber: e.target.value })}
-            className="input-field"
-            placeholder="Passport / ID number"
-          />
-        </div>
       </div>
+      <p className="mt-3 flex items-start gap-2 rounded-lg border border-safari-sand bg-safari-sand/40 px-3 py-2 text-xs text-gray-600">
+        <ShieldCheck className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary-700" />
+        We only ask for names here — no ID, passport or document details. We never collect identity
+        documents during booking; you can present them at check-in if required.
+      </p>
     </div>
   );
 }
@@ -350,7 +361,6 @@ export function BookingFlow({ initialSlug }: { initialSlug: string }) {
             firstName: p.firstName,
             lastName: p.lastName,
             dateOfBirth: p.dateOfBirth,
-            passportNumber: p.passportNumber,
             nationality: p.nationality,
             specialNeeds: p.specialNeeds,
           })),
@@ -383,7 +393,6 @@ export function BookingFlow({ initialSlug }: { initialSlug: string }) {
             firstName: p.firstName,
             lastName: p.lastName,
             dateOfBirth: p.dateOfBirth,
-            passportNumber: p.passportNumber,
             nationality: p.nationality,
             specialNeeds: p.specialNeeds,
             isLead: i === 0,
@@ -400,7 +409,6 @@ export function BookingFlow({ initialSlug }: { initialSlug: string }) {
             firstName: p.firstName,
             lastName: p.lastName,
             dateOfBirth: p.dateOfBirth,
-            passportNumber: p.passportNumber,
             nationality: p.nationality,
             specialNeeds: p.specialNeeds,
             isLead: i === 0,
